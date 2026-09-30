@@ -1,0 +1,41 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: team5-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: team5
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Seoul
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --performance-schema=OFF
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    image: ${DOCKERHUB_USERNAME}/team5-be:latest
+    container_name: team5-app
+    restart: always
+    ports:
+      - "80:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/team5?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DDL_AUTO: update
+      SHOW_SQL: "false"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql-data:

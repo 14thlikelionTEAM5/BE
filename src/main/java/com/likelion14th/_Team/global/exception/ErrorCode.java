@@ -1,0 +1,58 @@
+package com.likelion14th._Team.global.exception;
+
+import org.springframework.http.HttpStatus;
+
+/**
+ * API 명세서의 Error Cases 표와 1:1로 맞춘 에러 목록.
+ * code는 명세의 E400 / E401 ... 이고, 같은 code라도 message가 다를 수 있어 항목을 나눴다.
+ * 새 API의 에러가 필요하면 여기에 추가한다.
+ */
+public enum ErrorCode {
+
+    // 400
+    INVALID_INPUT(HttpStatus.BAD_REQUEST, "E400", "입력값이 올바르지 않습니다"),
+    NOT_SCHOOL_EMAIL(HttpStatus.BAD_REQUEST, "E400", "학교 메일(@hufs.ac.kr)만 사용할 수 있습니다"),
+    INVALID_CODE_FORMAT(HttpStatus.BAD_REQUEST, "E400", "인증 코드는 6자리 숫자여야 합니다"),
+    CODE_MISMATCH(HttpStatus.BAD_REQUEST, "E400", "인증 코드가 일치하지 않습니다"),
+    CODE_EXPIRED_OR_MISSING(HttpStatus.BAD_REQUEST, "E400", "인증 코드가 만료되었거나 발송 이력이 없습니다"),
+
+    // 401
+    LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "E401", "학교 메일 또는 비밀번호가 올바르지 않습니다"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다"),
+
+    // 403
+    EMAIL_NOT_VERIFIED(HttpStatus.FORBIDDEN, "E403", "학교 메일 인증이 완료되지 않았거나 만료되었습니다"),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "접근 권한이 없습니다"),
+
+    // 409
+    EMAIL_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 가입된 학교 메일입니다"),
+    NICKNAME_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 사용 중인 닉네임입니다"),
+
+    // 429
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "E429", "잠시 후 다시 요청해 주세요"),
+
+    // 500 (API별 문구가 다르므로 필요한 곳에서 CustomException(errorCode, message)로 문구를 덮어쓴다)
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E500", "서버 오류가 발생했습니다");
+
+    private final HttpStatus status;
+    private final String code;
+    private final String message;
+
+    ErrorCode(HttpStatus status, String code, String message) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}

@@ -20,7 +20,6 @@ public class SwaggerConfig {
 						.title("14th LikeLion Team5 API")
 						.description("멋쟁이사자처럼 14기 5팀 백엔드 API 문서")
 						.version("v1"))
-				// Swagger 우측 상단에 Authorize 버튼 표시 (로그인 응답의 accessToken을 붙여넣어 테스트)
 				.components(new Components().addSecuritySchemes(BEARER_SCHEME,
 						new SecurityScheme()
 								.type(SecurityScheme.Type.HTTP)

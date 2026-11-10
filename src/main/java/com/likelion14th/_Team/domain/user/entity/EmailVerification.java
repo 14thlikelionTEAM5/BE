@@ -55,4 +55,21 @@ public class EmailVerification extends BaseEntity {
         this.verifiedAt = verifiedAt;
         this.lastSentAt = lastSentAt;
     }
+    /** 새 코드로 교체한다. 이전 코드는 무효화되고 미인증 상태로 돌아간다 */
+    public void renew(String codeHash, LocalDateTime expiresAt, LocalDateTime sentAt) {
+        this.codeHash = codeHash;
+        this.expiresAt = expiresAt;
+        this.lastSentAt = sentAt;
+        this.verifiedAt = null;
+    }
+
+    /** 인증 완료 시각을 기록한다 */
+    public void markVerified(LocalDateTime verifiedAt) {
+        this.verifiedAt = verifiedAt;
+    }
+
+    /** 코드를 즉시 만료시킨다 (실패 횟수 초과 등) */
+    public void expire(LocalDateTime now) {
+        this.expiresAt = now;
+    }
 }

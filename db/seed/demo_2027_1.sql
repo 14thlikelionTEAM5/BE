@@ -195,6 +195,26 @@ WHERE NOT EXISTS (
     WHERE a.user_id=s.id AND a.university_id=u.id AND a.semester='2027-1' AND a.result='PASS'
 );
 
+-- 가상 탈락 사례 5건. 점수는 시연 값이며 실제 합격 기준이나 탈락 사유를 의미하지 않는다.
+-- 해당 학교 합격 사례와 다른 사용자를 연결한다. 재실행 시 중복 생성하지 않는다.
+INSERT INTO admission_report (university_id,semester,result,language_test_type,language_score,gpa,
+                              major_type,user_id,created_at,updated_at)
+SELECT u.id,'2027-1','FAIL','IELTS',f.ielts,f.gpa,'PRIMARY',s.id,@demo_now,@demo_now
+FROM (
+    SELECT '01' AS school_no,'02' AS user_no,6.5 AS ielts,3.65 AS gpa
+    UNION ALL SELECT '02','03',7.0,3.90
+    UNION ALL SELECT '03','04',6.0,3.45
+    UNION ALL SELECT '05','06',6.5,3.80
+    UNION ALL SELECT '09','10',7.0,4.00
+) f
+JOIN passhufs_demo_2027_1 d ON d.no=f.school_no
+JOIN university u ON u.name=d.name COLLATE utf8mb4_unicode_ci
+JOIN `user` s ON s.school_email=CONCAT('passhufs-demo',f.user_no,'@example.hufs.ac.kr') COLLATE utf8mb4_unicode_ci
+WHERE NOT EXISTS (
+    SELECT 1 FROM admission_report a
+    WHERE a.user_id=s.id AND a.university_id=u.id AND a.semester='2027-1' AND a.result='FAIL'
+);
+
 INSERT INTO study_plan (user_id,university_id,name,created_at,updated_at)
 SELECT s.id,u.id,'[시연] 2027-1 교환학생 수강계획',@demo_now,@demo_now
 FROM passhufs_demo_2027_1 d

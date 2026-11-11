@@ -1,0 +1,567 @@
+{
+  "description": "사용자가 제공한 실제 귀국보고서 9개교의 추출 데이터. 실제 수학 학기를 보존하며 QUT는 귀국보고서 미확보로 비워 둔다.",
+  "reports": [
+    {
+      "universityName": "Texas State University",
+      "source": "사용자 제공 본문 및 스크린샷",
+      "sourceSubmittedAt": "2026-06-05",
+      "sourceUpdatedAt": "2026-06-05T13:06:12+09:00",
+      "semester": "2026-1",
+      "semesterEvidence": "귀국보고서 검색 결과 스크린샷 및 사용자 확인",
+      "studyPeriod": {
+        "startMonth": 1,
+        "startPart": "중순",
+        "endMonth": 5,
+        "endPart": "중순"
+      },
+      "housingType": "DORM",
+      "housingName": "Cypress Apartments",
+      "visaDuration": "1주",
+      "visaDurationEvidence": "귀국보고서 선택 항목 스크린샷",
+      "visaType": "F비자",
+      "insuranceProvider": "외국대학교",
+      "costFlight": "약 200만원",
+      "costInsurance": "총비용에 포함 (필수)",
+      "costLivingMonthly": "매달 150-200만원 정도",
+      "costTotal": "약 8000달러",
+      "reviewSummary": "학부수업으로 3학점 과목 4개를 수강했다. Cypress의 개별 방과 화장실을 사용하는 3인실에 거주했으며, 교환교 보험 가입은 필수였다. 문학 수업과 Cultural Anthropology 수업 경험, writing center 및 교통편에 대한 후기를 제공했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "저도 아직 학점 인정 절차를 마무리하지 못해서... 학과 사무실에 연락해보시는 게 가장 정확할 거예요!",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": "ENG 3329",
+          "courseNameEn": "STUDIES IN MYTHOLOGY",
+          "foreignCredit": 3.0,
+          "satisfaction": 8
+        },
+        {
+          "courseCode": "ENG 3331",
+          "courseNameEn": "BLACK LITERATURE",
+          "foreignCredit": 3.0,
+          "satisfaction": 7
+        },
+        {
+          "courseCode": "ANTH 1312",
+          "courseNameEn": "CULTRL ANTHROPLGY",
+          "foreignCredit": 3.0,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "ENG 3344",
+          "courseNameEn": "CHICANA/O/X NARRATIVE",
+          "foreignCredit": 3.0,
+          "satisfaction": 10
+        }
+      ]
+    },
+    {
+      "universityName": "University of Groningen",
+      "source": "사용자 제공 본문",
+      "sourceSubmittedAt": "2026-09-04",
+      "sourceUpdatedAt": "2026-09-04T17:09:52+09:00",
+      "semester": "2026-1",
+      "semesterEvidence": "사용자 확인",
+      "studyPeriod": {
+        "startMonth": 2,
+        "startPart": null,
+        "endMonth": 6,
+        "endPart": null
+      },
+      "housingType": "SELF",
+      "housingName": "Ssh housing",
+      "housingNote": "숙소 이름 입력값은 Ssh housing이나, 후기 본문에는 공식 기숙사가 없고 본인이 Facebook에서 숙소를 찾았다고 기재했다.",
+      "visaDuration": "4-5 weeks",
+      "visaDurationEvidence": "후기 본문",
+      "visaType": "학생 비자",
+      "insuranceProvider": "Swiss care",
+      "insuranceNote": "구입처 항목에는 외국대학교, 비용 항목에는 Swiss care라고 기재했다.",
+      "costFlight": "For round trip you can spend around 500-600",
+      "costFlightCurrency": null,
+      "costInsurance": "Swiss care 70 euro per semester",
+      "costLivingMonthly": "Transportation- bike 15 euro per month",
+      "costTotal": "7500 euro per semester",
+      "reviewSummary": "2월부터 6월까지 수학하며 5학점 과목 6개를 수강했다. 수업은 소규모 세미나와 조별 과제 중심이었다. 비자와 생활비 증명을 위한 송금, 숙소 계약 및 네덜란드 은행 계좌 개설에 관한 주의사항을 제공했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "Most of the credits are recognised as elective credits",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": "UCG1HU05",
+          "courseNameEn": "Music in Culture",
+          "foreignCredit": 5.0,
+          "satisfaction": 8
+        },
+        {
+          "courseCode": "LXX029P05",
+          "courseNameEn": "Foodways in the Middle East: Heritage, Culture and Memory",
+          "foreignCredit": 5.0,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "UCG2SS09",
+          "courseNameEn": "Decision making",
+          "foreignCredit": 5.0,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "UCG2AC02",
+          "courseNameEn": "Philosophy of Science",
+          "foreignCredit": 5.0,
+          "satisfaction": 6
+        },
+        {
+          "courseCode": "UCG2HU03",
+          "courseNameEn": "Knowledge is power",
+          "foreignCredit": 5.0,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "UCG2SS02",
+          "courseNameEn": "Criminal law",
+          "foreignCredit": 5.0,
+          "satisfaction": 10
+        }
+      ]
+    },
+    {
+      "universityName": "University of Mannheim",
+      "source": "사용자 제공 본문 및 스크린샷",
+      "sourceSubmittedAt": "2026-09-26",
+      "sourceUpdatedAt": "2026-09-26T23:09:33+09:00",
+      "semester": "2026-1",
+      "semesterEvidence": "사용자 확인",
+      "studyPeriod": {
+        "startMonth": 1,
+        "startPart": "초순",
+        "endMonth": 6,
+        "endPart": "중순"
+      },
+      "housingType": "DORM",
+      "housingName": "Ulmenweg",
+      "visaDuration": "2주",
+      "visaDurationEvidence": "귀국보고서 선택 항목 스크린샷",
+      "visaType": "학생비자",
+      "insuranceProvider": "TK 공보험 (Expatrio를 통해 가입)",
+      "insuranceNote": "구입처 항목에는 외국대학교, 후기 본문에는 Expatrio를 통한 TK 공보험 가입이라고 기재했다.",
+      "costFlight": "약 120만원",
+      "costInsurance": "한달에 약 141유로",
+      "costLivingMonthly": "달에 약 100-200만원(여행비용)",
+      "costTotal": "기숙사비(390x6) 수업료 100, 식비 및 생활비 약 500-600유로",
+      "costTotalNote": "기숙사비와 수업료의 통화, 식비 및 생활비의 집계 기간은 명시되지 않아 원문을 보존한다.",
+      "reviewSummary": "1월 초순부터 6월 중순까지 수학하며 School of Humanities에서 세미나 중심의 수업을 수강했다. Ulmenweg 기숙사에서 개인 방과 공용 주방·화장실을 사용하는 플랫 형태로 생활했다. 학교 안내 이메일, 수강 및 시험 신청, 거주지 등록과 귀국 전 해지 절차 확인을 권장했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "학점 인정 방식은 학과마다 기준이 다를 수 있기 때문에 출국하기 전에 본인의 학과에서 정한 학점 인정 기준을 미리 확인하는 것이 가장 중요합니다. 저의 경우 사전학점 인정 신청을 하지 않으면 인정이 되지 않았지만 같이 간 친구의 경우 사전인정 신청을 아예 받지 않았을만큼 학과별로 기준이 천차만별이기에 미리 확인하는 것을 강력히 추천드립니다. 같은 만하임대학교에서 같은 수업을 듣더라도 본인의 전공이나 부전공에 따라 인정 방식이 달라질 수 있기 때문에 수강신청 전에 학과에 문의해두는 것을 추천합니다. 특히 전공학점으로 인정받고 싶은 과목이 있다면 과목명만 보고 판단하기보다는 강의계획서나 수업 내용을 함께 보내 학과에 확인하는 것이 좋습니다. 저도 수강할 과목을 정할 때 학점이나 전공 인정 여부를 신경 써서 확인했습니다. 교환학생을 가기 전에는 현지에서 어떤 수업을 들을지에 대한 기대가 크지만, 귀국 후 학점 인정 과정까지 생각하면 처음부터 필요한 자료를 잘 준비해두는 것이 좋습니다. 학과에서 요구하는 서류나 절차가 있을 수 있기 때문에 출국 전에 관련 내용을 미리 알아두면 나중에 훨씬 편합니다. 만하임대학교에서 수업을 들은 후에는 성적표뿐만 아니라 강의계획서, 수업자료, 과제나 시험과 관련된 자료 등이 필요한 경우가 있을 수 있으므로 학기 중에 필요한 자료를 저장해두는 것을 추천합니다. 특히 교환학생 기간이 끝난 후에는 학교 계정이나 수강 관련 사이트에 접근하기 어려워질 수도 있기 때문에 필요한 자료는 학기가 끝나기 전에 다운로드해두는 것이 안전합니다. 또한 현지 대학에서 발급받은 성적표를 받은 후에는 과목명과 ECTS 등의 내용이 본인이 알고 있던 것과 일치하는지 확인하는 것이 좋습니다. 문제가 있거나 예상과 다른 부분이 있다면 귀국 후에 발견하기보다 현지 대학에 있을 때 문의하는 것이 훨씬 편합니다. 학점 인정은 귀국 후 바로 진행해야 하는 경우가 있으므로 필요한 서류를 미리 정리해두면 한국에 돌아온 후에도 수월하게 처리할 수 있습니다.",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": "ANG 422",
+          "courseNameEn": "Fat American Studies: Representations of (Un)Ideal Bodies in US Film & Media/Overlap with ANG 425",
+          "foreignCredit": 6.0,
+          "satisfaction": 7
+        },
+        {
+          "courseCode": "MKW411",
+          "courseNameEn": "Public Opinion on Social Media Bans: International Perspectives",
+          "foreignCredit": 8.0,
+          "satisfaction": 7
+        },
+        {
+          "courseCode": "2601",
+          "courseNameEn": "IWA A1.1",
+          "foreignCredit": 6.0,
+          "satisfaction": 6
+        }
+      ],
+      "rawText": "[교환학생] 만하임대학교(University of Mannheim) 귀국보고서\n※ 입력일자 : 2026/09/26 (최종수정일시:2026/09/26 23:09:33)\n\n수학기간\n수학기간\n수학시작\t수학종료\n월\t시점\t월\t시점\n\n1월\n초순 중순 하순\t\n6월\n초순 중순 하순\n수강신청 시기 및 장소\n수학기간\n수업구분\t어학연수 학부수업 어학연수/학부수업 병행\n신청시기\t지원서 제출시 입학 허가 후 즉시 해외 대학교 도착 후\n기타 \n신청방법\t신청 희망 교과목 리스트 제출 해외 대학교 웹사이트에서 본인이 신청 해외 대학교 국제교류팀에서 대리 수강신청\n기타 \n \n기숙사/숙소\n기숙사/숙소\n기숙사 신청 가능여부\t\n신청할 수 있다\n\n신청할 수 있다\n신청 시기\t지원서 제출시 입학 허가 후 즉시\n기타 \n \n신청할 수 없다\n\n신청할 수 없다\n숙소 찾는 방법\t외국대학교 International Office에서 숙소 소개(Homestay 포함) 본인이 직접\n기타 \n \n기숙사/숙소 이름\t\nUlmenweg\n비자 발급\n비자 발급\n비자 발급 소요 기간\t없다 1주 2주 3주 4주 5주 2개월 3개월\n기타 \nnull\n비자 종류\t(예: F비자, J비자, 학생 비자, 무비자 등)\n학생비자\n해외유학생 보험\n기숙사/숙소\n구입처\t국내보험업체\n외국대학교\n\n외국대학교\n구입 사유\t필수 편리성\n기타 \n \n1. 출국 전 준비사항\n1-1. 입학허가서 신청시 유의사항\n만하임대학교는 교환학생을 위한 안내가 잘 되어 있어서 학교에서 보내주는 이메일과 안내사항을 잘 따라가면 어렵지 않게 진행할 수 있습니다. 한국외대에서 최종 선발된 후 만하임대학교에서 입학허가와 관련된 안내를 보내주며, 이후 기숙사나 수강신청 등 필요한 절차도 이메일을 통해 안내받을 수 있습니다. 따라서 이메일을 자주 확인하고 각 절차의 마감기한을 놓치지 않는 것이 중요합니다.\n1-2. 비자 취득, 항공권 및 유학생 보험 구입\n한국인은 독일에 무비자로 입국할 수 있기 때문에 한국에서 비자를 발급받지 않고 입독 후 거주허가를 신청하는 방법도 있습니다. 저는 비자를 발급받고 왔습니다. 다만 발급까지 시간이 오래 걸릴 수도 있고 발급이 안되는 경우도 있으니 미리 받고 오는 것을 추천합니다. 또한 거주허가를 따로 받을 예정이고 유럽 여행을 계획하고 있다면 최대한 빨리 신청하는 것을 추천합니다. 항공권은 일정이 확정되면 너무 늦지 않게 구매하는 것이 좋습니다. 보험은 독일 교환학생에게 필수이므로 출국 전에 미리 준비해야 하며, 저는 Expatrio를 통해 TK 공보험을 가입했습니다.\n1-3. 기타 유의사항\n입독 후에는 Anmeldung(거주지 등록)과 거주허가 등의 행정절차를 진행해야 합니다. Termin(예약)이 필요한 경우가 있으므로 미리 확인해두는 것이 좋습니다. 보통 예약 없이 방문 가능한 날에 영업시간에 맞춰 가도 가능합니다. 또한 DB Navigator 앱을 미리 설치하면 독일 내 기차를 이용할 때 편리합니다. Deutschlandticket을 이용하면 독일 내 대중교통도 편하게 이용할 수 있습니다. 귀국 전에는 Abmeldung(전출신고), 보험 해지, Deutschlandticket 해지 등 필요한 절차가 있으므로 귀국 전에 미리 확인하는 것을 추천합니다.\n2. 파견대학 관련\n2-1. 공항에서 학교까지 교통편\n프랑크푸르트 공항에서 만하임까지는 기차를 이용하면 편리하게 이동할 수 있습니다. 공항역f에서 ICE를 타면 만하임 중앙역까지 약 30~40분 정도 걸립니다. DB Navigator 앱에서 미리 기차표를 구매할 수 있으며, 짐이 많다면 좌석을 미리 지정하는 것도 추천합니다. 만하임 중앙역에 도착한 후에는 기숙사 위치에 따라 버스나 트램을 이용하면 됩니다. 처음 독일에 도착하고 짐이 많다면 이동이 익숙하지 않을 수 있으므로 상황에 따라 택시나 Uber를 이용하는 것도 괜찮습니다.\n2-2. 수강신청\n수강신청은 만하임대학교에서 보내주는 안내 메일을 참고하면 어렵지 않게 진행할 수 있습니다. 한국과 달리 대부분의 수업이 선착순으로 바로 마감되는 방식은 아니기 때문에 비교적 여유롭게 신청할 수 있습니다. 그러나 역시 수강 인원이 적고 빨리 차는 Semiinar 수업은 정원이 다 차면 받아주지 않을 때도 있습니다. 수강신청 기간 동안 수업을 추가하거나 변경할 수도 있기 때문에 처음부터 모든 수업을 완벽하게 정할 필요는 없습니다. 다만 수업마다 신청 방법이나 기간이 다를 수 있으므로 학교에서 보내주는 안내를 확인하는 것이 좋습니다. 특히 학점을 인정받아야 하는 수업은 마지막에 시험 신청이나 관련 절차가 필요한지 확인하는 것을 추천합니다.\n2-3(1) 수업내용 및 프로그램 과정\n만하임대학교의 수업은 Lecture와 Seminar 등 여러 형태로 진행됩니다. Lecture는 교수님의 설명을 중심으로 진행되는 수업이고, Seminar는 학생들의 발표와 토론 등 참여가 많은 편입니다. 저는 School of Humanities에서 Seminar 형태의 수업을 주로 들었는데, 인문학부에는 Seminar 수업이 대부분 입니다. 그리고 Seminar는 대부분 출석점수를 포함하기 때문에 여행을 많이 다닐 예정이라면 충분히 고려해보고 신청하시길 바랍니다. 한국에서 듣던 수업과는 다르게 학생들이 자유롭게 의견을 이야기하는 분위기가 인상적이었습니다. 영어로 발표하거나 외국인 학생들과 함께 과제를 하는 것이 처음에는 부담스러울 수 있지만, 교환학생 기간에만 경험할 수 있는 부분이라고 생각합니다. 수업 외에도 학교에서 다양한 스포츠 프로그램이나 교환학생 프로그램이 운영되기 때문에 관심 있는 활동에 참여해보는 것을 추천합니다.\n2-3(2) 수강 교과목 리스트\n기숙사/숙소\nNo\t교과목코드\t영문 교과목명\t학점\n(외국대학교기준)\t수업만족도\n1(낮다)~10(높다)\n1\t\nANG 422\nFat American Studies: Representations of (Un)Ideal Bodies in US Film & Media/Overlap with ANG 425\n\n6학점\n\n7\n2\t\nMKW411\nPublic Opinion on Social Media Bans: International Perspectives\n\n8학점\n\n7\n3\t\n2601\nIWA A1.1\n\n6학점\n\n6\n4\t\n \n \n\n--선택--\n\n--선택--\n5\t\n \n \n\n--선택--\n\n--선택--\n6\t\n \n \n\n--선택--\n\n--선택--\n7\t\n \n \n\n--선택--\n\n--선택--\n8\t\n \n \n\n--선택--\n\n--선택--\n9\t\n \n \n\n--선택--\n\n--선택--\n10\t\n \n \n\n--선택--\n\n--선택--\n2-4. 기숙사 정보\n저는 Ulmenweg 기숙사에서 생활했습니다. Ulmenweg는 교환학생들이 많이 거주하는 기숙사라서 자연스럽게 다른 교환학생이나 한국인 학생들을 만날 수 있었고, 마트와 버스, 트램 정류장도 가까워 생활하기 편리했습니다. 주로 한국인은 한국인끼리 방을 배정해주나 저는 겨울 계절을 위해 한달 먼저 도착해 외국인들과 방을 썼습니다. 기숙사 근처에 큰 마트가 서너개 있어 개인적으로는 다른 기숙사보다 큰 이점이라고 느껴졌습니다. 개인 방을 사용하고 주방과 화장실, 샤워실 등의 공간을 다른 학생들과 함께 사용하는 플랫 형태로 생활했습니다. 방에는 침대, 책상, 옷장, 책장, 세면대 등 기본적인 가구가 갖춰져 있어서 개인적으로 필요한 생활용품만 준비하면 됩니다. 다만 건물이나 방마다 시설 상태에 차이가 있고 오래된 시설도 있기 때문에 처음 입주했을 때 생각했던 것과 다른 부분이 있을 수 있습니다. 특히 저는 1층(독일 기준 0층)에서 생활하였는데 통풍이나 벌레 등 생활하는데불편함을 느낀 부분이 있습니다. 물론 엘레베이터가 없는 기숙사 특성 상 장을 보거나 짐을 들고 오르락내리락하는 것이 편리하기는 하였으나, 개인적으로는 여름을 보내야한다면 바람이 잘드는 높은 층을 추천합니다. 플랫메이트에 따라 생활환경도 달라질 수 있기 때문에 공용공간을 함께 사용하는 것에 어느 정도 적응할 필요가 있습니다. 그리고 남녀공용인 만큼 같은 플랫에 다른 성별 하나를 배정하는 것 같습니다. 저도 생활하면서 방이나 공용시설과 관련해 불편한 점이 있었지만, 기숙사 측에 문의하면 방을 옮기거나 문제를 해결할 수 있는 경우도 있었습니다. 세탁실은 별도로 이용해야 하고 학생증 등을 이용해 결제할 수 있습니다. 입주 전에 침구나 주방용품, 세면용품 등 필요한 물건을 미리 확인해두는 것을 추천합니다. 전체적으로 Ulmenweg는 시설이 아주 최신인 기숙사는 아니지만, 교환학생들이 많이 거주하고 생활에 필요한 시설들이 가까워 교환학생 생활을 하기에는 괜찮은 선택이라고 생각합니다.\n2-5. 교내 활동\n만하임대학교에서는 교환학생들을 위한 다양한 프로그램과 행사가 운영됩니다. 특히 ESN에서 교환학생을 대상으로 여러 행사를 진행하기 때문에 학기 초에는 이런 행사들을 확인해보는 것을 추천합니다. 웰컴 파티나 다른 교환학생들과 함께하는 행사 등이 자주 열리기 때문에 처음 만하임에 도착했을 때 친구를 사귀는 데 도움이 됩니다. 처음에는 서로 이름도 모르고 영어로 대화해야 하기 때문에 조금 어색할 수 있지만, 교환학생이라는 공통점이 있어서 생각보다 쉽게 친해질 수 있습니다. 저도 처음에는 외국인 친구들에게 먼저 말을 거는 것이 조금 부담스러웠습니다. 하지만 행사에 몇 번 참여하다 보니 같은 행사에서 계속 만나는 친구들도 생기고 자연스럽게 같이 수업을 듣거나 여행을 가는 친구도 생겼습니다. 특히 교환학생들은 대부분 비슷한 시기에 처음 만하임에 도착하기 때문에 처음 몇 주 동안 얼마나 적극적으로 사람들과 어울리는지가 중요하다고 생각합니다. 처음에는 혼자 행사에 가는 것이 부담스러워도 한 번 참여하고 나면 이후에는 아는 친구들과 함께 참여할 수 있어서 훨씬 편해집니다. 학교에서는 스포츠 프로그램도 다양하게 운영하고 있습니다. 평소 운동을 좋아한다면 스포츠 프로그램을 신청해서 새로운 운동을 해보는 것도 좋고, 운동을 좋아하지 않더라도 새로운 사람들을 만나는 기회로 활용할 수 있습니다. 또한 교환학생 프로그램 외에도 학교에서 진행하는 여러 활동이 있기 때문에 학교 이메일이나 관련 공지를 자주 확인하는 것을 추천합니다. 교환학생 생활을 하면서 수업만 듣고 기숙사에서 생활하는 것보다 다양한 행사에 직접 참여하는 것이 훨씬 기억에 남았습니다. 특히 다른 나라에서 온 친구들과 이야기를 나누다 보면 같은 교환학생이라고 해도 생활 방식이나 문화가 많이 다르다는 것을 알 수 있습니다. 처음에는 영어 때문에 대화가 잘 안 될까 걱정할 수 있지만, 완벽하게 말하려고 하기보다 간단하게라도 먼저 말을 걸어보는 것이 중요하다고 생각합니다.\n2-6. 소요 비용\n- 총 비용(기숙사비+식비+수업료)\n기숙사비(390x6) 수업료 100, 식비 및 생활비 약 500-600유로\n- 항공료\n약 120만원\n- 유학생보험\n한달에 약 141유로\n- 기타생활비\n달에 약 100-200만원(여행비용)\n2-7. 기타 사항\n만하임은 독일에서 관광지로 아주 유명한 도시는 아니지만 교환학생으로 생활하기에는 편리한 도시라고 생각합니다. 도시 자체가 아주 크지는 않아서 생활하면서 주요 장소에 익숙해지기 쉽고, 필요한 시설들도 비교적 가까운 곳에서 찾을 수 있습니다. 특히 프랑크푸르트와 하이델베르크가 가까워서 주말에 다른 도시로 여행하기 좋았습니다. 만하임 중앙역에서 독일 내 다른 지역으로 이동하기도 편리하고 주변 국가로 여행할 때도 기차를 이용하기 좋기 때문에 교환학생 기간 동안 여행을 많이 하고 싶은 학생에게는 편리한 위치라고 생각합니다. 생활비의 경우 외식을 자주 하면 한국보다 비싸다고 느낄 수 있습니다. 특히 식당에서 식사를 하거나 카페를 자주 이용하면 생각보다 돈을 많이 사용하게 됩니다. 반면 Aldi, Lidl 등의 마트에서 직접 장을 보면 식비를 어느 정도 줄일 수 있습니다. 저도 처음에는 외식을 많이 했지만 생활에 익숙해진 이후에는 마트에서 필요한 식재료를 사서 직접 요리하는 경우가 많았습니다. 여러 명이 함께 생활한다면 친구들과 같이 장을 보고 요리하는 것도 좋은 방법입니다. 독일은 일요일에 대부분의 마트와 일반 상점이 문을 닫기 때문에 주말에 필요한 물건을 미리 준비하는 것이 좋습니다. 특히 처음에는 한국처럼 늦은 시간이나 일요일에도 필요한 물건을 바로 살 수 있을 것이라고 생각할 수 있는데, 실제로 생활하다 보면 이 부분이 꽤 불편하게 느껴질 수 있습니다. 따라서 토요일에 미리 장을 보거나 필요한 물건을 준비해두는 습관을 들이는 것이 좋습니다. 또한 독일에서 생활하다 보면 행정처리가 생각보다 느리거나 예약을 잡는 데 시간이 오래 걸리는 경우가 있습니다. 학교나 관공서와 이메일을 주고받을 때 답변을 기다려야 하는 경우도 있기 때문에 마감기한이 있는 일은 가능한 한 미리 처리하는 것을 추천합니다. 영어가 통하지 않을까 걱정할 수도 있지만 만하임대학교나 학생 관련 업무에서는 영어로 의사소통할 수 있는 경우가 많았습니다. 혼자 해결하기 어려운 일이 있다면 버디나 학교 국제교류처, 다른 교환학생들에게 도움을 요청하는 것도 좋은 방법입니다. 독일 생활에서 처음에는 한국과 다른 점 때문에 당황하는 일이 생길 수 있지만 몇 주 정도 생활하다 보면 자연스럽게 익숙해집니다. 특히 대중교통이나 행정절차, 마트 이용 등 처음에는 하나하나 찾아봐야 하지만 한 번 경험하고 나면 이후에는 혼자서도 할 수 있게 됩니다. 교환학생 생활을 시작할 때부터 모든 것을 완벽하게 하려고 하기보다는 하나씩 직접 경험하면서 적응하는 것이 좋다고 생각합니다.\n3. 파견대학 취득 성적 본교 학점 인정 관련(최소20자이상)\n학점 인정 방식은 학과마다 기준이 다를 수 있기 때문에 출국하기 전에 본인의 학과에서 정한 학점 인정 기준을 미리 확인하는 것이 가장 중요합니다. 저의 경우 사전학점 인정 신청을 하지 않으면 인정이 되지 않았지만 같이 간 친구의 경우 사전인정 신청을 아예 받지 않았을만큼 학과별로 기준이 천차만별이기에 미리 확인하는 것을 강력히 추천드립니다. 같은 만하임대학교에서 같은 수업을 듣더라도 본인의 전공이나 부전공에 따라 인정 방식이 달라질 수 있기 때문에 수강신청 전에 학과에 문의해두는 것을 추천합니다. 특히 전공학점으로 인정받고 싶은 과목이 있다면 과목명만 보고 판단하기보다는 강의계획서나 수업 내용을 함께 보내 학과에 확인하는 것이 좋습니다. 저도 수강할 과목을 정할 때 학점이나 전공 인정 여부를 신경 써서 확인했습니다. 교환학생을 가기 전에는 현지에서 어떤 수업을 들을지에 대한 기대가 크지만, 귀국 후 학점 인정 과정까지 생각하면 처음부터 필요한 자료를 잘 준비해두는 것이 좋습니다. 학과에서 요구하는 서류나 절차가 있을 수 있기 때문에 출국 전에 관련 내용을 미리 알아두면 나중에 훨씬 편합니다. 만하임대학교에서 수업을 들은 후에는 성적표뿐만 아니라 강의계획서, 수업자료, 과제나 시험과 관련된 자료 등이 필요한 경우가 있을 수 있으므로 학기 중에 필요한 자료를 저장해두는 것을 추천합니다. 특히 교환학생 기간이 끝난 후에는 학교 계정이나 수강 관련 사이트에 접근하기 어려워질 수도 있기 때문에 필요한 자료는 학기가 끝나기 전에 다운로드해두는 것이 안전합니다. 또한 현지 대학에서 발급받은 성적표를 받은 후에는 과목명과 ECTS 등의 내용이 본인이 알고 있던 것과 일치하는지 확인하는 것이 좋습니다. 문제가 있거나 예상과 다른 부분이 있다면 귀국 후에 발견하기보다 현지 대학에 있을 때 문의하는 것이 훨씬 편합니다. 학점 인정은 귀국 후 바로 진행해야 하는 경우가 있으므로 필요한 서류를 미리 정리해두면 한국에 돌아온 후에도 수월하게 처리할 수 있습니다.\n4. 후배들에게 남기고픈 한마디(최소20자이상)\n처음 교환학생을 준비할 때는 영어로 수업을 듣고 외국인 친구들과 생활하는 것에 대해 걱정이 많을 수 있습니다. 저도 출국 전에는 영어로 수업을 잘 따라갈 수 있을지, 외국인 친구들과 제대로 대화할 수 있을지 걱정했습니다. 하지만 막상 독일에 도착해서 생활하다 보니 처음 생각했던 것보다 훨씬 빠르게 적응할 수 있었습니다. 영어를 완벽하게 해야 한다는 부담을 갖기보다는 모르는 표현이 있더라도 일단 이야기해보는 것이 중요하다고 생각합니다. 특히 교환학생 생활에서는 먼저 말을 거는 것이 생각보다 중요합니다. 처음 만난 친구에게 먼저 이름을 물어보고 같이 밥을 먹거나 수업에 대해 이야기하는 것만으로도 금방 친해질 수 있습니다. 처음에는 영어로 이야기하는 것이 어색하고 대화가 끊기는 순간도 있지만, 계속 이야기하다 보면 점점 익숙해집니다. 저도 처음에는 영어로 대화하는 것에 부담을 느꼈지만 나중에는 외국인 친구들과 자연스럽게 여행 계획을 세우거나 일상적인 이야기를 할 수 있게 되었습니다. 교환학생 기간에는 수업뿐만 아니라 새로운 사람들을 만나고 다른 나라의 문화를 경험하고 여행을 다니는 등 한국에서는 쉽게 경험하기 어려운 일들을 많이 할 수 있습니다. 특히 유럽에서 교환학생을 하면 주변 국가로 여행하기도 비교적 편하기 때문에 시간이 있을 때 여러 도시와 국가를 경험해보는 것을 추천합니다. 다만 여행만 하는 것보다 현지에서 수업을 듣고 친구들과 생활하면서 그 나라의 일상을 직접 경험하는 것도 교환학생의 중요한 부분이라고 생각합니다. 물론 교환학생 생활이 항상 즐겁기만 한 것은 아닙니다. 행정적인 문제나 기숙사 문제처럼 예상하지 못했던 일이 생길 수도 있고, 처음에는 혼자 해결해야 하는 일이 많아서 힘들게 느껴질 수도 있습니다. 하지만 그런 문제들을 하나씩 해결하면서 혼자 생활하는 데에도 익숙해지고, 나중에는 그 경험도 좋은 추억으로 남는 것 같습니다. 문제가 생겼을 때 너무 당황하지 말고 학교나 주변 친구들에게 도움을 요청하는 것도 중요합니다. 교환학생을 준비하면서 출국 전부터 너무 많은 걱정을 하기보다는 가서 직접 경험해보겠다는 마음으로 가는 것도 좋을 것 같습니다. 완벽하게 영어를 잘하지 않아도 되고, 처음부터 많은 친구를 만들지 못해도 괜찮습니다. 조금씩 먼저 다가가고 새로운 활동에 참여하다 보면 자연스럽게 적응할 수 있습니다. 교환학생은 생각보다 정말 빠르게 지나가기 때문에 할 수 있는 활동은 최대한 많이 해보고, 새로운 사람들을 만나고, 여행도 하면서 그 시간을 충분히 즐기고 오셨으면 좋겠습니다."
+    },
+    {
+      "universityName": "Florida International University",
+      "source": "사용자 제공 본문 및 스크린샷",
+      "sourceSubmittedAt": "2026-05-28",
+      "sourceUpdatedAt": "2026-05-28T18:05:08+09:00",
+      "semester": "2026-1",
+      "semesterEvidence": "사용자 확인",
+      "studyPeriod": {
+        "startMonth": 1,
+        "startPart": "초순",
+        "endMonth": 4,
+        "endPart": "하순"
+      },
+      "courseRegistration": {
+        "classTypeSelected": "어학연수",
+        "classTypeNote": "스크린샷에서는 어학연수가 선택되어 있으나 본문 및 과목 목록은 학부 교과목 수강 경험을 기술한다.",
+        "applicationTimeSelected": "입학 허가 후 즉시",
+        "applicationMethodsSelected": [
+          "신청 희망 교과목 리스트 제출",
+          "해외 대학교 국제교류팀에서 대리 수강신청"
+        ]
+      },
+      "housingType": "DORM",
+      "housingName": "Tamiami Hall",
+      "visaDuration": "1주",
+      "visaDurationEvidence": "귀국보고서 선택 항목 스크린샷",
+      "visaType": "J-1 비자",
+      "insuranceProvider": "ISO FIU 전용 플랜 및 국내 유학생 보험",
+      "insuranceNote": "구입처 선택 항목은 외국대학교, 구입 사유는 편리성이다. 본문에서는 ISO FIU 전용 플랜과 국내 유학생 보험을 가입했다고 기재했다.",
+      "costFlight": "왕복 약 350만원",
+      "costFlightNote": "출국 준비 본문의 항공권 약 160만원 선과 비용 항목의 왕복 약 350만원을 구분해 보존한다.",
+      "costInsurance": "ISO 보험 월 별 $75, 국내 유학생 보험 약 20만원",
+      "costLivingMonthly": "달마다 250~300만원",
+      "costTotal": "기숙사비+밀플랜 75블럭 약 1000만원",
+      "reviewSummary": "1월 초순부터 4월 하순까지 수학하며 커뮤니케이션 등 3학점 과목 5개를 수강했다. 희망 교과목 리스트를 제출하면 FIU 측에서 수강신청을 진행하며 학기 초 변경 기간을 활용할 수 있다고 설명했다. Tamiami Hall 거주, ISO 보험 및 국내 유학생 보험 가입 경험을 공유했고, 프로젝트와 발표 중심 수업 및 높은 생활비를 언급했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "저는 EICC학과 + 전공 인정 과목 수강으로 FIU에서 각 과목 등급이 외대에서 한 단계 높여 인정되는 방식이었습니다. (A -> A+로 인정.) 경우에 따라 P/F로 인정되는 학과도 있는 것 같으니 꼭! 지원 전 + 수강 신청 전에 학과 내규를 꼼꼼히 확인하고 문의 메일로 강의 계획서를 보내 인정 방식을 확인하도록 합시다.",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": "ASN 3153",
+          "courseNameEn": "Topics in Korean Culture",
+          "foreignCredit": 3.0,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "COM 2417",
+          "courseNameEn": "Com in Film",
+          "foreignCredit": 3.0,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "COM 3120",
+          "courseNameEn": "Organizational Comm",
+          "foreignCredit": 3.0,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "COM 3230",
+          "courseNameEn": "Crisis Comm",
+          "foreignCredit": 3.0,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "COM 3461",
+          "courseNameEn": "Intercultural Comm",
+          "foreignCredit": 3.0,
+          "satisfaction": 10
+        }
+      ]
+    },
+    {
+      "universityName": "Ghent University",
+      "source": "사용자 제공 스크린샷 3장",
+      "sourceSubmittedAt": "2026-11-07",
+      "sourceUpdatedAt": "2026-11-07T23:11:13+09:00",
+      "semester": "2026-1",
+      "semesterEvidence": "사용자 확인",
+      "studyPeriod": {
+        "startMonth": 2,
+        "startPart": "초순",
+        "endMonth": 2,
+        "endPart": "초순"
+      },
+      "studyPeriodNote": "화면의 시작·종료가 모두 2월 초순으로 선택되어 있다. 실제 종료 시점은 별도 확인이 필요하다.",
+      "courseRegistration": {
+        "classTypeSelected": "학부수업",
+        "applicationTimeSelected": "지원서 제출시",
+        "applicationMethodsSelected": [
+          "신청 희망 교과목 리스트 제출"
+        ],
+        "registrationNote": "learning agreement 작성 시 희망 과목을 제출하고 현지 강의실에서 방법을 확인할 수 있으며, 초기 약 5주 동안 변경이 가능했다고 설명했다."
+      },
+      "housingType": "DORM",
+      "housingName": "Home Göttingen",
+      "visaDuration": "3주",
+      "visaDurationEvidence": "귀국보고서 선택 항목 스크린샷",
+      "visaType": "학생비자 (D비자)",
+      "insuranceProvider": "국내보험업체",
+      "costFlight": "왕복 160만원",
+      "costInsurance": "약 15만원",
+      "costLivingMonthly": "첫달 정착 비용 약 150유로 / 여행비 약 3000유로",
+      "costLivingMonthlyNote": "기타생활비 입력란 원문이다. 정착비와 여행비의 월별 합계로 환산하지 않는다.",
+      "costTotal": "약 1500만원 (매달 Blocked Account 1050유로/ 기",
+      "costTotalIsTruncated": true,
+      "costTotalNote": "총비용 입력란이 스크린샷에서 잘려 보이는 부분까지만 보존했다.",
+      "reviewSummary": "학부수업으로 5 ECTS 과목 4개를 수강했으며 기말시험과 공통 평가 기준에 대비할 것을 권장했다. Home Göttingen에서 개인 방·화장실과 공용 주방을 이용했다. 기숙사 신청을 위해 입학 지원서를 빨리 작성하고, 비자 및 현지 거주증 절차를 미리 준비할 것을 안내했다. ESN과 기숙사 프로그램을 활용한 교류 경험을 공유했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "저는 아직 귀국 후 성적 인정을 받진 않았지만 초반에 learning agreement 작성 시 미리 이중전공 및 본전공 학과장님께 사전 승인을 받았습니다. 각 학과마다 내규가 다르기 때문에 잘 찾아보시고 미리 사전인정 받으시는 것을 추천드립니다.",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": "A005583",
+          "courseNameEn": "Art Policy and Museum Studies",
+          "foreignCredit": 5.0,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "A005637",
+          "courseNameEn": "Music and Social Action",
+          "foreignCredit": 5.0,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "A005761",
+          "courseNameEn": "English Literature: Historical Period",
+          "foreignCredit": 5.0,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "A005759",
+          "courseNameEn": "English Linguistics: Syntax and Semantics",
+          "foreignCredit": 5.0,
+          "satisfaction": 6
+        }
+      ]
+    },
+    {
+      "universityName": "NHH Norwegian School of Economics",
+      "source": "사용자 제공 스크린샷 3장",
+      "sourceSubmittedAt": "2026-06-30",
+      "sourceUpdatedAt": "2026-09-01T13:09:02+09:00",
+      "semester": null,
+      "semesterEvidence": null,
+      "studyPeriod": {
+        "startMonth": 1,
+        "startPart": "초순",
+        "endMonth": 6,
+        "endPart": "중순"
+      },
+      "courseRegistration": {
+        "classTypeSelected": "학부수업",
+        "applicationTimeSelected": "기타",
+        "applicationTimeOther": null,
+        "applicationMethodsSelected": [
+          "해외 대학교 웹사이트에서 본인이 신청"
+        ],
+        "registrationNote": "12월 24일경 수강 가능 과목 목록이 공개되고 1월부터 일정 기간 신청과 변경이 가능했다고 설명했다."
+      },
+      "housingType": "DORM",
+      "housingName": "Hatleberg",
+      "housingNote": "본문에서 Hatleberg와 HatleBreg 등 철자가 혼용된다. 숙소 이름 입력값을 기준으로 저장했다.",
+      "housingApplicationNote": "10월 초 Nomination 메일, 11월 1일 기숙사 신청 마감",
+      "visaDuration": "2주",
+      "visaDurationEvidence": "귀국보고서 선택 항목 스크린샷",
+      "visaType": "학생 비자",
+      "insuranceProvider": "국내보험업체",
+      "insuranceNote": "본문에서는 기존 이용하던 보험사와 보장범위·금액을 비교해 해외장기체류보험을 가입했다고 설명했다.",
+      "costFlight": "Bergen행 비행기 약 100만 원(출국편 편도)",
+      "costInsurance": "약 20만원",
+      "costLivingMonthly": "여행 약 1천5백만원",
+      "costLivingMonthlyNote": "기타생활비 입력란에 기재된 여행비다. 월별 생활비로 환산하지 않는다.",
+      "costTotal": "기숙사비 달 90-100만원/식비 25-50만원",
+      "costTotalNote": "총비용 입력란 원문이다. 학기 총액으로 합산하지 않는다.",
+      "reviewSummary": "1월 초순부터 6월 중순까지 수학하며 영어로 진행되는 과목을 수강했다. Hatleberg 기숙사와 Sammen 신청 경로, 공항에서의 대중교통·공항버스·우버 이용 경험을 공유했다. 학기 초 환영 행사와 교내 동아리를 소개했으며, 식비 절약을 위해 현지 마트 이용을 권장했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "아직 학점 인정을 받지 않아 결과는 모르지만 6학점 인정 받을 것 같습니다. 교환교 기준 16학점, 본교 기준 12학점(학과당 최대 3학점 인정) 인정 가능하나, 제 학과는 수강 목록 중 두 개만 받아줘서 두 과목만 인정되어 같이 간 친구들보다 인정이 더 빡빡해요... 특히 Taxation 수업의 경우 수강생 절반이 F를 받을 만큼 악명이 높았는데... 다들 이 점 참고하시길 바랍니다. 노르웨이어 수업을 제외하고는 단순 학기말 보고서 혹은 시험 한 번으로 성적 판정이 나며, 보고서의 특성상 기준이 모호하기도 했던 것 같습니다.",
+      "confirmedCourseCases": [],
+      "courseCreditNote": "과목 표는 각 과목을 4학점으로 기재한다. 후기에는 노르웨이에서는 학점이 다르게 표시된다는 설명이 있다. 표의 값을 보존하고 ECTS 등 실제 단위는 추가 확인이 필요하다.",
+      "courses": [
+        {
+          "courseCode": "FOR16",
+          "courseNameEn": "Sustainable investments",
+          "foreignCredit": 4.0,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "NOR10",
+          "courseNameEn": "Norwegian Language for Foreign Students level I (A1)",
+          "foreignCredit": 4.0,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "SOL11",
+          "courseNameEn": "Managing Projects in the Digital Age",
+          "foreignCredit": 4.0,
+          "satisfaction": 7
+        },
+        {
+          "courseCode": "FOR11",
+          "courseNameEn": "Business Taxation",
+          "foreignCredit": 4.0,
+          "satisfaction": 1
+        }
+      ]
+    },
+    {
+      "universityName": "Goethe University Frankfurt am Main",
+      "source": "사용자 제공 귀국보고서 스크린샷",
+      "sourceSubmittedAt": "2026-08-11",
+      "sourceUpdatedAt": "2026-08-12T16:08:52+09:00",
+      "semester": "2026-1",
+      "semesterEvidence": "사용자 확인",
+      "studyPeriod": {
+        "startMonth": 3,
+        "startPart": "초순",
+        "endMonth": 8,
+        "endPart": "초순"
+      },
+      "housingType": "DORM",
+      "housingName": "Platenstrasse 6",
+      "housingNote": "개인 욕실과 주방이 있는 apartment. 기숙사 신청 메일 직후 신청 권장.",
+      "visaDuration": "3개월",
+      "visaType": "학생 비자",
+      "insuranceProvider": "외국대학교",
+      "costFlight": "왕복 약 200만원",
+      "costInsurance": "매달 약 146유로",
+      "costLivingMonthly": "매달 992유로(엑스파트리오)",
+      "costTotal": "약 1000만원+여행비",
+      "reviewSummary": "정규학기 전 DIA 독일어 과정과 버디 프로그램을 추천한다. 대형 lecture와 tutorial로 수업을 진행하며 lecture는 별도 수강신청을 하지 않는다. apartment형 기숙사에 만족했고 프랑크푸르트의 교통과 여행 접근성이 좋다고 평가했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "외대 경영학과는 B 이상, 국제통상학과는 C 이상을 받아야 학점 인정을 받을 수 있었다고 작성했다. 개별 과목의 본교 대응 과목과 인정 학점은 제시하지 않았다.",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": null,
+          "courseNameEn": "DIA - Deutsch Intensivkurs für Austauschstudierende",
+          "foreignCredit": 3,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "WPMF_INFI",
+          "courseNameEn": "International Finance",
+          "foreignCredit": 6,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "WPME_MECC",
+          "courseNameEn": "Macroeconomics of Climate Change",
+          "foreignCredit": 6,
+          "satisfaction": 8
+        }
+      ]
+    },
+    {
+      "universityName": "Audencia Business School",
+      "source": "사용자 제공 귀국보고서 스크린샷",
+      "sourceSubmittedAt": "2026-02-24",
+      "sourceUpdatedAt": "2026-02-24T17:02:34+09:00",
+      "semester": "2025-2",
+      "semesterEvidence": "사용자 확인",
+      "studyPeriod": {
+        "startMonth": 9,
+        "startPart": "초순",
+        "endMonth": 12,
+        "endPart": "중순"
+      },
+      "housingType": "SELF",
+      "housingName": null,
+      "housingNote": "기숙사는 신청 가능하지만 이용하지 않고 학교 근처 셰어하우스에서 생활.",
+      "visaDuration": "2주",
+      "visaType": "학생비자-D",
+      "insuranceProvider": "국내보험업체",
+      "costFlight": "170",
+      "costInsurance": "20",
+      "costLivingMonthly": "약 월 200만원씩,+여행비",
+      "costTotal": "대략 2000만원 소요",
+      "reviewSummary": "팀플·발표·그룹 과제가 많고 라이팅과 리스닝 역량이 필요하다고 설명한다. 입학 허가 후 안내 메일을 받아 정해진 기간 구글폼으로 수강신청하며 시간표가 매주 바뀔 수 있다. 학교 근처 셰어하우스에서 생활했고 국제학생회와 교내 동아리 활동을 소개했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "학과장님에게 미리 수강과목에 대해 전공 학점 허가가 된다고 답변을 받았습니다.",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": "STR402",
+          "courseNameEn": "Business Simulation",
+          "foreignCredit": 3,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "ENT402",
+          "courseNameEn": "Entrepreneurial Project and Business plan",
+          "foreignCredit": 4,
+          "satisfaction": 8
+        },
+        {
+          "courseCode": "FIN406",
+          "courseNameEn": "Financial Analysis",
+          "foreignCredit": 5,
+          "satisfaction": 9
+        },
+        {
+          "courseCode": "FIN467",
+          "courseNameEn": "Financial Modeling",
+          "foreignCredit": 3,
+          "satisfaction": 6
+        },
+        {
+          "courseCode": "CLE400",
+          "courseNameEn": "French",
+          "foreignCredit": 4,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "FIN460",
+          "courseNameEn": "Introduction to International Project Finance",
+          "foreignCredit": 3,
+          "satisfaction": 6
+        }
+      ],
+      "costFlightNote": "원문에 통화·금액 단위가 없어 환산하지 않음.",
+      "costInsuranceNote": "원문에 통화·금액 단위가 없어 환산하지 않음. 본문에는 카카오보험 가입이라고 기재."
+    },
+    {
+      "universityName": "EM Normandie Business School",
+      "source": "사용자 제공 귀국보고서 스크린샷",
+      "isSynthetic": false,
+      "sourceSubmittedAt": "2025-09-07",
+      "sourceUpdatedAt": "2025-09-07T20:09:49+09:00",
+      "semester": "2025-1",
+      "semesterEvidence": "사용자 확인",
+      "studyPeriod": {
+        "startMonth": 1,
+        "startPart": "초순",
+        "endMonth": 4,
+        "endPart": "중순"
+      },
+      "housingType": "SELF",
+      "housingName": "Twenty campus - Le havre",
+      "housingNote": "학교 기숙사 신청 불가로 표시. 학교가 숙소 플랫폼을 소개하지만 직접 찾아도 됨. Twenty campus 사설 기숙사에서 거주했으며 월세 약 80~90만원, 도보 약 3분이라고 설명.",
+      "visaDuration": "4주",
+      "visaType": "학생 비자",
+      "insuranceProvider": "국내보험업체",
+      "insuranceNote": "본문에는 인슈플러스 유학생보험 가입이라고 기재.",
+      "costFlight": "왕복 약 120만원",
+      "costInsurance": "약 20만원",
+      "costLivingMonthly": null,
+      "costLivingOther": "약 200만원",
+      "costLivingNote": "기타생활비의 기간이 명시되지 않아 월 비용으로 환산하지 않음.",
+      "costTotal": "약 1500만원",
+      "courseRegistrationNote": "입학허가서 수령 이후 희망 과목 리스트 제출. 시간표가 매주 달라지고 수강신청 변경기간은 길지 않다고 설명.",
+      "reviewSummary": "르아브르 캠퍼스에서 수학했으며 팀플과 발표가 많았다고 설명한다. Services Marketing 수업을 추천했고 Port Management 수업은 어려웠다고 평가했다. 학교 근처 사설 기숙사에 거주했으며 학교 직원들이 친절하고 학기 중 짧은 방학을 활용해 여행했다고 작성했다.",
+      "reviewSummaryIsGenerated": true,
+      "recognitionNote": "일단 외대는 절대평가라고 알고 있는데, 제가 받은 성적표에는 백분위 비율이 적혀있었습니다. 성적표는 매우 늦게 나오는 편이며 중간 3월과 이사 날짜 이후에도 문의했으나 아직 없다는 답변을 받았습니다. Incoming RI라는 메일로 요청하여 수령했습니다. 개별 본교 대응 과목과 인정 학점은 확인되지 않았습니다.",
+      "confirmedCourseCases": [],
+      "courses": [
+        {
+          "courseCode": "2425_MKT_1_EN_009",
+          "courseNameEn": "Services Marketing",
+          "foreignCredit": 5,
+          "satisfaction": 10
+        },
+        {
+          "courseCode": "2425_SCM_1_EN_007",
+          "courseNameEn": "Port Management",
+          "foreignCredit": 5,
+          "satisfaction": 1
+        },
+        {
+          "courseCode": "2425_DFC_1_EN_010",
+          "courseNameEn": "Internet Law and Cybersecurity",
+          "foreignCredit": 5,
+          "satisfaction": 6
+        },
+        {
+          "courseCode": "2425_MKT_1_EN_036",
+          "courseNameEn": "Financial And Gaming Services",
+          "foreignCredit": 5,
+          "satisfaction": 7
+        }
+      ]
+    }
+  ],
+  "unavailableReports": [
+    {
+      "universityName": "Queensland University of Technology",
+      "status": "NOT_PROVIDED",
+      "reason": "실제 귀국보고서 미확보. 사용자 요청으로 보고서 및 과목 데이터를 비워 둠."
+    }
+  ]
+}

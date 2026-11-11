@@ -25,7 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = UniversityController.class, properties = "app.cors.allowed-origins=http://localhost:3000")
+@WebMvcTest(controllers = UniversitySearchController.class, properties = "app.cors.allowed-origins=http://localhost:3000")
 @Import(SecurityConfig.class)
 class UniversityControllerTests {
 

@@ -4,7 +4,8 @@
 -- 대학 메타데이터는 첨부 78개교 조사표의 국가·인증·학점 체계 열을 사용한다.
 -- 성적, 보고서, 과목과 인정 사례는 모두 가상의 시연 데이터다.
 -- 로컬 시연 계정 passhufs-demo01@example.hufs.ac.kr ~ passhufs-demo10@example.hufs.ac.kr
--- 공통 시연 비밀번호 PassHufsDemo27!
+-- 시연 계정 자격 증명은 팀 비공개 채널에서 관리한다.
+-- 이 파일은 개발·시연 DB에서만 수동 실행하며 배포 DB에는 실행하지 않는다.
 
 SET NAMES utf8mb4;
 

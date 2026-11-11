@@ -42,6 +42,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
         var paths = PathPatternRequestMatcher.withDefaults();
+        var universities = paths.matcher(HttpMethod.GET, "/api/v1/universities");
+        var universityCountries = paths.matcher(HttpMethod.GET, "/api/v1/universities/countries");
+        var universityDetail = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}");
         var studyPlanById = new OrRequestMatcher(
                 paths.matcher(HttpMethod.POST, "/api/v1/study-plans/{studyPlanId}/items"),
                 paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans/{studyPlanId}/items/{itemId}"),
@@ -65,6 +68,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(universities).authenticated()
+                        .requestMatchers(universityCountries).authenticated()
+                        .requestMatchers(universityDetail).authenticated()
                         .requestMatchers(studyPlanById).authenticated()
                         .requestMatchers(studyPlans).authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/universities/search", "/api/v1/home-courses").authenticated()
@@ -74,7 +80,9 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint((request, response, e) ->
-                                SecurityErrorWriter.write(response, studyPlanById.matches(request)
+                                SecurityErrorWriter.write(response, universityCountries.matches(request) || universityDetail.matches(request)
+                                        ? ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED : universities.matches(request)
+                                        ? ErrorCode.UNIVERSITY_LOGIN_REQUIRED : studyPlanById.matches(request)
                                         ? ErrorCode.STUDY_PLAN_LOGIN_REQUIRED
                                         : studyPlans.matches(request) ? ErrorCode.AUTHENTICATION_REQUIRED : ErrorCode.UNAUTHORIZED))
                         .accessDeniedHandler((request, response, e) ->

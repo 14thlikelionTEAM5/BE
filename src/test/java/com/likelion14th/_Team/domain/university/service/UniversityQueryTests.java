@@ -32,6 +32,15 @@ class UniversityQueryTests {
         assertTrue(UniversityQueryService.changes(agreement(true, 2), null, false).isEmpty());
         assertEquals(List.of("NEW"), UniversityQueryService.changes(agreement(true, 2), null, true));
     }
+    @Test void closedAnnouncementAlwaysHasStoppedBadgeWithoutPriorSemester() {
+        assertEquals(List.of("RECRUITMENT_STOPPED"), UniversityQueryService.changes(agreement(false, null), null, false));
+    }
+    @Test void previouslyClosedSchoolKeepsStoppedBadgeAndNewClosedSchoolHasBothBadges() {
+        assertEquals(List.of("RECRUITMENT_STOPPED"),
+                UniversityQueryService.changes(agreement(false, 2), agreement(false, 2), true));
+        assertEquals(List.of("NEW", "RECRUITMENT_STOPPED"),
+                UniversityQueryService.changes(agreement(false, 2), null, true));
+    }
     @Test void exactThresholdsPass() {
         assertEquals("ELIGIBLE", calculator.calculate(agreement(true, 2), new BigDecimal("3.00"),
                 Map.of(LanguageTestType.IELTS, new BigDecimal("6.5")),

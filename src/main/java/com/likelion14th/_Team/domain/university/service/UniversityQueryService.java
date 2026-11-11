@@ -102,13 +102,12 @@ public class UniversityQueryService {
     }
     static List<String> changes(Agreement current, Agreement previous, boolean hasPreviousSemester) {
         if (current == null) return List.of("RECRUITMENT_STOPPED");
-        if (!hasPreviousSemester) return List.of();
         List<String> result = new ArrayList<>();
-        if (previous == null) result.add("NEW");
-        else {
-            if (!Objects.equals(current.getQuota(), previous.getQuota())) result.add("QUOTA_CHANGED");
-            if (previous.isOpen() && !current.isOpen()) result.add("RECRUITMENT_STOPPED");
+        if (hasPreviousSemester) {
+            if (previous == null) result.add("NEW");
+            else if (!Objects.equals(current.getQuota(), previous.getQuota())) result.add("QUOTA_CHANGED");
         }
+        if (!current.isOpen()) result.add("RECRUITMENT_STOPPED");
         return List.copyOf(result);
     }
 }

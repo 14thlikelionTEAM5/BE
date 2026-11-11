@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -50,4 +51,16 @@ public class StudyPlanItem extends BaseEntity {
 
     @Column(name = "recognition_type", length = 20)
     private String recognitionType;
+
+    @Builder
+    private StudyPlanItem(StudyPlan studyPlan, String itemType, String courseName, BigDecimal foreignCredit,
+                          Long sourceCourseId, HomeCourse homeCourse, String recognitionType) {
+        this.studyPlan = studyPlan;
+        this.itemType = itemType;
+        this.courseName = courseName;
+        this.foreignCredit = foreignCredit;
+        this.sourceCourseId = sourceCourseId;
+        this.homeCourse = homeCourse;
+        this.recognitionType = recognitionType;
+    }
 }

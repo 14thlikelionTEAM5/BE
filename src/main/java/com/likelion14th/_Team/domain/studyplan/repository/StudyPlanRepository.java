@@ -32,6 +32,10 @@ public interface StudyPlanRepository extends JpaRepository<StudyPlan, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<StudyPlan> findForDeleteById(Long id);
 
+    @Modifying
+    @Query("update StudyPlan plan set plan.updatedAt = :updatedAt where plan.id = :id")
+    void touch(@Param("id") Long id, @Param("updatedAt") LocalDateTime updatedAt);
+
     @Query("""
             select plan from StudyPlan plan
             join fetch plan.university

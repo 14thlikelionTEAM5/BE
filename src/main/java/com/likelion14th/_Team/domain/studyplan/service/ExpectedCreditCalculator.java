@@ -55,8 +55,10 @@ public class ExpectedCreditCalculator {
         }
         BigDecimal courseLimit = BigDecimal.valueOf(policy.getMaxCreditPerCourse());
         return items.stream()
-                .filter(item -> item.getHomeCourse() != null)
-                .map(item -> expectedCredit(item, item.getHomeCourse().getId(), calculation, policy))
+                .map(item -> {
+                    Long homeCourseId = item.getHomeCourse() == null ? null : item.getHomeCourse().getId();
+                    return expectedCredit(item, homeCourseId, calculation, policy);
+                })
                 .filter(java.util.Objects::nonNull)
                 .map(credit -> credit.min(courseLimit))
                 .reduce(BigDecimal.ZERO, BigDecimal::add)

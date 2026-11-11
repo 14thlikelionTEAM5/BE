@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleCustom(CustomException e) {
         ErrorCode errorCode = e.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus())
-                .body(ApiResponse.error(errorCode.getCode(), e.getMessage(), null));
+                .body(ApiResponse.error(errorCode.getCode(), e.getMessage(), e.getErrors()));
     }
 
     /** @Valid 검증 실패 (RequestBody) -> errors에 필드별 사유를 담는다 */

@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.likelion14th._Team.domain.university.dto.UniversitySearchResponse;
+import com.likelion14th._Team.domain.university.service.UniversityQueryService;
 import com.likelion14th._Team.domain.university.service.UniversityService;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
@@ -37,6 +38,9 @@ class UniversityControllerTests {
 
     @MockitoBean
     private UniversityService universityService;
+
+    @MockitoBean
+    private UniversityQueryService universityQueryService;
 
     @MockitoBean
     private JwtProvider jwtProvider;

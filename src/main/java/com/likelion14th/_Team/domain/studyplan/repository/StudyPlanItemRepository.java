@@ -1,6 +1,7 @@
 package com.likelion14th._Team.domain.studyplan.repository;
 
 import com.likelion14th._Team.domain.studyplan.entity.StudyPlanItem;
+import java.util.Collection;
 import java.util.Optional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,4 +32,9 @@ public interface StudyPlanItemRepository extends JpaRepository<StudyPlanItem, Lo
             where course.id = :sourceCourseId
             """)
     Optional<Long> findSourceUniversityId(@Param("sourceCourseId") Long sourceCourseId);
+
+    /** 귀국보고서 과목이 삭제될 때 수강계획 항목의 원본 연결만 끊는다 (항목 자체와 이름·학점은 유지) */
+    @Modifying(flushAutomatically = true)
+    @Query("update StudyPlanItem item set item.sourceCourseId = null where item.sourceCourseId in :courseIds")
+    int clearSourceCourse(@Param("courseIds") Collection<Long> courseIds);
 }

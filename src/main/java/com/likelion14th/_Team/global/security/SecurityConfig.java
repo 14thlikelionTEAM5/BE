@@ -42,6 +42,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
         var paths = PathPatternRequestMatcher.withDefaults();
+        var admissionStats = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports/stats");
+        var admissionReports = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports");
         var studyPlanById = new OrRequestMatcher(
                 paths.matcher(HttpMethod.POST, "/api/v1/study-plans/{studyPlanId}/items"),
                 paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans/{studyPlanId}/items/{itemId}"),
@@ -65,6 +67,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(admissionStats).authenticated()
+                        .requestMatchers(admissionReports).authenticated()
                         .requestMatchers(studyPlanById).authenticated()
                         .requestMatchers(studyPlans).authenticated()
                         // TODO: 로그인 API가 머지되면 permitAll()을 authenticated()로 바꾼다.

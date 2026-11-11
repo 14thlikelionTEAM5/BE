@@ -52,6 +52,14 @@ public class StudyPlanItem extends BaseEntity {
     @Column(name = "recognition_type", length = 20)
     private String recognitionType;
 
+    public String getResponseItemType() {
+        return switch (itemType) {
+            case "CUSTOM" -> "DIRECT";
+            case "REGISTERED" -> "REFERENCE";
+            default -> itemType;
+        };
+    }
+
     @Builder
     private StudyPlanItem(StudyPlan studyPlan, String itemType, String courseName, BigDecimal foreignCredit,
                           Long sourceCourseId, HomeCourse homeCourse, String recognitionType) {

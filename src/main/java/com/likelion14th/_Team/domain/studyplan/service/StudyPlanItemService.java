@@ -39,6 +39,7 @@ public class StudyPlanItemService {
         StudyPlanItem item = itemRepository.findByIdAndStudyPlanId(itemId, studyPlanId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STUDY_PLAN_ITEM_NOT_FOUND));
         itemRepository.delete(item);
+        planRepository.touch(studyPlanId, LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         return new StudyPlanItemDeleteResponse(itemId);
     }
 
@@ -92,7 +93,7 @@ public class StudyPlanItemService {
         LocalDateTime updatedAt = LocalDateTime.now(ZoneId.of("Asia/Seoul")).withNano(0);
         itemRepository.updateCredits(studyPlanId, itemId, credit, home, updatedAt);
         planRepository.touch(studyPlanId, updatedAt);
-        return new StudyPlanItemUpdateResponse(item.getId(), item.getItemType(), item.getCourseName(), credit,
+        return new StudyPlanItemUpdateResponse(item.getId(), item.getResponseItemType(), item.getCourseName(), credit,
                 item.getSourceCourseId(), home == null ? null : home.getId(), item.getRecognitionType(),
                 updatedAt.atZone(ZoneId.of("Asia/Seoul")).toOffsetDateTime());
     }

@@ -5,6 +5,7 @@ import com.likelion14th._Team.global.exception.ErrorCode;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import tools.jackson.databind.JsonNode;
 
 public record StudyPlanItemCreateRequest(
@@ -21,6 +22,9 @@ public record StudyPlanItemCreateRequest(
         Long source = id(body, "sourceCourseId");
         Long home = id(body, "homeCourseId");
         String recognition = text(body, "recognitionType", 20, false);
+        if (recognition != null && !Set.of("GENERAL", "MAJOR_REQUIRED", "MAJOR_ELECTIVE").contains(recognition)) {
+            throw invalid("recognitionType", "GENERAL, MAJOR_REQUIRED, MAJOR_ELECTIVE 중 하나를 입력해 주세요.");
+        }
         switch (type) {
             case "REGISTERED" -> {
                 if (source == null) {

@@ -26,10 +26,9 @@ public interface StudyPlanItemRepository extends JpaRepository<StudyPlanItem, Lo
                       @Param("homeCourse") com.likelion14th._Team.domain.course.entity.HomeCourse homeCourse,
                       @Param("updatedAt") LocalDateTime updatedAt);
 
-    @Query(value = """
-            SELECT report.university_id FROM return_report_course course
-            JOIN return_report report ON report.id = course.return_report_id
-            WHERE course.id = :sourceCourseId
-            """, nativeQuery = true)
+    @Query("""
+            select course.returnReport.university.id from ReturnReportCourse course
+            where course.id = :sourceCourseId
+            """)
     Optional<Long> findSourceUniversityId(@Param("sourceCourseId") Long sourceCourseId);
 }

@@ -155,11 +155,7 @@ public class StudyPlanService {
     private Item detailItem(StudyPlanItem item, Calculation calculation, CreditPolicy policy) {
         Long homeCourseId = item.getHomeCourse() == null ? null : item.getHomeCourse().getId();
         BigDecimal expected = creditCalculator.expectedCredit(item, homeCourseId, calculation, policy);
-        String type = switch (item.getItemType()) {
-            case "CUSTOM" -> "DIRECT";
-            case "REGISTERED" -> "REFERENCE";
-            default -> item.getItemType();
-        };
+        String type = item.getResponseItemType();
         return new Item(item.getId(), type, item.getCourseName(), item.getForeignCredit(),
                 "DIRECT".equals(type) ? null : item.getSourceCourseId(), homeCourseId, item.getRecognitionType(),
                 expected, expected != null && expected.compareTo(BigDecimal.valueOf(policy.getMaxCreditPerCourse())) > 0);

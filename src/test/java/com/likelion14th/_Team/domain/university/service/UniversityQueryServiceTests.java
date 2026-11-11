@@ -1,0 +1,115 @@
+package com.likelion14th._Team.domain.university.service;
+
+import com.likelion14th._Team.domain.university.dto.*;
+import com.likelion14th._Team.domain.university.entity.*;
+import com.likelion14th._Team.domain.university.repository.UniversityQueryRepository;
+import com.likelion14th._Team.domain.user.entity.User;
+import com.likelion14th._Team.global.enums.CreditSystem;
+import java.util.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class UniversityQueryServiceTests {
+    private final UniversityQueryRepository repository = mock(UniversityQueryRepository.class);
+    private final UniversityQueryService service = new UniversityQueryService(repository, new UniversityEligibilityCalculator());
+    @BeforeEach void setup() {
+        when(repository.user(1L)).thenReturn(User.builder().build());
+        when(repository.profile(1L)).thenReturn(Optional.empty());
+        when(repository.semesters()).thenReturn(List.of("2027-1"));
+        when(repository.bookmarks(1L)).thenReturn(Set.of(1L));
+        when(repository.experienceUniversities()).thenReturn(Set.of(2L));
+        when(repository.universities()).thenReturn(List.of(school(1L,"Zulu","Belgium"),school(2L,"Alpha","USA")));
+    }
+    private University school(Long id, String name, String country) {
+        var u = University.builder().name(name).country(country).creditSystem(CreditSystem.ECTS).build();
+        ReflectionTestUtils.setField(u,"id",id);
+        return u;
+    }
+    @Test void includesSchoolsWithoutCurrentAnnouncementAndPreservesNulls() {
+        var data = service.list(1L,UniversitySearch.from(null,null,null,null,null));
+        assertEquals(2,data.totalCount());
+        var first = data.universities().getFirst();
+        assertEquals("Alpha",first.name());
+        assertNull(first.agreementId());
+        assertNull(first.languageRequirements());
+        assertTrue(first.hasExperienceData());
+        assertFalse(first.isBookmarked());
+        assertTrue(data.universities().get(1).isBookmarked());
+        assertEquals("NOT_ELIGIBLE",first.eligibility().status());
+    }
+    @Test void filtersKeywordCaseInsensitivelyAndCountryExactly() {
+        var data = service.list(1L,UniversitySearch.from("ALP","USA",null,null,null));
+        assertEquals(1,data.totalCount());
+        assertEquals("Alpha",data.universities().getFirst().name());
+        assertEquals("Zulu",service.list(1L,UniversitySearch.from(null,null,null,null,"COUNTRY")).universities().getFirst().name());
+    }
+    @Test void eligibleAndLanguageFiltersExcludeUnknownSchools() {
+        assertEquals(0,service.list(1L,UniversitySearch.from(null,null,null,"true",null)).totalCount());
+        assertEquals(0,service.list(1L,UniversitySearch.from(null,null,"IELTS",null,null)).totalCount());
+    }
+    @Test void noAgreementsStillReturnsUniversitiesWithNullSemester() {
+        when(repository.semesters()).thenReturn(List.of());
+        var data = service.list(1L,UniversitySearch.from(null,null,null,null,null));
+        assertNull(data.semester());
+        assertEquals(2,data.totalCount());
+    }
+    @Test void countriesReturnEmptyArrayWhenNoUniversitiesExist() {
+        when(repository.countries()).thenReturn(List.of());
+        assertTrue(service.countries(1L).countries().isEmpty());
+        verify(repository, never()).semesters();
+        verify(repository, never()).agreements(anyList());
+    }
+    @Test void countriesReturnAggregatedCountsWithoutAgreementFilter() {
+        var rows = List.of(new UniversityCountriesResponse.Country("네덜란드", 1L),
+                new UniversityCountriesResponse.Country("독일", 2L));
+        when(repository.countries()).thenReturn(rows);
+        assertEquals(rows, service.countries(1L).countries());
+        verify(repository, never()).semesters();
+    }
+    @Test void detailWithoutAnnouncementsPreservesSchoolAndNeedsCheck() {
+        when(repository.university(1L)).thenReturn(Optional.of(school(1L,"Zulu","Belgium")));
+        when(repository.studyPlanId(1L,1L)).thenReturn(Optional.empty());
+        var data = service.detail(1L,1L,null);
+        assertNull(data.semester());
+        assertNull(data.agreement());
+        assertTrue(data.availableSemesters().isEmpty());
+        assertEquals("NEEDS_CHECK",data.eligibility().status());
+        assertTrue(data.isBookmarked());
+        assertFalse(data.hasStudyPlan());
+        assertNull(data.studyPlanId());
+    }
+    @Test void detailDefaultsToSchoolLatestSemesterAndReturnsOwnedPlan() {
+        when(repository.university(1L)).thenReturn(Optional.of(school(1L,"Zulu","Belgium")));
+        var older = Agreement.builder().semester("2026-2").isOpen(true).build();
+        var latest = Agreement.builder().semester("2027-1").isOpen(true).costSummary("official cost").build();
+        ReflectionTestUtils.setField(latest,"id",10L);
+        when(repository.schoolAgreements(1L)).thenReturn(List.of(latest,older));
+        when(repository.studyPlanId(1L,1L)).thenReturn(Optional.of(7L));
+        var data=service.detail(1L,1L,null);
+        assertEquals("2027-1",data.semester());
+        assertEquals(List.of("2027-1","2026-2"),data.availableSemesters());
+        assertEquals("official cost",data.agreement().costSummary());
+        assertTrue(data.agreement().languageRequirements().isEmpty());
+        assertTrue(data.hasStudyPlan());
+        assertEquals(7L,data.studyPlanId());
+        verify(repository,never()).semesters();
+    }
+    @Test void explicitMissingSemesterDoesNotFallbackToOlderAnnouncement() {
+        when(repository.university(1L)).thenReturn(Optional.of(school(1L,"Zulu","Belgium")));
+        when(repository.schoolAgreements(1L)).thenReturn(List.of(Agreement.builder().semester("2027-1").build()));
+        when(repository.studyPlanId(1L,1L)).thenReturn(Optional.empty());
+        var data=service.detail(1L,1L,"2025-1");
+        assertEquals("2025-1",data.semester());
+        assertNull(data.agreement());
+        assertEquals("NEEDS_CHECK",data.eligibility().status());
+    }
+    @Test void missingSchoolReturns404() {
+        when(repository.university(999L)).thenReturn(Optional.empty());
+        var error=assertThrows(com.likelion14th._Team.global.exception.CustomException.class,
+                () -> service.detail(1L,999L,null));
+        assertEquals("E404",error.getErrorCode().getCode());
+    }
+}

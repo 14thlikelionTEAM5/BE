@@ -43,6 +43,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
         var paths = PathPatternRequestMatcher.withDefaults();
         var studyPlanById = new OrRequestMatcher(
+                paths.matcher(HttpMethod.POST, "/api/v1/study-plans/{studyPlanId}/items"),
+                paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans/{studyPlanId}/items/{itemId}"),
+                paths.matcher(HttpMethod.DELETE, "/api/v1/study-plans/{studyPlanId}/items/{itemId}"),
+                paths.matcher(HttpMethod.DELETE, "/api/v1/study-plans/{studyPlanId}/items"),
                 paths.matcher(HttpMethod.GET, "/api/v1/study-plans/{studyPlanId}"),
                 paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans/{studyPlanId}"),
                 paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans"),

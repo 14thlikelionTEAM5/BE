@@ -30,12 +30,16 @@ public enum ErrorCode {
     // 404
     UNIVERSITY_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "대학을 찾을 수 없습니다."),
     STUDY_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "수강계획을 찾을 수 없습니다."),
+    SOURCE_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "원본 과목을 찾을 수 없습니다."),
+    HOME_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "본교 과목을 찾을 수 없습니다."),
+    STUDY_PLAN_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "수강계획 과목을 찾을 수 없습니다."),
 
     // 409
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 가입된 학교 메일입니다"),
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 사용 중인 닉네임입니다"),
     STUDY_PLAN_UNIVERSITY_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 해당 학교의 수강계획이 있어요"),
     STUDY_PLAN_LIMIT_REACHED(HttpStatus.CONFLICT, "E409", "수강계획은 최대 5개까지 생성할 수 있습니다."),
+    STUDY_PLAN_ITEM_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 수강계획에 추가된 과목입니다."),
 
     // 429
     TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "E429", "잠시 후 다시 요청해 주세요"),

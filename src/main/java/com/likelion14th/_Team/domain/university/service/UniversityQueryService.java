@@ -35,9 +35,7 @@ public class UniversityQueryService {
         Map<LanguageTestType, BigDecimal> scores = new EnumMap<>(LanguageTestType.class);
         repository.scores(userId).forEach(s -> scores.put(s.getTestType(), s.getScore()));
         BigDecimal gpa = repository.profile(userId).map(p -> p.getGpa()).orElse(null);
-        Eligibility eligibility = a == null
-                ? new Eligibility("NEEDS_CHECK", List.of("NO_CURRENT_AGREEMENT"), "지원 조건을 확인해 주세요.")
-                : calculator.calculate(a, gpa, scores, language);
+        Eligibility eligibility = calculator.calculate(a, gpa, scores, language);
         var details = a == null ? null : new UniversityDetailResponse.AgreementDetail(a.getId(), a.getQuota(),
                 a.getExchangePeriod(), a.getMinGpa(), a.getCostSummary(), a.getBenefitSummary(), a.getRemarkSummary(),
                 a.getCourseRestriction(), a.isBusinessOnly(), a.isOpen(), a.getAnnouncedAt(), a.getImportedAt(),

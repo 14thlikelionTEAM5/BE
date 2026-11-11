@@ -1,3 +1,4 @@
+-- 재실행 정책: 기존 협정 공고·어학 기준은 덮어쓰지 않는다. 변경된 원문을 반영하려면 별도 검토된 수정 SQL을 사용한다.
 -- 2027-1 공식 협정 공고: 상세-자격요건등 시트의 대상 10개교.
 -- 기존 university.name으로 연결하며 대학 ID를 재생성하지 않는다.
 -- 사용자·귀국보고서·합격/탈락·수강계획 샘플은 생성하지 않는다.
@@ -22,16 +23,6 @@ INSERT INTO passhufs_notice_2027_1 VALUES
 START TRANSACTION;
 SET @demo_now = CURRENT_TIMESTAMP;
 
--- 2026-07-03 공지용 명단의 기준일. 모집 여부와 시연용 가상 합격 데이터는 별개다.
-INSERT INTO agreement (university_id,semester,quota,exchange_period,is_business_only,is_open,
-                       announced_at,imported_at,created_at,updated_at)
-SELECT u.id,'2027-1',d.quota,'1학기',d.business_only,d.is_open,'2026-07-03',@demo_now,@demo_now,@demo_now
-FROM passhufs_notice_2027_1 d JOIN university u ON u.name=d.name COLLATE utf8mb4_unicode_ci
-WHERE NOT EXISTS (
-    SELECT 1 FROM agreement a WHERE a.university_id=u.id AND a.semester='2027-1'
-);
-
-
 -- 공식 모집 엑셀 sheet1의 상세 조건. sheet2 요약본과 다른 경우 상세 원문을 사용한다.
 -- FIU의 2~3명처럼 정수 한 칸으로 표현하지 못하는 선발인원은 NULL과 원문을 함께 보존한다.
 DROP TEMPORARY TABLE IF EXISTS passhufs_notice_details;
@@ -53,15 +44,21 @@ INSERT INTO passhufs_notice_details VALUES
 ('EM Normandie Business School',3.3,5,1,'€ 800 ~ 1,300\n/월\n(Le Havre 기준\n출처-Information sheet)','•  외국대학 등록금 면제','• 지원가능 학부: International Management(BIM), Business Administraion(BBA)\n• 석사 과정은 원칙적으로 수강 불가하나 한국의 4학년에 해당하는 프랑스 그랑제꼴 과정 Master 1년 과정 수강을 희망하는 4학년 교환학생인 경우 학과와 검토 후 승인여부 결정\n• 2027학년도 1학기 이후 매년 봄학기에만 교환학생 선발 예정','선발인원 원문 5\n• 학부과정은 Le Havre 캠퍼스만 선택 가능 \n• 각종안내(강의목록, Factsheet, Welcome guide 포함): https://www.em-normandie.com/en/exchange-programmes\n• 숙소(외부숙소 학생 스스로 찾아야함) \n- Campus France website 방문하여 추가 정보 확인 필요, 주정부 운영 CROUS와 연계가능','https://www.em-normandie.com/en/exchange-programmes');
 
 UPDATE university u JOIN passhufs_notice_details d ON u.name=d.name COLLATE utf8mb4_unicode_ci
-SET u.course_list_url=d.course_list_url;
+SET u.course_list_url=d.course_list_url
+WHERE u.course_list_url IS NULL AND d.course_list_url IS NOT NULL;
 
-UPDATE agreement a JOIN university u ON u.id=a.university_id
-JOIN passhufs_notice_details d ON u.name=d.name COLLATE utf8mb4_unicode_ci
-SET a.min_gpa=d.min_gpa,a.quota=d.quota,a.is_open=d.is_open,
-    a.cost_summary=d.cost_summary,a.benefit_summary=d.benefit_summary,
-    a.course_restriction=d.course_restriction,a.remark_summary=d.remark_summary,
-    a.source_url='https://oia.hufs.ac.kr/bbs/oia/3431/262695/artclView.do'
-WHERE a.semester='2027-1';
+-- 기존 공고는 수동 수정값을 보존한다. 신규 공고만 상세 정보와 함께 삽입한다.
+INSERT INTO agreement (university_id,semester,quota,exchange_period,is_business_only,is_open,
+                       min_gpa,cost_summary,benefit_summary,course_restriction,remark_summary,
+                       source_url,announced_at,imported_at,created_at,updated_at)
+SELECT u.id,'2027-1',details.quota,'1학기',d.business_only,details.is_open,
+       details.min_gpa,details.cost_summary,details.benefit_summary,details.course_restriction,
+       details.remark_summary,'https://oia.hufs.ac.kr/bbs/oia/3431/262695/artclView.do',
+       '2026-07-03',@demo_now,@demo_now,@demo_now
+FROM passhufs_notice_2027_1 d
+JOIN university u ON u.name=d.name COLLATE utf8mb4_unicode_ci
+JOIN passhufs_notice_details details ON details.name=d.name
+WHERE NOT EXISTS (SELECT 1 FROM agreement a WHERE a.university_id=u.id AND a.semester='2027-1');
 
 DROP TEMPORARY TABLE IF EXISTS passhufs_notice_languages;
 CREATE TEMPORARY TABLE passhufs_notice_languages (
@@ -111,13 +108,6 @@ WHERE NOT EXISTS (
     SELECT 1 FROM agreement_language_requirement l
     WHERE l.agreement_id=a.id AND l.test_type=d.test_type COLLATE utf8mb4_unicode_ci
 );
-
-UPDATE agreement_language_requirement l JOIN agreement a ON a.id=l.agreement_id
-JOIN university u ON u.id=a.university_id
-JOIN passhufs_notice_languages d ON u.name=d.name COLLATE utf8mb4_unicode_ci
-    AND l.test_type=d.test_type COLLATE utf8mb4_unicode_ci
-SET l.min_score=d.min_score,l.min_section_score=d.min_section_score,l.condition_note=d.condition_note
-WHERE a.semester='2027-1';
 
 DROP TEMPORARY TABLE passhufs_notice_languages;
 DROP TEMPORARY TABLE passhufs_notice_details;

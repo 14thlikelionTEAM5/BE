@@ -69,14 +69,14 @@ class UniversityQueryServiceTests {
         assertEquals(rows, service.countries(1L).countries());
         verify(repository, never()).semesters();
     }
-    @Test void detailWithoutAnnouncementsPreservesSchoolAndNeedsCheck() {
+    @Test void detailWithoutAnnouncementsPreservesSchoolAndIsNotEligible() {
         when(repository.university(1L)).thenReturn(Optional.of(school(1L,"Zulu","Belgium")));
         when(repository.studyPlanId(1L,1L)).thenReturn(Optional.empty());
         var data = service.detail(1L,1L,null);
         assertNull(data.semester());
         assertNull(data.agreement());
         assertTrue(data.availableSemesters().isEmpty());
-        assertEquals("NEEDS_CHECK",data.eligibility().status());
+        assertEquals("NOT_ELIGIBLE",data.eligibility().status());
         assertTrue(data.isBookmarked());
         assertFalse(data.hasStudyPlan());
         assertNull(data.studyPlanId());
@@ -104,12 +104,26 @@ class UniversityQueryServiceTests {
         var data=service.detail(1L,1L,"2025-1");
         assertEquals("2025-1",data.semester());
         assertNull(data.agreement());
-        assertEquals("NEEDS_CHECK",data.eligibility().status());
+        assertEquals("NOT_ELIGIBLE",data.eligibility().status());
     }
     @Test void missingSchoolReturns404() {
         when(repository.university(999L)).thenReturn(Optional.empty());
         var error=assertThrows(com.likelion14th._Team.global.exception.CustomException.class,
                 () -> service.detail(1L,999L,null));
         assertEquals("E404",error.getErrorCode().getCode());
+    }
+    @Test void closedAnnouncementHasSameEligibilityInListAndDetail() {
+        var school = school(1L,"Zulu","Belgium");
+        var closed = Agreement.builder().semester("2027-1").university(school).isOpen(false).build();
+        ReflectionTestUtils.setField(closed,"id",10L);
+        when(repository.university(1L)).thenReturn(Optional.of(school));
+        when(repository.schoolAgreements(1L)).thenReturn(List.of(closed));
+        when(repository.agreements(List.of("2027-1"))).thenReturn(List.of(closed));
+        when(repository.studyPlanId(1L,1L)).thenReturn(Optional.empty());
+        var detail = service.detail(1L,1L,"2027-1");
+        var listed = service.list(1L,UniversitySearch.from(null,"Belgium",null,null,null)).universities().getFirst();
+        assertEquals(listed.eligibility(),detail.eligibility());
+        assertEquals(List.of("RECRUITMENT_STOPPED"),detail.eligibility().reasonCodes());
+        assertEquals("이번 학기 모집 없음",detail.eligibility().message());
     }
 }

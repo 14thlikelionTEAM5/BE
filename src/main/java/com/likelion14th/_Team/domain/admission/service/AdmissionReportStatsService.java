@@ -16,7 +16,7 @@ public class AdmissionReportStatsService {
     private final UniversityRepository universities;
 
     public AdmissionReportListResponse list(Long userId, long universityId, String result) {
-        if (userId == null || !repository.userExists(userId)) throw new CustomException(ErrorCode.UNAUTHORIZED);
+        if (userId == null) throw new CustomException(ErrorCode.UNAUTHORIZED);
         if (!universities.existsById(universityId)) {
             throw new CustomException(ErrorCode.UNIVERSITY_NOT_FOUND, "존재하지 않는 학교입니다");
         }
@@ -24,7 +24,7 @@ public class AdmissionReportStatsService {
         return new AdmissionReportListResponse(universityId, reports.size(), reports);
     }
     public AdmissionStatsResponse stats(Long userId, AdmissionReportFilter filter) {
-        if (userId == null || !repository.userExists(userId)) throw new CustomException(ErrorCode.UNAUTHORIZED);
+        if (userId == null) throw new CustomException(ErrorCode.UNAUTHORIZED);
         var university=universities.findById(filter.universityId()).orElseThrow(() ->
                 new CustomException(ErrorCode.UNIVERSITY_NOT_FOUND,"존재하지 않는 학교입니다"));
         var counts=repository.counts(filter);

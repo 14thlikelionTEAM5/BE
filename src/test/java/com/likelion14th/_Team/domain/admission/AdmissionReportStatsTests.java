@@ -57,6 +57,8 @@ class AdmissionReportStatsTests {
         assertEquals(0,new BigDecimal("3.10").compareTo(data.gpa().min()));
         assertEquals(0,new BigDecimal("4.00").compareTo(data.gpa().max()));
         assertEquals(2,data.languageScores().size());
+        assertEquals("TOEFL_IBT",data.languageScores().get(0).testType());
+        assertEquals("IELTS",data.languageScores().get(1).testType());
         assertEquals(0,new BigDecimal("6.5").compareTo(data.languageScores().stream().filter(s -> s.testType().equals("IELTS")).findFirst().orElseThrow().max()));
         assertEquals(0,new BigDecimal("4.50").compareTo(data.myProfile().gpa()));
         assertEquals(1,data.myProfile().languageScores().size());

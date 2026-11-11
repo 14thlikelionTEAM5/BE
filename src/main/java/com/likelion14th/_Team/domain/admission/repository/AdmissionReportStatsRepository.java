@@ -3,7 +3,8 @@ package com.likelion14th._Team.domain.admission.repository;
 import com.likelion14th._Team.domain.admission.dto.AdmissionReportFilter;
 import com.likelion14th._Team.domain.admission.dto.AdmissionReportListResponse;
 import com.likelion14th._Team.domain.admission.dto.AdmissionStatsResponse.*;
-import com.likelion14th._Team.domain.user.entity.*;
+import com.likelion14th._Team.domain.user.entity.UserLanguageScore;
+import com.likelion14th._Team.global.enums.LanguageTestType;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -51,19 +52,26 @@ public class AdmissionReportStatsRepository {
     public List<LanguageRange> languageScores(AdmissionReportFilter filter) {
         return query("select a.languageTestType, min(a.languageScore), max(a.languageScore)",filter,
                 " and a.result = 'PASS' and a.languageTestType is not null and a.languageScore is not null group by a.languageTestType order by a.languageTestType",Object[].class)
-                .getResultList().stream().map(row -> new LanguageRange((String)row[0],(BigDecimal)row[1],(BigDecimal)row[2])).toList();
+                .getResultList().stream().map(row -> new LanguageRange((String)row[0],(BigDecimal)row[1],(BigDecimal)row[2]))
+                .sorted(Comparator.comparingInt((LanguageRange score) -> testOrder(score.testType()))
+                        .thenComparing(LanguageRange::testType)).toList();
     }
     public List<String> semesters(long universityId) {
         return em.createQuery("select distinct a.semester from AdmissionReport a where a.university.id = :id order by a.semester desc",String.class)
                 .setParameter("id",universityId).getResultList();
     }
-    public boolean userExists(Long userId) { return em.find(User.class,userId) != null; }
     public MyProfile myProfile(Long userId) {
         BigDecimal gpa=em.createQuery("select p.gpa from UserProfile p where p.user.id = :id",BigDecimal.class)
                 .setParameter("id",userId).getResultStream().findFirst().orElse(null);
         var scores=em.createQuery("select s from UserLanguageScore s where s.user.id = :id order by s.testType",UserLanguageScore.class)
                 .setParameter("id",userId).getResultList().stream()
+                .sorted(Comparator.comparingInt(s -> s.getTestType().ordinal()))
                 .map(s -> new MyLanguageScore(s.getTestType().name(),s.getScore())).toList();
         return new MyProfile(gpa,scores);
+    }
+    // 응답 정렬: TOEFL_IBT, TOEFL_NEW, TOEFL_ITP, IELTS. 기존 미정의 값은 마지막에 둔다.
+    private int testOrder(String type) {
+        try { return LanguageTestType.valueOf(type).ordinal(); }
+        catch (IllegalArgumentException exception) { return Integer.MAX_VALUE; }
     }
 }

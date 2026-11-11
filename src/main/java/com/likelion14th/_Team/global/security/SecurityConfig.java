@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -39,6 +41,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
+        var paths = PathPatternRequestMatcher.withDefaults();
+        var studyPlanById = new OrRequestMatcher(
+                paths.matcher(HttpMethod.GET, "/api/v1/study-plans/{studyPlanId}"),
+                paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans/{studyPlanId}"),
+                paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans"),
+                paths.matcher(HttpMethod.DELETE, "/api/v1/study-plans/{studyPlanId}"),
+                paths.matcher(HttpMethod.DELETE, "/api/v1/study-plans"));
+        var studyPlans = new OrRequestMatcher(
+                paths.matcher(HttpMethod.GET, "/api/v1/study-plans"),
+                paths.matcher(HttpMethod.POST, "/api/v1/study-plans"));
         http
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
@@ -49,12 +61,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(studyPlanById).authenticated()
+                        .requestMatchers(studyPlans).authenticated()
                         // TODO: 로그인 API가 머지되면 permitAll()을 authenticated()로 바꾼다.
                         // 지금 바꾸면 로그인할 방법이 없어서 다른 API를 Swagger에서 테스트할 수 없다.
                         .anyRequest().permitAll())
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint((request, response, e) ->
-                                SecurityErrorWriter.write(response, ErrorCode.UNAUTHORIZED))
+                                SecurityErrorWriter.write(response, studyPlanById.matches(request)
+                                        ? ErrorCode.STUDY_PLAN_LOGIN_REQUIRED
+                                        : studyPlans.matches(request) ? ErrorCode.AUTHENTICATION_REQUIRED : ErrorCode.UNAUTHORIZED))
                         .accessDeniedHandler((request, response, e) ->
                                 SecurityErrorWriter.write(response, ErrorCode.FORBIDDEN)))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);

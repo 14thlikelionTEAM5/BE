@@ -22,7 +22,7 @@ public class UniversityQueryService {
     private final UniversityEligibilityCalculator calculator;
 
     public UniversityDetailResponse detail(Long userId, Long universityId, String requestedSemester) {
-        if (userId == null || repository.user(userId) == null) {
+        if (userId == null) {
             throw new CustomException(ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED);
         }
         University u = repository.university(universityId).orElseThrow(() ->
@@ -48,14 +48,14 @@ public class UniversityQueryService {
     }
 
     public UniversityCountriesResponse countries(Long userId) {
-        if (userId == null || repository.user(userId) == null) {
+        if (userId == null) {
             throw new CustomException(ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED);
         }
         return new UniversityCountriesResponse(List.copyOf(repository.countries()));
     }
 
     public UniversityListResponse list(Long userId, UniversitySearch search) {
-        if (userId == null || repository.user(userId) == null) {
+        if (userId == null) {
             throw new CustomException(ErrorCode.UNIVERSITY_LOGIN_REQUIRED);
         }
         var semesters = repository.semesters();
@@ -101,7 +101,8 @@ public class UniversityQueryService {
                 .collect(Collectors.toMap(a -> a.getUniversity().getId(), Function.identity()));
     }
     static List<String> changes(Agreement current, Agreement previous, boolean hasPreviousSemester) {
-        if (current == null || !hasPreviousSemester) return List.of();
+        if (current == null) return List.of("RECRUITMENT_STOPPED");
+        if (!hasPreviousSemester) return List.of();
         List<String> result = new ArrayList<>();
         if (previous == null) result.add("NEW");
         else {

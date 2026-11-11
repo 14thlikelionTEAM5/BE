@@ -18,9 +18,10 @@ class UniversityQueryTests {
         return AgreementLanguageRequirement.builder().testType(test).minScore(new BigDecimal("6.5"))
                 .minSectionScore(section == null ? null : new BigDecimal(section)).build();
     }
-    @Test void missingAnnouncementIsNotRecruitmentStoppedBadge() {
+    @Test void missingAnnouncementReturnsRecruitmentStoppedBadgeRegardlessOfHistory() {
         assertEquals(List.of("NO_CURRENT_AGREEMENT"), calculator.calculate(null, null, Map.of(), List.of()).reasonCodes());
-        assertTrue(UniversityQueryService.changes(null, agreement(true, 2), true).isEmpty());
+        assertEquals(List.of("RECRUITMENT_STOPPED"), UniversityQueryService.changes(null, agreement(true, 2), true));
+        assertEquals(List.of("RECRUITMENT_STOPPED"), UniversityQueryService.changes(null, null, false));
     }
     @Test void explicitClosureAndQuotaChangeProduceBothBadges() {
         assertEquals(List.of("QUOTA_CHANGED", "RECRUITMENT_STOPPED"),

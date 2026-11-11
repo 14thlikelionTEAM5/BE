@@ -55,7 +55,6 @@ public class UniversityQueryRepository {
         return em.createQuery("select r from AgreementLanguageRequirement r join fetch r.agreement a where a.semester = :semester", AgreementLanguageRequirement.class)
                 .setParameter("semester", semester).getResultList();
     }
-    public User user(Long id) { return em.find(User.class, id); }
     public Optional<UserProfile> profile(Long id) {
         return em.createQuery("select p from UserProfile p where p.user.id = :id", UserProfile.class)
                 .setParameter("id", id).getResultStream().findFirst();

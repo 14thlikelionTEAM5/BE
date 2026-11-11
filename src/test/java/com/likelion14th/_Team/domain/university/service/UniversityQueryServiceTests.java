@@ -3,7 +3,6 @@ package com.likelion14th._Team.domain.university.service;
 import com.likelion14th._Team.domain.university.dto.*;
 import com.likelion14th._Team.domain.university.entity.*;
 import com.likelion14th._Team.domain.university.repository.UniversityQueryRepository;
-import com.likelion14th._Team.domain.user.entity.User;
 import com.likelion14th._Team.global.enums.CreditSystem;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ class UniversityQueryServiceTests {
     private final UniversityQueryRepository repository = mock(UniversityQueryRepository.class);
     private final UniversityQueryService service = new UniversityQueryService(repository, new UniversityEligibilityCalculator());
     @BeforeEach void setup() {
-        when(repository.user(1L)).thenReturn(User.builder().build());
         when(repository.profile(1L)).thenReturn(Optional.empty());
         when(repository.semesters()).thenReturn(List.of("2027-1"));
         when(repository.bookmarks(1L)).thenReturn(Set.of(1L));
@@ -35,6 +33,7 @@ class UniversityQueryServiceTests {
         assertEquals("Alpha",first.name());
         assertNull(first.agreementId());
         assertNull(first.languageRequirements());
+        assertEquals(List.of("RECRUITMENT_STOPPED"), first.semesterChanges());
         assertTrue(first.hasExperienceData());
         assertFalse(first.isBookmarked());
         assertTrue(data.universities().get(1).isBookmarked());

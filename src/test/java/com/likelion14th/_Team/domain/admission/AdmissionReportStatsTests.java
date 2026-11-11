@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class AdmissionReportStatsTests {
     @Autowired EntityManager em;
+    @Autowired tools.jackson.databind.ObjectMapper objectMapper;
     @Autowired AdmissionReportStatsService service;
     @Autowired AdmissionReportStatsRepository repository;
     private University university;
@@ -57,9 +58,9 @@ class AdmissionReportStatsTests {
         assertEquals(0,new BigDecimal("3.10").compareTo(data.gpa().min()));
         assertEquals(0,new BigDecimal("4.00").compareTo(data.gpa().max()));
         assertEquals(2,data.languageScores().size());
-        assertEquals("TOEFL_IBT",data.languageScores().get(0).testType());
-        assertEquals("IELTS",data.languageScores().get(1).testType());
-        assertEquals(0,new BigDecimal("6.5").compareTo(data.languageScores().stream().filter(s -> s.testType().equals("IELTS")).findFirst().orElseThrow().max()));
+        assertEquals(LanguageTestType.TOEFL_IBT,data.languageScores().get(0).testType());
+        assertEquals(LanguageTestType.IELTS,data.languageScores().get(1).testType());
+        assertEquals(0,new BigDecimal("6.5").compareTo(data.languageScores().stream().filter(s -> s.testType() == LanguageTestType.IELTS).findFirst().orElseThrow().max()));
         assertEquals(0,new BigDecimal("4.50").compareTo(data.myProfile().gpa()));
         assertEquals(1,data.myProfile().languageScores().size());
         assertEquals(java.util.List.of("2026-1","2025-2"),data.availableSemesters());
@@ -67,11 +68,11 @@ class AdmissionReportStatsTests {
     @Test void filtersCountsButNotAvailableSemesters() {
         report("2026-1","PRIMARY","PASS","3.10","IELTS",null);
         report("2025-2","DOUBLE","FAIL","3.80","IELTS","7.0");
-        var data=service.stats(viewer.getId(),new AdmissionReportFilter(university.getId(),"2026-1","PRIMARY"));
+        var data=service.stats(viewer.getId(),new AdmissionReportFilter(university.getId(),"2026-1",MajorType.PRIMARY));
         assertEquals(1,data.totalCount()); assertEquals(1,data.passCount());
         assertTrue(data.languageScores().isEmpty());
         assertEquals(2,data.availableSemesters().size());
-        var other=service.stats(viewer.getId(),new AdmissionReportFilter(university.getId(),"2025-2","PRIMARY"));
+        var other=service.stats(viewer.getId(),new AdmissionReportFilter(university.getId(),"2025-2",MajorType.PRIMARY));
         assertEquals(0,other.totalCount()); assertNull(other.gpa());
     }
     @Test void emptyReportsAndMissingProfileAreAllowed() {
@@ -93,21 +94,65 @@ class AdmissionReportStatsTests {
         report("2025-2","MINOR","PASS","3.30","TOEFL_IBT","100");
         em.createNativeQuery("update admission_report set created_at = '2099-01-01 00:00:00' where university_id = :id and gpa = 3.10")
                 .setParameter("id",university.getId()).executeUpdate();
-        var all=service.list(viewer.getId(),university.getId(),"ALL");
+        var all=service.list(viewer.getId(),university.getId(),null);
         assertEquals(3,all.totalCount());
         assertEquals(0,new BigDecimal("3.10").compareTo(all.admissionReports().get(0).gpa()));
         assertEquals(0,new BigDecimal("3.20").compareTo(all.admissionReports().get(1).gpa()));
         assertEquals("2025-2",all.admissionReports().get(2).semester());
-        var fail=service.list(viewer.getId(),university.getId(),"FAIL");
+        var fail=service.list(viewer.getId(),university.getId(),AdmissionResult.FAIL);
         assertEquals(1,fail.totalCount());
         assertNull(fail.admissionReports().getFirst().languageTestType());
         assertNull(fail.admissionReports().getFirst().languageScore());
-        assertEquals(2,service.list(viewer.getId(),university.getId(),"PASS").totalCount());
+        assertEquals(2,service.list(viewer.getId(),university.getId(),AdmissionResult.PASS).totalCount());
     }
     @Test void emptyListDoesNotRequireOwnReportAndUnknownSchoolIs404() {
-        var data=service.list(viewer.getId(),university.getId(),"ALL");
+        var data=service.list(viewer.getId(),university.getId(),null);
         assertEquals(0,data.totalCount());assertTrue(data.admissionReports().isEmpty());
-        var error=assertThrows(CustomException.class,() -> service.list(viewer.getId(),Long.MAX_VALUE,"ALL"));
+        var error=assertThrows(CustomException.class,() -> service.list(viewer.getId(),Long.MAX_VALUE,null));
         assertEquals("E404",error.getErrorCode().getCode());
+    }
+    @Test void enumFieldsReadLegacyVarcharAndWriteEnumNamesWithNullableLanguage() {
+        report("2026-1","PRIMARY","PASS","3.50","IELTS","7.0");
+        Long id=((Number)em.createNativeQuery("select id from admission_report where university_id=:id")
+                .setParameter("id",university.getId()).getSingleResult()).longValue();
+        var entity=em.find(com.likelion14th._Team.domain.admission.entity.AdmissionReport.class,id);
+        assertEquals(AdmissionResult.PASS,entity.getResult());
+        assertEquals(MajorType.PRIMARY,entity.getMajorType());
+        assertEquals(LanguageTestType.IELTS,entity.getLanguageTestType());
+        org.springframework.test.util.ReflectionTestUtils.setField(entity,"result",AdmissionResult.FAIL);
+        org.springframework.test.util.ReflectionTestUtils.setField(entity,"majorType",MajorType.MINOR);
+        org.springframework.test.util.ReflectionTestUtils.setField(entity,"languageTestType",null);
+        org.springframework.test.util.ReflectionTestUtils.setField(entity,"languageScore",null);
+        em.flush();em.clear();
+        Object[] stored=(Object[])em.createNativeQuery("select result,major_type,language_test_type from admission_report where id=:id")
+                .setParameter("id",id).getSingleResult();
+        assertEquals("FAIL",stored[0]);assertEquals("MINOR",stored[1]);assertNull(stored[2]);
+        assertNull(em.find(com.likelion14th._Team.domain.admission.entity.AdmissionReport.class,id).getLanguageTestType());
+    }
+    @Test void schemaKeepsVarcharTypesAndOriginalNullability() {
+        long count=((Number)em.createNativeQuery("""
+                select count(*) from information_schema.columns
+                where table_schema=database() and table_name='admission_report'
+                  and column_name in ('result','major_type','language_test_type') and data_type='varchar'
+                """).getSingleResult()).longValue();
+        assertEquals(3,count);
+        assertEquals("YES",em.createNativeQuery("""
+                select is_nullable from information_schema.columns where table_schema=database()
+                  and table_name='admission_report' and column_name='language_test_type'
+                """).getSingleResult());
+    }
+    @Test void apiJsonStillContainsEnumNamesAsStringsAndNullLanguage() throws Exception {
+        report("2026-1","DOUBLE","PASS","3.50","IELTS","7.0");
+        report("2026-1","MINOR","FAIL","3.10",null,null);
+        String listJson=objectMapper.writeValueAsString(service.list(viewer.getId(),university.getId(),null));
+        assertTrue(listJson.contains("\"result\":\"PASS\""));
+        assertTrue(listJson.contains("\"result\":\"FAIL\""));
+        assertTrue(listJson.contains("\"majorType\":\"DOUBLE\""));
+        assertTrue(listJson.contains("\"languageTestType\":\"IELTS\""));
+        assertTrue(listJson.contains("\"languageTestType\":null"));
+        String statsJson=objectMapper.writeValueAsString(service.stats(viewer.getId(),
+                AdmissionReportFilter.from(university.getId().toString(),"2026-1","DOUBLE")));
+        assertTrue(statsJson.contains("\"majorType\":\"DOUBLE\""));
+        assertTrue(statsJson.contains("\"testType\":\"IELTS\""));
     }
 }

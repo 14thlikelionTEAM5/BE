@@ -3,6 +3,9 @@ package com.likelion14th._Team.domain.admission.repository;
 import com.likelion14th._Team.domain.admission.entity.AdmissionReport;
 import com.likelion14th._Team.global.enums.AdmissionResult;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface AdmissionReportRepository extends JpaRepository<AdmissionReport, Long> {
 
@@ -13,4 +16,8 @@ public interface AdmissionReportRepository extends JpaRepository<AdmissionReport
     /** 수정 시 중복 확인: 자기 자신은 제외하고 확인 */
     boolean existsByUserIdAndUniversityIdAndSemesterAndResultAndIdNot(
             Long userId, Long universityId, String semester, AdmissionResult result, Long id);
+    /** 내 등록 내역 조회: 내 건을 학기 최신순으로 */
+    @Query("select a from AdmissionReport a join fetch a.university "
+            + "where a.user.id = :userId order by a.semester desc, a.id desc")
+    List<AdmissionReport> findAllByUserIdWithUniversity(@Param("userId") Long userId);
 }

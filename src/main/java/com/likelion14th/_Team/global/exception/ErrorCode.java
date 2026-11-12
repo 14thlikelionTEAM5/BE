@@ -16,6 +16,7 @@ public enum ErrorCode {
     INVALID_CODE_FORMAT(HttpStatus.BAD_REQUEST, "E400", "인증 코드는 6자리 숫자여야 합니다"),
     CODE_MISMATCH(HttpStatus.BAD_REQUEST, "E400", "인증 코드가 일치하지 않습니다"),
     CODE_EXPIRED_OR_MISSING(HttpStatus.BAD_REQUEST, "E400", "인증 코드가 만료되었거나 발송 이력이 없습니다"),
+    CURRENT_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "E400", "현재 비밀번호가 올바르지 않습니다"),
 
     // 401
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "E401", "학교 메일 또는 비밀번호가 올바르지 않습니다"),

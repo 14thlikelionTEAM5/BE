@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,4 +41,18 @@ public class ReturnReportCourse extends BaseEntity {
 
     @Column
     private Integer satisfaction;
+
+    @Builder
+    private ReturnReportCourse(ReturnReport returnReport, String courseCode, String courseNameEn,
+                               BigDecimal foreignCredit, Integer satisfaction) {
+        this.returnReport = returnReport;
+        update(courseCode, courseNameEn, foreignCredit, satisfaction);
+    }
+
+    public void update(String courseCode, String courseNameEn, BigDecimal foreignCredit, Integer satisfaction) {
+        this.courseCode = courseCode;
+        this.courseNameEn = courseNameEn;
+        this.foreignCredit = foreignCredit;
+        this.satisfaction = satisfaction;
+    }
 }

@@ -205,6 +205,7 @@ git push                                       # 이후 push
 
 ### 7-3. 알아두면 좋은 것
 - `.env`는 **Docker(MySQL)만** 읽습니다. 서버는 `application.yaml`의 기본값(`localhost:3307/team5`, `team5`/`team5`)으로 접속하므로 IntelliJ에 환경 변수를 따로 넣지 않아도 됩니다.
+- 귀국보고서 항목 추출(외부 AI)은 **로컬 기본값이 mock**(`AI_MODE=mock`)이라 API 키 없이 고정 응답이 나옵니다. 실제 Gemini 호출을 확인할 때만 IntelliJ 실행 환경 변수에 `AI_MODE=real`, `GEMINI_API_KEY=...`를 넣고, 키는 절대 커밋하지 마세요.
 - 서버 실행 전에 **Docker와 DB가 켜져 있어야** 합니다. `Connection refused` 오류가 나면 `docker compose ps`부터 확인하세요.
 - DB 컨테이너가 시작되지 않으면 `.env`가 루트 폴더에 있는지, 파일 이름이 정확히 `.env`인지 확인하세요.
 - 3307 포트를 이미 쓰고 있으면 충돌합니다. 이 경우 단톡에 물어봐주세요.

@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -66,4 +67,31 @@ public class ReturnReport extends BaseEntity {
 
     @Column(name = "review_summary", columnDefinition = "TEXT")
     private String reviewSummary;
+
+    @Builder
+    private ReturnReport(User user, University university, String semester,
+                         String costFlight, String costInsurance, String costLivingMonthly, String costTotal,
+                         String housingType, String visaDuration, String visaType,
+                         String insuranceProvider, String reviewSummary) {
+        this.user = user;
+        this.university = university;
+        this.semester = semester;
+        updateContent(costFlight, costInsurance, costLivingMonthly, costTotal,
+                housingType, visaDuration, visaType, insuranceProvider, reviewSummary);
+    }
+
+    /** 학교·학기를 제외한 항목 전체를 덮어쓴다 */
+    public void updateContent(String costFlight, String costInsurance, String costLivingMonthly, String costTotal,
+                              String housingType, String visaDuration, String visaType,
+                              String insuranceProvider, String reviewSummary) {
+        this.costFlight = costFlight;
+        this.costInsurance = costInsurance;
+        this.costLivingMonthly = costLivingMonthly;
+        this.costTotal = costTotal;
+        this.housingType = housingType;
+        this.visaDuration = visaDuration;
+        this.visaType = visaType;
+        this.insuranceProvider = insuranceProvider;
+        this.reviewSummary = reviewSummary;
+    }
 }

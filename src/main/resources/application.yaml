@@ -34,6 +34,25 @@ jwt:
   secret: ${JWT_SECRET:local-dev-only-secret-key-change-me-0123456789abcdef}
   expiration-seconds: 86400
 
+ai:
+  # real / mock. 기본값 mock이라 로컬은 키 없이 실행된다. 운영은 AI_MODE=real
+  mode: ${AI_MODE:mock}
+  prompt:
+    extract-return-report: v1
+  gemini:
+    # 키는 코드·yaml에 쓰지 않고 환경변수로만 받는다
+    api-key: ${GEMINI_API_KEY:}
+    # 대안 모델(예: gemini-3.6-flash)은 GEMINI_MODEL로 바꿔 쓴다
+    model: ${GEMINI_MODEL:gemini-3.8-flash}
+    base-url: https://generativelanguage.googleapis.com/v1beta
+    api-revision: ${GEMINI_API_REVISION:2026-05-20}
+    connect-timeout-seconds: 5
+    timeout-seconds: 30
+    total-timeout-seconds: 45
+    thinking-level: low
+    # thinking 토큰 포함 여부가 문서에 없어 JSON이 잘리지 않게 넉넉히 둔다
+    max-output-tokens: 8192
+
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173}

@@ -28,6 +28,7 @@ public enum ErrorCode {
     EMAIL_NOT_VERIFIED(HttpStatus.FORBIDDEN, "E403", "학교 메일 인증이 완료되지 않았거나 만료되었습니다"),
     FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "접근 권한이 없습니다"),
     STUDY_PLAN_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "해당 수강계획에 대한 권한이 없습니다."),
+    RETURN_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서만 수정할 수 있습니다"),
 
     // 404
     UNIVERSITY_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "대학을 찾을 수 없습니다."),
@@ -35,6 +36,7 @@ public enum ErrorCode {
     SOURCE_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "원본 과목을 찾을 수 없습니다."),
     HOME_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "본교 과목을 찾을 수 없습니다."),
     STUDY_PLAN_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "수강계획 과목을 찾을 수 없습니다."),
+    RETURN_REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 귀국보고서입니다"),
 
     // 409
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 가입된 학교 메일입니다"),
@@ -42,6 +44,7 @@ public enum ErrorCode {
     STUDY_PLAN_UNIVERSITY_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 해당 학교의 수강계획이 있어요"),
     STUDY_PLAN_LIMIT_REACHED(HttpStatus.CONFLICT, "E409", "수강계획은 최대 5개까지 생성할 수 있습니다."),
     STUDY_PLAN_ITEM_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 수강계획에 추가된 과목입니다."),
+    RETURN_REPORT_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 해당 학기의 귀국보고서를 등록했습니다"),
 
     // 429
     TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "E429", "잠시 후 다시 요청해 주세요"),

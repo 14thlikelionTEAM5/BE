@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ConsentRepository extends JpaRepository<Consent, Long> {
 
     Optional<Consent> findByUserIdAndConsentType(Long userId, ConsentType consentType);
+
+    boolean existsByUserIdAndConsentType(Long userId, ConsentType consentType);
 }

@@ -55,7 +55,7 @@ class UniversityControllerTests {
         mockMvc.perform(get(URL).param("keyword", "nus"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("E401"))
-                .andExpect(jsonPath("$.message").value("로그인이 필요합니다"))
+                .andExpect(jsonPath("$.message").value("로그인이 필요합니다."))
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andExpect(jsonPath("$.errors").doesNotExist())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty());

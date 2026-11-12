@@ -18,11 +18,11 @@ public enum ErrorCode {
 
     // 401
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "E401", "학교 메일 또는 비밀번호가 올바르지 않습니다"),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다"),
-    AUTHENTICATION_REQUIRED(HttpStatus.UNAUTHORIZED, "E401", "인증이 필요합니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다."),
+    AUTHENTICATION_REQUIRED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다."),
     STUDY_PLAN_LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다."),
     UNIVERSITY_LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다."),
-    UNIVERSITY_COUNTRIES_LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다"),
+    UNIVERSITY_COUNTRIES_LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다."),
 
     // 403
     EMAIL_NOT_VERIFIED(HttpStatus.FORBIDDEN, "E403", "학교 메일 인증이 완료되지 않았거나 만료되었습니다"),

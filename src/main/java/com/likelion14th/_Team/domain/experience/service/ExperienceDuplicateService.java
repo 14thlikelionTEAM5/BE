@@ -2,6 +2,7 @@ package com.likelion14th._Team.domain.experience.service;
 
 import com.likelion14th._Team.domain.admission.repository.AdmissionReportRepository;
 import com.likelion14th._Team.domain.experience.dto.DuplicateCheckResponse;
+import com.likelion14th._Team.domain.returnreport.repository.ReturnReportCourseRepository;
 import com.likelion14th._Team.domain.returnreport.repository.ReturnReportRepository;
 import com.likelion14th._Team.global.enums.AdmissionResult;
 import com.likelion14th._Team.global.enums.DuplicateReason;
@@ -27,6 +28,7 @@ public class ExperienceDuplicateService {
     private static final Pattern SEMESTER_PATTERN = Pattern.compile("^\\d{4}-[12]$");
 
     private final ReturnReportRepository returnReportRepository;
+    private final ReturnReportCourseRepository returnReportCourseRepository;
     private final AdmissionReportRepository admissionReportRepository;
 
     /** 새로 등록하기 전에 선택한 유형·학교·학기로 등록할 수 있는지 확인 */
@@ -53,7 +55,8 @@ public class ExperienceDuplicateService {
                         : DuplicateCheckResponse.ok();
                 case PASS -> checkAdmission(userId, universityId, semester, AdmissionResult.PASS);
                 case FAIL -> checkAdmission(userId, universityId, semester, AdmissionResult.FAIL);
-                case COURSE_CASE -> returnReportRepository
+                // 인정 사례는 귀국보고서의 수강 교과목에 연결하므로 교과목이 하나 이상 있어야 등록 가능
+                case COURSE_CASE -> returnReportCourseRepository
                         .existsByUserIdAndUniversityIdAndSemester(userId, universityId, semester)
                         ? DuplicateCheckResponse.ok()
                         : DuplicateCheckResponse.unavailable(DuplicateReason.REPORT_REQUIRED);

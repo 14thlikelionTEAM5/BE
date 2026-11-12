@@ -19,6 +19,15 @@ public interface ReturnReportCourseRepository extends JpaRepository<ReturnReport
             + "where r.user.id = :userId order by c.id asc")
     List<ReturnReportCourse> findAllByUserId(@Param("userId") Long userId);
 
+    /** 내 해당 학교·학기 귀국보고서에 수강 교과목이 하나 이상 있는지 */
+    @Query("select count(c) > 0 from ReturnReportCourse c "
+            + "where c.returnReport.user.id = :userId "
+            + "and c.returnReport.university.id = :universityId "
+            + "and c.returnReport.semester = :semester")
+    boolean existsByUserIdAndUniversityIdAndSemester(@Param("userId") Long userId,
+                                                     @Param("universityId") Long universityId,
+                                                     @Param("semester") String semester);
+
     @Modifying(flushAutomatically = true)
     @Query("delete from ReturnReportCourse course where course.returnReport.id = :returnReportId")
     int deleteAllByReturnReportId(@Param("returnReportId") Long returnReportId);

@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
  * 새 API의 에러가 필요하면 여기에 추가한다.
  */
 public enum ErrorCode {
-    AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "협정교 정보가 없습니다"),
-
     // 400
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "E400", "입력값이 올바르지 않습니다"),
     NOT_SCHOOL_EMAIL(HttpStatus.BAD_REQUEST, "E400", "학교 메일(@hufs.ac.kr)만 사용할 수 있습니다"),
@@ -37,6 +35,7 @@ public enum ErrorCode {
     ADMISSION_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 스펙만 수정할 수 있습니다"),
 
     // 404
+    AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "협정교 정보가 없습니다"),
     BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "찜하지 않은 학교입니다"),
     UNIVERSITY_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "대학을 찾을 수 없습니다."),
     STUDY_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "수강계획을 찾을 수 없습니다."),

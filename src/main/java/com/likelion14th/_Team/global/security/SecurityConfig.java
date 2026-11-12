@@ -47,6 +47,7 @@ public class SecurityConfig {
         var universities = paths.matcher(HttpMethod.GET, "/api/v1/universities");
         var universityCountries = paths.matcher(HttpMethod.GET, "/api/v1/universities/countries");
         var universityDetail = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}");
+        var universityCourses = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/courses");
         var studyPlanById = new OrRequestMatcher(
                 paths.matcher(HttpMethod.POST, "/api/v1/study-plans/{studyPlanId}/items"),
                 paths.matcher(HttpMethod.PATCH, "/api/v1/study-plans/{studyPlanId}/items/{itemId}"),
@@ -75,6 +76,7 @@ public class SecurityConfig {
                         .requestMatchers(universities).authenticated()
                         .requestMatchers(universityCountries).authenticated()
                         .requestMatchers(universityDetail).authenticated()
+                        .requestMatchers(universityCourses).authenticated()
                         .requestMatchers(studyPlanById).authenticated()
                         .requestMatchers(studyPlans).authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/universities/search", "/api/v1/home-courses").authenticated()

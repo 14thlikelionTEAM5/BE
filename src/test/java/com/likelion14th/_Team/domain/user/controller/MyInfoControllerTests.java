@@ -39,6 +39,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import com.likelion14th._Team.domain.user.service.WithdrawService;
 
 @WebMvcTest(controllers = MyInfoController.class,
         properties = "app.cors.allowed-origins=http://localhost:3000")
@@ -55,6 +57,8 @@ class MyInfoControllerTests {
     MyInfoService myInfoService;
     @MockitoBean
     PasswordService passwordService;
+    @MockitoBean
+    WithdrawService withdrawService;
     @MockitoBean
     JwtProvider jwt;
 
@@ -271,5 +275,45 @@ class MyInfoControllerTests {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("E401"));
         verifyNoInteractions(passwordService);
+    }
+    // ===== DELETE /users/me =====
+
+    @Test
+    void withdrawReturnsMessageWithNullData() throws Exception {
+        mvc.perform(delete(URL).header("Authorization", BEARER))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("S200"))
+                .andExpect(jsonPath("$.message").value("회원 탈퇴가 완료되었습니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
+
+        verify(withdrawService).withdraw(1L);
+    }
+
+    @Test
+    void withdrawWithoutTokenIs401() throws Exception {
+        mvc.perform(delete(URL))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("E401"));
+        verifyNoInteractions(withdrawService);
+    }
+
+    @Test
+    void withdrawForDeletedUserIs401() throws Exception {
+        doThrow(new CustomException(ErrorCode.UNAUTHORIZED)).when(withdrawService).withdraw(1L);
+
+        mvc.perform(delete(URL).header("Authorization", BEARER))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("E401"));
+    }
+
+    @Test
+    void withdrawFailureIs500WithApiMessage() throws Exception {
+        doThrow(new CustomException(ErrorCode.INTERNAL_ERROR, "회원 탈퇴 중 오류가 발생했습니다"))
+                .when(withdrawService).withdraw(1L);
+
+        mvc.perform(delete(URL).header("Authorization", BEARER))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.code").value("E500"))
+                .andExpect(jsonPath("$.message").value("회원 탈퇴 중 오류가 발생했습니다"));
     }
 }

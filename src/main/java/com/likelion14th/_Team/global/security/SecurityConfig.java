@@ -77,6 +77,7 @@ public class SecurityConfig {
                         .requestMatchers(universityCountries).authenticated()
                         .requestMatchers(universityDetail).authenticated()
                         .requestMatchers(universityCourses).authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/universities/{universityId}/course-cases").authenticated()
                         .requestMatchers(studyPlanById).authenticated()
                         .requestMatchers(studyPlans).authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/universities/search", "/api/v1/home-courses").authenticated()

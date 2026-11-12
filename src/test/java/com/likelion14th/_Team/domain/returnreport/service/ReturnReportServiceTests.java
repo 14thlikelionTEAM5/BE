@@ -19,6 +19,7 @@ import com.likelion14th._Team.domain.returnreport.dto.ReturnReportUpdateRequest;
 import com.likelion14th._Team.domain.returnreport.dto.ReturnReportVisa;
 import com.likelion14th._Team.domain.returnreport.entity.ReturnReport;
 import com.likelion14th._Team.domain.returnreport.entity.ReturnReportCourse;
+import com.likelion14th._Team.domain.coursecase.repository.CourseCaseRepository;
 import com.likelion14th._Team.domain.returnreport.repository.ReturnReportCourseRepository;
 import com.likelion14th._Team.domain.returnreport.repository.ReturnReportRepository;
 import com.likelion14th._Team.domain.studyplan.repository.StudyPlanItemRepository;
@@ -53,8 +54,9 @@ class ReturnReportServiceTests {
     private final UniversityRepository universityRepository = mock(UniversityRepository.class);
     private final UserRepository userRepository = mock(UserRepository.class);
     private final StudyPlanItemRepository studyPlanItemRepository = mock(StudyPlanItemRepository.class);
+    private final CourseCaseRepository courseCaseRepository = mock(CourseCaseRepository.class);
     private final ReturnReportService service = new ReturnReportService(reportRepository, courseRepository,
-            universityRepository, userRepository, studyPlanItemRepository);
+            universityRepository, userRepository, studyPlanItemRepository, courseCaseRepository);
 
     private final User user = mock(User.class);
     private final University university = mock(University.class);

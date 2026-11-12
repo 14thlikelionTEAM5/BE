@@ -29,6 +29,8 @@ public enum ErrorCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "접근 권한이 없습니다"),
     STUDY_PLAN_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "해당 수강계획에 대한 권한이 없습니다."),
     RETURN_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서만 수정할 수 있습니다"),
+    RETURN_REPORT_COURSE_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서 과목만 등록할 수 있습니다"),
+    COURSE_CASE_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 인정 사례만 수정할 수 있습니다."),
     ADMISSION_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 스펙만 수정할 수 있습니다"),
 
     // 404
@@ -39,6 +41,8 @@ public enum ErrorCode {
     HOME_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "본교 과목을 찾을 수 없습니다."),
     STUDY_PLAN_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "수강계획 과목을 찾을 수 없습니다."),
     RETURN_REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 귀국보고서입니다"),
+    RETURN_REPORT_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 귀국보고서 과목입니다"),
+    COURSE_CASE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 인정 사례입니다"),
     ADMISSION_REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 스펙입니다"),
 
     // 409
@@ -49,6 +53,7 @@ public enum ErrorCode {
     STUDY_PLAN_LIMIT_REACHED(HttpStatus.CONFLICT, "E409", "수강계획은 최대 5개까지 생성할 수 있습니다."),
     STUDY_PLAN_ITEM_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 수강계획에 추가된 과목입니다."),
     RETURN_REPORT_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 해당 학기의 귀국보고서를 등록했습니다"),
+    COURSE_CASE_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 등록된 인정 사례입니다."),
     ADMISSION_REPORT_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 같은 학교·학기의 같은 유형을 등록했습니다"),
 
     // 429

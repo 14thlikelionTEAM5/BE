@@ -1,5 +1,6 @@
 package com.likelion14th._Team.domain.returnreport.service;
 
+import com.likelion14th._Team.domain.coursecase.repository.CourseCaseRepository;
 import com.likelion14th._Team.domain.returnreport.dto.ReturnReportContent;
 import com.likelion14th._Team.domain.returnreport.dto.ReturnReportCost;
 import com.likelion14th._Team.domain.returnreport.dto.ReturnReportCourseRequest;
@@ -33,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 귀국보고서 저장·수정·삭제.
  * 500은 공통 문구("서버 오류가 발생했습니다")를 쓰므로 별도로 감싸지 않고 GlobalExceptionHandler에 맡긴다.
- * course_case 삭제는 course_case 엔티티가 생기는 #20에서 수정(행 삭제)·삭제 흐름에 추가한다.
+ * 수강 교과목 행을 지울 때는 딸린 인정 사례(course_case)를 먼저 지운다.
  */
 @Service
 @RequiredArgsConstructor
@@ -48,6 +49,7 @@ public class ReturnReportService {
     private final UniversityRepository universityRepository;
     private final UserRepository userRepository;
     private final StudyPlanItemRepository studyPlanItemRepository;
+    private final CourseCaseRepository courseCaseRepository;
 
     // ===== 저장 =====
 
@@ -100,7 +102,9 @@ public class ReturnReportService {
                 .filter(course -> !requestedIds.contains(course.getId()))
                 .toList();
         if (!removed.isEmpty()) {
-            studyPlanItemRepository.clearSourceCourse(removed.stream().map(ReturnReportCourse::getId).toList());
+            List<Long> removedIds = removed.stream().map(ReturnReportCourse::getId).toList();
+            courseCaseRepository.deleteByReturnReportCourseIds(removedIds);
+            studyPlanItemRepository.clearSourceCourse(removedIds);
             courseRepository.deleteAll(removed);
         }
 
@@ -156,12 +160,14 @@ public class ReturnReportService {
     /**
      * 귀국보고서와 수강 교과목을 삭제한다. 회원 탈퇴에서도 이 메서드를 재사용한다.
      * DB의 ON DELETE에 의존하지 않고 순서대로 처리한다:
-     * ① 수강계획 항목의 원본 연결 해제(본인 포함 전체) ② return_report_course ③ return_report
+     * ① 인정 사례(course_case) ② 수강계획 항목의 원본 연결 해제(본인 포함 전체)
+     * ③ return_report_course ④ return_report
      */
     @Transactional
     public void deleteReport(ReturnReport report) {
         List<Long> courseIds = courseRepository.findIdsByReturnReportId(report.getId());
         if (!courseIds.isEmpty()) {
+            courseCaseRepository.deleteByReturnReportCourseIds(courseIds);
             studyPlanItemRepository.clearSourceCourse(courseIds);
             courseRepository.deleteAllByReturnReportId(report.getId());
         }

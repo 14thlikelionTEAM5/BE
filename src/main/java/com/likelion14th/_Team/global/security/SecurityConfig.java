@@ -42,6 +42,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
         var paths = PathPatternRequestMatcher.withDefaults();
+        var admissionStats = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports/stats");
+        var admissionReports = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports");
         var universities = paths.matcher(HttpMethod.GET, "/api/v1/universities");
         var universityCountries = paths.matcher(HttpMethod.GET, "/api/v1/universities/countries");
         var universityDetail = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}");
@@ -68,6 +70,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(admissionStats).authenticated()
+                        .requestMatchers(admissionReports).authenticated()
                         .requestMatchers(universities).authenticated()
                         .requestMatchers(universityCountries).authenticated()
                         .requestMatchers(universityDetail).authenticated()

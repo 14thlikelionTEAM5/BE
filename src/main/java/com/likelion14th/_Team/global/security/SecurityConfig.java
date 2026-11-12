@@ -42,6 +42,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
         var paths = PathPatternRequestMatcher.withDefaults();
+        var admissionStats = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports/stats");
+        var admissionReports = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports");
         var universities = paths.matcher(HttpMethod.GET, "/api/v1/universities");
         var universityCountries = paths.matcher(HttpMethod.GET, "/api/v1/universities/countries");
         var universityDetail = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}");
@@ -68,6 +70,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(admissionStats).authenticated()
+                        .requestMatchers(admissionReports).authenticated()
                         .requestMatchers(universities).authenticated()
                         .requestMatchers(universityCountries).authenticated()
                         .requestMatchers(universityDetail).authenticated()
@@ -75,6 +79,7 @@ public class SecurityConfig {
                         .requestMatchers(studyPlans).authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/universities/search", "/api/v1/home-courses").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/consents").authenticated()
+                        .requestMatchers("/api/v1/return-reports/**").authenticated()
                         // TODO: 로그인 API가 머지되면 permitAll()을 authenticated()로 바꾼다.
                         // 지금 바꾸면 로그인할 방법이 없어서 다른 API를 Swagger에서 테스트할 수 없다.
                         .anyRequest().permitAll())

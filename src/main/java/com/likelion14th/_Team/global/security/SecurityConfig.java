@@ -71,6 +71,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/agreements/changes").authenticated()
                         .requestMatchers(admissionStats).authenticated()
                         .requestMatchers(admissionReports).authenticated()
                         .requestMatchers(universities).authenticated()

@@ -13,6 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
+import java.util.Arrays;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.likelion14th._Team.domain.university.entity.Agreement;
+import com.likelion14th._Team.domain.university.entity.AgreementLanguageRequirement;
+import com.likelion14th._Team.global.enums.LanguageTestType;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties="spring.jpa.properties.hibernate.generate_statistics=true")
@@ -48,4 +55,39 @@ class UniversityQueryPerformanceTests {
         assertTrue(statistics.getPrepareStatementCount() <= 5, "query count must not grow with school count");
         assertEquals(100,statistics.getEntityLoadCount());
     }
+    @Test void mixedAgreementsAndRequirementsKeepReadsBounded() {
+        String key=UUID.randomUUID().toString().replace("-", "");
+        User viewer=User.builder().schoolEmail(key+"@example.hufs.ac.kr").nickname(key.substring(0,12))
+                .majorType(MajorType.PRIMARY).password(UUID.randomUUID().toString()).build();
+        em.persist(viewer);
+        String country="Mixed-"+key;
+        for(int i=0;i<100;i++) {
+            University school=University.builder().name("MixedSchool-"+key+"-"+i).country(country).build();
+            em.persist(school);
+            if(i<10) {
+                var agreement=Agreement.builder()
+                        .university(school).semester("9999-1").quota(2)
+                        .minGpa(new BigDecimal("3.0"))
+                        .announcedAt(LocalDate.now()).importedAt(LocalDateTime.now()).build();
+                em.persist(agreement);
+                em.persist(AgreementLanguageRequirement.builder()
+                        .agreement(agreement).testType(LanguageTestType.IELTS)
+                        .minScore(new BigDecimal("6.5")).build());
+            }
+        }
+        em.flush(); em.clear();
+        var statistics=emf.unwrap(SessionFactory.class).getStatistics();
+        statistics.clear();
+        var result=service.list(viewer.getId(),UniversitySearch.from(null,country,null,null,null));
+        assertEquals(100,result.totalCount());
+        assertEquals(10,result.universities().stream().filter(s -> s.agreementId()!=null).count());
+        assertEquals(10,result.universities().stream().filter(s -> s.languageRequirements()!=null)
+                .mapToLong(s -> s.languageRequirements().size()).sum());
+        assertTrue(statistics.getPrepareStatementCount() <= 5, "agreements and requirements must use bounded batch queries");
+        assertTrue(Arrays.stream(statistics.getQueries()).anyMatch(q -> q.contains("Agreement a")));
+        assertTrue(Arrays.stream(statistics.getQueries()).anyMatch(q -> q.contains("AgreementLanguageRequirement")));
+        System.out.printf("UNIVERSITY_MIXED_MEASUREMENT queries=%d entities=%d%n",
+                statistics.getPrepareStatementCount(),statistics.getEntityLoadCount());
+    }
+
 }

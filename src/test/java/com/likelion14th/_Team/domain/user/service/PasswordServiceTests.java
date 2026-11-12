@@ -7,12 +7,18 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.times;
 
 import com.likelion14th._Team.domain.user.dto.PasswordChangeRequest;
 import com.likelion14th._Team.domain.user.entity.User;
 import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,5 +81,29 @@ class PasswordServiceTests {
 
         assertEquals(ErrorCode.INTERNAL_ERROR, e.getErrorCode());
         assertEquals("비밀번호 변경 중 오류가 발생했습니다", e.getMessage());
+    }
+    @Test
+    void passwordUpTo72BytesIsAccepted() {
+        // 영문 72자(72B), 한글 24자(72B)
+        for (String pw : List.of("a".repeat(72), "가".repeat(24))) {
+            service.changePassword(USER_ID, new PasswordChangeRequest(CURRENT, pw));
+        }
+
+        verify(user, times(2)).changePassword(any());
+    }
+
+    @Test
+    void passwordOver72BytesIs400WithNewPasswordField() {
+        // 영문 73자(73B), 한글 25자(75B)
+        for (String pw : List.of("a".repeat(73), "가".repeat(25))) {
+            CustomException e = assertThrows(CustomException.class,
+                    () -> service.changePassword(USER_ID, new PasswordChangeRequest(CURRENT, pw)));
+
+            assertEquals(ErrorCode.INVALID_INPUT, e.getErrorCode());
+            assertEquals("newPassword", e.getErrors().get(0).field());
+        }
+
+        verify(userRepository, never()).findById(any());
+        verify(user, never()).changePassword(any());
     }
 }

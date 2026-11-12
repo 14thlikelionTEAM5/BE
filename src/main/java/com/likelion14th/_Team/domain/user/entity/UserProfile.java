@@ -40,4 +40,7 @@ public class UserProfile extends BaseEntity {
         this.gpa = gpa;
         this.user = user;
     }
+    public void changeGpa(BigDecimal gpa) {
+        this.gpa = gpa;
+    }
 }

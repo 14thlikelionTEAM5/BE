@@ -14,6 +14,11 @@ public interface ReturnReportCourseRepository extends JpaRepository<ReturnReport
     @Query("select course.id from ReturnReportCourse course where course.returnReport.id = :returnReportId")
     List<Long> findIdsByReturnReportId(@Param("returnReportId") Long returnReportId);
 
+    /** 내 귀국보고서들의 수강 교과목을 한 번에 조회 (서비스에서 보고서별로 묶는다) */
+    @Query("select c from ReturnReportCourse c join fetch c.returnReport r "
+            + "where r.user.id = :userId order by c.id asc")
+    List<ReturnReportCourse> findAllByUserId(@Param("userId") Long userId);
+
     @Modifying(flushAutomatically = true)
     @Query("delete from ReturnReportCourse course where course.returnReport.id = :returnReportId")
     int deleteAllByReturnReportId(@Param("returnReportId") Long returnReportId);

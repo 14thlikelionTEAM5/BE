@@ -8,6 +8,7 @@ import com.likelion14th._Team.domain.bookmark.service.BookmarkService;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
 import com.likelion14th._Team.global.response.ApiResponse;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -51,7 +52,7 @@ public class BookmarkController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("찜 추가 실패 exception={}", exception.getClass().getSimpleName());
+            log.error("찜 추가 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "찜 추가 중 오류가 발생했습니다");
         }
     }
@@ -74,7 +75,7 @@ public class BookmarkController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("찜 해제 실패 exception={}", exception.getClass().getSimpleName());
+            log.error("찜 해제 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "찜 해제 중 오류가 발생했습니다");
         }
     }
@@ -88,7 +89,7 @@ public class BookmarkController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("찜 목록 조회 실패 exception={}", exception.getClass().getSimpleName());
+            log.error("찜 목록 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "찜 목록 조회 중 오류가 발생했습니다");
         }
     }

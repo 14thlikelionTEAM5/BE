@@ -14,6 +14,7 @@ public record BookmarkCreateRequest(
         if (body == null || !body.isObject()) {
             throw invalid("body", "JSON 객체를 입력해 주세요.");
         }
+        // Long 자동 변환은 "4", 4.0, 4.9를 허용/절삭할 수 있으므로 JSON 정수 자체를 검증한다.
         JsonNode id = body.get("universityId");
         if (id == null || !id.isIntegralNumber() || !id.canConvertToLong() || id.longValue() <= 0) {
             throw invalid("universityId", "양의 정수 학교 ID를 입력해 주세요.");

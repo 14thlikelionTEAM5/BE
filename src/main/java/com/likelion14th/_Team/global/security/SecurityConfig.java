@@ -83,6 +83,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/universities/search", "/api/v1/home-courses").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/consents").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/me/experiences").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/me").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/me", "/api/v1/users/me/password").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/bookmarks").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/bookmarks").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/bookmarks/{universityId}").authenticated()

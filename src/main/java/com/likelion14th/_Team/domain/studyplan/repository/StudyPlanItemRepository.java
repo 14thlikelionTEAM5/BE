@@ -37,4 +37,10 @@ public interface StudyPlanItemRepository extends JpaRepository<StudyPlanItem, Lo
     @Modifying(flushAutomatically = true)
     @Query("update StudyPlanItem item set item.sourceCourseId = null where item.sourceCourseId in :courseIds")
     int clearSourceCourse(@Param("courseIds") Collection<Long> courseIds);
+
+    /** 회원 탈퇴: 내 수강계획에 속한 항목을 모두 삭제 */
+    @Modifying(flushAutomatically = true)
+    @Query("delete from StudyPlanItem item where item.studyPlan.id in "
+            + "(select plan.id from StudyPlan plan where plan.user.id = :userId)")
+    int deleteAllByStudyPlanUserId(@Param("userId") Long userId);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Modifying;
 
 public interface AdmissionReportRepository extends JpaRepository<AdmissionReport, Long> {
 
@@ -20,4 +21,9 @@ public interface AdmissionReportRepository extends JpaRepository<AdmissionReport
     @Query("select a from AdmissionReport a join fetch a.university "
             + "where a.user.id = :userId order by a.semester desc, a.id desc")
     List<AdmissionReport> findAllByUserIdWithUniversity(@Param("userId") Long userId);
+
+    /** 회원 탈퇴 */
+    @Modifying(flushAutomatically = true)
+    @Query("delete from AdmissionReport a where a.user.id = :userId")
+    int deleteAllByUserId(@Param("userId") Long userId);
 }

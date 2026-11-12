@@ -31,8 +31,10 @@ public enum ErrorCode {
     RETURN_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서만 수정할 수 있습니다"),
     RETURN_REPORT_COURSE_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서 과목만 등록할 수 있습니다"),
     COURSE_CASE_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 인정 사례만 수정할 수 있습니다."),
+    ADMISSION_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 스펙만 수정할 수 있습니다"),
 
     // 404
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "찜하지 않은 학교입니다"),
     UNIVERSITY_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "대학을 찾을 수 없습니다."),
     STUDY_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "수강계획을 찾을 수 없습니다."),
     SOURCE_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "원본 과목을 찾을 수 없습니다."),
@@ -41,8 +43,10 @@ public enum ErrorCode {
     RETURN_REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 귀국보고서입니다"),
     RETURN_REPORT_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 귀국보고서 과목입니다"),
     COURSE_CASE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 인정 사례입니다"),
+    ADMISSION_REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 스펙입니다"),
 
     // 409
+    BOOKMARK_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 찜한 학교입니다"),
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 가입된 학교 메일입니다"),
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 사용 중인 닉네임입니다"),
     STUDY_PLAN_UNIVERSITY_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 해당 학교의 수강계획이 있어요"),
@@ -50,6 +54,7 @@ public enum ErrorCode {
     STUDY_PLAN_ITEM_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 수강계획에 추가된 과목입니다."),
     RETURN_REPORT_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 해당 학기의 귀국보고서를 등록했습니다"),
     COURSE_CASE_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 등록된 인정 사례입니다."),
+    ADMISSION_REPORT_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 같은 학교·학기의 같은 유형을 등록했습니다"),
 
     // 429
     TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "E429", "잠시 후 다시 요청해 주세요"),

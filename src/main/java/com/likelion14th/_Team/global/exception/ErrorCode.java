@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
  * 새 API의 에러가 필요하면 여기에 추가한다.
  */
 public enum ErrorCode {
+    AGREEMENT_LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "E401", "로그인이 필요합니다"),
+    AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "협정교 정보가 없습니다"),
 
     // 400
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "E400", "입력값이 올바르지 않습니다"),

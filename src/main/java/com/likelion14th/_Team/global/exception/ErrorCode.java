@@ -31,6 +31,7 @@ public enum ErrorCode {
     RETURN_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서만 수정할 수 있습니다"),
 
     // 404
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "찜하지 않은 학교입니다"),
     UNIVERSITY_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "대학을 찾을 수 없습니다."),
     STUDY_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "수강계획을 찾을 수 없습니다."),
     SOURCE_COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "원본 과목을 찾을 수 없습니다."),
@@ -39,6 +40,7 @@ public enum ErrorCode {
     RETURN_REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "E404", "존재하지 않는 귀국보고서입니다"),
 
     // 409
+    BOOKMARK_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 찜한 학교입니다"),
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 가입된 학교 메일입니다"),
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 사용 중인 닉네임입니다"),
     STUDY_PLAN_UNIVERSITY_DUPLICATED(HttpStatus.CONFLICT, "E409", "이미 해당 학교의 수강계획이 있어요"),

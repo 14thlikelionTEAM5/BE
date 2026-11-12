@@ -60,7 +60,7 @@ class AuthenticationRoutingTests {
                 new Endpoint(HttpMethod.GET, "/api/v1/universities/countries", ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED),
                 new Endpoint(HttpMethod.GET, "/api/v1/universities/1", ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED),
                 // /search는 기존 상세 패턴 /universities/{universityId}에도 매칭된다.
-                // 이번 리팩터링에서는 이 순서와 401 메시지를 유지하며, 응답 통일은 별도 변경으로 다룬다.
+                // 매처 순서는 유지하되, 인증 필요 메시지는 모든 보호 경로에서 공통 문구로 검증한다.
                 new Endpoint(HttpMethod.GET, "/api/v1/universities/search", ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED),
                 new Endpoint(HttpMethod.GET, "/api/v1/universities/1/admission-reports", ErrorCode.UNAUTHORIZED),
                 new Endpoint(HttpMethod.GET, "/api/v1/universities/1/admission-reports/stats", ErrorCode.UNAUTHORIZED),
@@ -94,7 +94,7 @@ class AuthenticationRoutingTests {
             mvc.perform(request)
                     .andExpect(status().isUnauthorized())
                     .andExpect(jsonPath("$.code").value(endpoint.error().getCode()))
-                    .andExpect(jsonPath("$.message").value(endpoint.error().getMessage()))
+                    .andExpect(jsonPath("$.message").value("로그인이 필요합니다."))
                     .andExpect(jsonPath("$.data").doesNotExist())
                     .andExpect(jsonPath("$.errors").doesNotExist())
                     .andExpect(jsonPath("$.timestamp").isNotEmpty());
@@ -102,17 +102,17 @@ class AuthenticationRoutingTests {
     }
 
     @Test
-    void missingTokensKeepAllRouteSpecific401Messages() throws Exception {
+    void missingTokensReturnUnified401Message() throws Exception {
         assertUnauthorized(null);
     }
 
     @Test
-    void expiredTokensKeepAllRouteSpecific401Messages() throws Exception {
+    void expiredTokensReturnUnified401Message() throws Exception {
         assertUnauthorized(expired);
     }
 
     @Test
-    void forgedTokensKeepAllRouteSpecific401Messages() throws Exception {
+    void forgedTokensReturnUnified401Message() throws Exception {
         assertUnauthorized(forged);
     }
 

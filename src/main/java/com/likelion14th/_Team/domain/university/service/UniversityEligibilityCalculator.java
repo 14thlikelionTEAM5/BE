@@ -49,7 +49,12 @@ public class UniversityEligibilityCalculator {
         }
         if (!failures.isEmpty()) return new Eligibility("NOT_ELIGIBLE", List.copyOf(failures),
                 "어학 점수가 기준에 못 미쳐요.");
-        if (!unknown.isEmpty()) return new Eligibility("NEEDS_CHECK", List.copyOf(unknown), "지원 조건을 확인해 주세요.");
+        if (!unknown.isEmpty()) {
+            String message = scores.isEmpty() && unknown.contains("LANGUAGE_SCORE_NOT_PROVIDED")
+                    ? "어학 성적이 없어 지원 자격을 확인해야 해요."
+                    : "지원 조건을 확인해 주세요.";
+            return new Eligibility("NEEDS_CHECK", List.copyOf(unknown), message);
+        }
         return new Eligibility("ELIGIBLE", List.of(), null);
     }
     private boolean hasAdditionalCondition(String note) {

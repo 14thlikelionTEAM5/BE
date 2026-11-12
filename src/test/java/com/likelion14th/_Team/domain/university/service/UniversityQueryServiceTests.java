@@ -3,6 +3,7 @@ package com.likelion14th._Team.domain.university.service;
 import com.likelion14th._Team.domain.university.dto.*;
 import com.likelion14th._Team.domain.university.entity.*;
 import com.likelion14th._Team.domain.university.repository.UniversityQueryRepository;
+import com.likelion14th._Team.domain.university.repository.UniversityQueryRepository.SchoolRow;
 import com.likelion14th._Team.global.enums.CreditSystem;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +19,9 @@ class UniversityQueryServiceTests {
         when(repository.profile(1L)).thenReturn(Optional.empty());
         when(repository.semesters()).thenReturn(List.of("2027-1"));
         when(repository.bookmarks(1L)).thenReturn(Set.of(1L));
-        when(repository.experienceUniversities()).thenReturn(Set.of(2L));
-        when(repository.universities()).thenReturn(List.of(school(1L,"Zulu","Belgium"),school(2L,"Alpha","USA")));
+        when(repository.schools(eq(1L),any(UniversitySearch.class),nullable(String.class))).thenReturn(List.of(
+                new SchoolRow(school(1L,"Zulu","Belgium"),true,false),
+                new SchoolRow(school(2L,"Alpha","USA"),false,true)));
     }
     private University school(Long id, String name, String country) {
         var u = University.builder().name(name).country(country).creditSystem(CreditSystem.ECTS).build();
@@ -39,15 +41,20 @@ class UniversityQueryServiceTests {
         assertTrue(data.universities().get(1).isBookmarked());
         assertEquals("NOT_ELIGIBLE",first.eligibility().status());
     }
-    @Test void filtersKeywordCaseInsensitivelyAndCountryExactly() {
-        var data = service.list(1L,UniversitySearch.from("ALP","USA",null,null,null));
+    @Test void delegatesSearchToDatabaseAndPreservesCountrySort() {
+        var search=UniversitySearch.from("ALP","USA",null,null,null);
+        when(repository.schools(1L,search,"2027-1")).thenReturn(List.of(new SchoolRow(school(2L,"Alpha","USA"),false,true)));
+        var data=service.list(1L,search);
         assertEquals(1,data.totalCount());
         assertEquals("Alpha",data.universities().getFirst().name());
+        verify(repository).schools(1L,search,"2027-1");
         assertEquals("Zulu",service.list(1L,UniversitySearch.from(null,null,null,null,"COUNTRY")).universities().getFirst().name());
     }
     @Test void eligibleAndLanguageFiltersExcludeUnknownSchools() {
         assertEquals(0,service.list(1L,UniversitySearch.from(null,null,null,"true",null)).totalCount());
-        assertEquals(0,service.list(1L,UniversitySearch.from(null,null,"IELTS",null,null)).totalCount());
+        var languageSearch=UniversitySearch.from(null,null,"IELTS",null,null);
+        when(repository.schools(1L,languageSearch,"2027-1")).thenReturn(List.of());
+        assertEquals(0,service.list(1L,languageSearch).totalCount());
     }
     @Test void noAgreementsStillReturnsUniversitiesWithNullSemester() {
         when(repository.semesters()).thenReturn(List.of());
@@ -59,7 +66,7 @@ class UniversityQueryServiceTests {
         when(repository.countries()).thenReturn(List.of());
         assertTrue(service.countries(1L).countries().isEmpty());
         verify(repository, never()).semesters();
-        verify(repository, never()).agreements(anyList());
+        verify(repository, never()).agreementsForSchools(anyList(),anyList());
     }
     @Test void countriesReturnAggregatedCountsWithoutAgreementFilter() {
         var rows = List.of(new UniversityCountriesResponse.Country("네덜란드", 1L),
@@ -117,7 +124,9 @@ class UniversityQueryServiceTests {
         ReflectionTestUtils.setField(closed,"id",10L);
         when(repository.university(1L)).thenReturn(Optional.of(school));
         when(repository.schoolAgreements(1L)).thenReturn(List.of(closed));
-        when(repository.agreements(List.of("2027-1"))).thenReturn(List.of(closed));
+        when(repository.agreementsForSchools(anyList(),anyList())).thenReturn(List.of(closed));
+        when(repository.schools(1L,UniversitySearch.from(null,"Belgium",null,null,null),"2027-1"))
+                .thenReturn(List.of(new SchoolRow(school,true,false)));
         when(repository.studyPlanId(1L,1L)).thenReturn(Optional.empty());
         var detail = service.detail(1L,1L,"2027-1");
         var listed = service.list(1L,UniversitySearch.from(null,"Belgium",null,null,null)).universities().getFirst();

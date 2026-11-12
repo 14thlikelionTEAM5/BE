@@ -15,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /** 닉네임은 대소문자 구분 없이 중복 불가 */
     boolean existsByNicknameIgnoreCase(String nickname);
 
+    Optional<User> findByNicknameIgnoreCase(String nickname);
+
     Optional<User> findBySchoolEmail(String schoolEmail);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

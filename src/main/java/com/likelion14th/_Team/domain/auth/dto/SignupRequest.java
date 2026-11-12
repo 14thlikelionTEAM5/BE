@@ -96,7 +96,7 @@ public record SignupRequest(
                 case IELTS -> inRange("0", "9") && multipleOf("0.5");
                 case TOEFL_ITP -> inRange("310", "677") && isInteger();
                 case TOEFL_IBT -> inRange("0", "120") && isInteger();
-                case TOEFL_NEW -> inRange("0", "120") && isInteger(); // TODO: 뉴토플 범위 확인 필요
+                case TOEFL_NEW -> inRange("1", "6") && multipleOf("0.5");
             };
         }
 

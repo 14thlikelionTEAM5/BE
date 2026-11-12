@@ -39,7 +39,7 @@ class NicknameCheckTests {
         mvc.perform(request("채원")).andExpect(status().isOk())
             .andExpect(jsonPath("$.data.available").value(true))
             .andExpect(jsonPath("$.data.isCurrent").value(false))
-            .andExpect(jsonPath("$.timestamp").value(org.hamcrest.Matchers.endsWith("+09:00")));
+            .andExpect(jsonPath("$.timestamp").value(org.hamcrest.Matchers.matchesPattern("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}")));
         verify(users).findByNicknameIgnoreCase("채원");
     }
     @Test void duplicateAndCurrentAndInvalidToken() throws Exception {
@@ -66,9 +66,18 @@ class NicknameCheckTests {
     @Test void thirtyRequestsThen429EvenWithForgedForwardedIp() throws Exception {
         for(int i=0;i<30;i++) mvc.perform(request("사용가능")).andExpect(status().isOk());
         mvc.perform(request("사용가능").header("X-Forwarded-For","new-ip"))
-            .andExpect(status().isTooManyRequests()).andExpect(jsonPath("$.code").value("E429"));
+            .andExpect(status().isTooManyRequests()).andExpect(jsonPath("$.code").value("E429"))
+            .andExpect(jsonPath("$.message").value("잠시 후 다시 요청해 주세요"));
         ip=UUID.randomUUID().toString();
         mvc.perform(request("사용가능")).andExpect(status().isOk());
+    }
+    @Test void internalIllegalArgumentIs500WithoutLeakingDetails(CapturedOutput output) throws Exception {
+        String secret=UUID.randomUUID().toString();
+        when(users.findByNicknameIgnoreCase("오류확인")).thenThrow(new IllegalArgumentException(secret));
+        mvc.perform(request("오류확인")).andExpect(status().isInternalServerError())
+            .andExpect(jsonPath("$.code").value("E500"))
+            .andExpect(jsonPath("$.errors").doesNotExist());
+        assertFalse(output.getAll().contains(secret));
     }
     @Test void serverFailureDoesNotLogSecrets(CapturedOutput output) throws Exception {
         String secret=UUID.randomUUID().toString();

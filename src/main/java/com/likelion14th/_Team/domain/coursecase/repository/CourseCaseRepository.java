@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.List;
 
 public interface CourseCaseRepository extends JpaRepository<CourseCase, Long> {
 
@@ -18,4 +19,13 @@ public interface CourseCaseRepository extends JpaRepository<CourseCase, Long> {
     @Modifying(flushAutomatically = true)
     @Query("delete from CourseCase c where c.returnReportCourse.id in :courseIds")
     int deleteByReturnReportCourseIds(@Param("courseIds") Collection<Long> courseIds);
+
+    /** 내 등록 내역 조회: 내 귀국보고서 과목에 연결된 인정 사례를 학기 최신순으로 (교양은 homeCourse 없음) */
+    @Query("select c from CourseCase c "
+            + "join fetch c.returnReportCourse rc "
+            + "join fetch rc.returnReport r "
+            + "join fetch r.university "
+            + "left join fetch c.homeCourse "
+            + "where r.user.id = :userId order by c.semester desc, c.id desc")
+    List<CourseCase> findAllByUserIdWithDetails(@Param("userId") Long userId);
 }

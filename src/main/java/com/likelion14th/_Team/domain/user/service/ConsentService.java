@@ -66,6 +66,12 @@ public class ConsentService {
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "동의 기록 중 오류가 발생했습니다.");
         }
     }
+    /** 외부 AI로 데이터를 보내는 API가 호출 전에 확인한다. 동의 기록이 없으면 403 */
+    public void requireExternalAiConsent(Long userId) {
+        if (!consentRepository.existsByUserIdAndConsentType(userId, ConsentType.EXTERNAL_AI)) {
+            throw new CustomException(ErrorCode.EXTERNAL_AI_CONSENT_REQUIRED);
+        }
+    }
 
     /** 현재는 EXTERNAL_AI만 받는다. 이용약관·개인정보 동의는 회원가입 API에서 기록한다 */
     private ConsentType parseConsentType(ConsentRequest request) {

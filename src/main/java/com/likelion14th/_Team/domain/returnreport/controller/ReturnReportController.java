@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.likelion14th._Team.domain.user.service.ConsentService;
 
 @Tag(name = "ReturnReport", description = "귀국보고서 API")
 @RestController
@@ -31,13 +32,16 @@ public class ReturnReportController {
 
     private final ReturnReportService returnReportService;
     private final ReturnReportExtractService returnReportExtractService;
+    private final ConsentService consentService;
 
     @Operation(summary = "귀국보고서 항목 추출",
             description = "붙여넣은 귀국보고서 텍스트(최대 20,000자)에서 비용·숙소·비자·보험·수강 교과목·요약을 추출합니다. "
+                    + "외부 AI 처리에 동의(EXTERNAL_AI)한 사용자만 호출할 수 있습니다. "
                     + "결과만 반환하고 저장하지 않으며, 원문도 저장하지 않습니다. 찾지 못한 값은 null입니다.")
     @PostMapping("/extract")
     public ResponseEntity<ApiResponse<ReturnReportExtractResponse>> extract(
-            @Valid @RequestBody ReturnReportExtractRequest request) {
+            @AuthenticationPrincipal Long userId, @Valid @RequestBody ReturnReportExtractRequest request) {
+        consentService.requireExternalAiConsent(userId);
         ReturnReportExtractResponse response = returnReportExtractService.extract(request);
         return ResponseEntity.ok(ApiResponse.ok("항목이 추출되었습니다.", response));
     }

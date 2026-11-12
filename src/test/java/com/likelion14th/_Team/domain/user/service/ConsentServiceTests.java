@@ -136,4 +136,19 @@ class ConsentServiceTests {
     private Consent consent() {
         return Consent.builder().user(user).consentType(ConsentType.EXTERNAL_AI).consentedAt(CONSENTED_AT).build();
     }
+    @Test
+    void requireExternalAiConsentPassesWhenConsentExists() {
+        when(consentRepository.existsByUserIdAndConsentType(USER_ID, ConsentType.EXTERNAL_AI)).thenReturn(true);
+
+        service.requireExternalAiConsent(USER_ID);
+    }
+
+    @Test
+    void requireExternalAiConsentThrows403WhenConsentMissing() {
+        when(consentRepository.existsByUserIdAndConsentType(USER_ID, ConsentType.EXTERNAL_AI)).thenReturn(false);
+
+        CustomException e = assertThrows(CustomException.class, () -> service.requireExternalAiConsent(USER_ID));
+
+        assertEquals(ErrorCode.EXTERNAL_AI_CONSENT_REQUIRED, e.getErrorCode());
+    }
 }

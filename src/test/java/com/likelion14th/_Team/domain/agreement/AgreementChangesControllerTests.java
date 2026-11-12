@@ -31,7 +31,7 @@ class AgreementChangesControllerTests {
     static final String URL="/api/v1/agreements/changes";
     @Test void missingInvalidExpiredTokensAre401() throws Exception {
         mvc.perform(get(URL)).andExpect(status().isUnauthorized()).andExpect(jsonPath("$.code").value("E401"))
-            .andExpect(jsonPath("$.message").value("로그인이 필요합니다"));
+            .andExpect(jsonPath("$.message").value("로그인이 필요합니다."));
         for(String token:new String[]{"invalid","expired"}) {
             when(jwt.getUserId(token)).thenThrow(new JwtException(token));
             mvc.perform(get(URL).header("Authorization","Bearer "+token)).andExpect(status().isUnauthorized());
@@ -46,6 +46,16 @@ class AgreementChangesControllerTests {
             .andExpect(jsonPath("$.data.newCount").value(3)).andExpect(jsonPath("$.data.quotaChangedCount").value(5))
             .andExpect(jsonPath("$.data.closedCount").value(2)).andExpect(jsonPath("$.data.standardDate").value("2026-07-03"))
             .andExpect(jsonPath("$.errors").doesNotExist());
+    }
+    @Test void firstSemesterPreservesNullCountsInJson() throws Exception {
+        when(jwt.getUserId("valid")).thenReturn(1L);
+        when(service.changes()).thenReturn(new AgreementChangesResponse("2027-1",null,LocalDate.parse("2026-07-03"),null,null,null));
+        mvc.perform(get(URL).header("Authorization","Bearer valid")).andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.previousSemester").value(org.hamcrest.Matchers.nullValue()))
+            .andExpect(jsonPath("$.data.newCount").value(org.hamcrest.Matchers.nullValue()))
+            .andExpect(jsonPath("$.data.quotaChangedCount").value(org.hamcrest.Matchers.nullValue()))
+            .andExpect(jsonPath("$.data.closedCount").value(org.hamcrest.Matchers.nullValue()))
+            .andExpect(jsonPath("$.timestamp").value(org.hamcrest.Matchers.matchesPattern("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}")));
     }
     @Test void noAgreementIs404() throws Exception {
         when(jwt.getUserId("valid")).thenReturn(1L);

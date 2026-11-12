@@ -93,8 +93,6 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 .exceptionHandling(handling -> handling
                         .authenticationEntryPoint(new ApiAuthenticationEntryPoint(List.of(
-                                new ApiAuthenticationEntryPoint.Route(paths.matcher(HttpMethod.GET, "/api/v1/agreements/changes"),
-                                        ErrorCode.AGREEMENT_LOGIN_REQUIRED),
                                 new ApiAuthenticationEntryPoint.Route(
                                         new OrRequestMatcher(universityCountries, universityDetail),
                                         ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED),

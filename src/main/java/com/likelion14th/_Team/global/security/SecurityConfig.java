@@ -84,12 +84,13 @@ public class SecurityConfig {
                         // 지금 바꾸면 로그인할 방법이 없어서 다른 API를 Swagger에서 테스트할 수 없다.
                         .anyRequest().permitAll())
                 .exceptionHandling(handling -> handling
-                        .authenticationEntryPoint((request, response, e) ->
-                                SecurityErrorWriter.write(response, universityCountries.matches(request) || universityDetail.matches(request)
-                                        ? ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED : universities.matches(request)
-                                        ? ErrorCode.UNIVERSITY_LOGIN_REQUIRED : studyPlanById.matches(request)
-                                        ? ErrorCode.STUDY_PLAN_LOGIN_REQUIRED
-                                        : studyPlans.matches(request) ? ErrorCode.AUTHENTICATION_REQUIRED : ErrorCode.UNAUTHORIZED))
+                        .authenticationEntryPoint(new ApiAuthenticationEntryPoint(List.of(
+                                new ApiAuthenticationEntryPoint.Route(
+                                        new OrRequestMatcher(universityCountries, universityDetail),
+                                        ErrorCode.UNIVERSITY_COUNTRIES_LOGIN_REQUIRED),
+                                new ApiAuthenticationEntryPoint.Route(universities, ErrorCode.UNIVERSITY_LOGIN_REQUIRED),
+                                new ApiAuthenticationEntryPoint.Route(studyPlanById, ErrorCode.STUDY_PLAN_LOGIN_REQUIRED),
+                                new ApiAuthenticationEntryPoint.Route(studyPlans, ErrorCode.AUTHENTICATION_REQUIRED))))
                         .accessDeniedHandler((request, response, e) ->
                                 SecurityErrorWriter.write(response, ErrorCode.FORBIDDEN)))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);

@@ -29,6 +29,7 @@ public enum ErrorCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "접근 권한이 없습니다"),
     STUDY_PLAN_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "해당 수강계획에 대한 권한이 없습니다."),
     RETURN_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서만 수정할 수 있습니다"),
+    EXTERNAL_AI_CONSENT_REQUIRED(HttpStatus.FORBIDDEN, "E403", "외부 AI 처리 동의가 필요합니다"),
     RETURN_REPORT_COURSE_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 귀국보고서 과목만 등록할 수 있습니다"),
     COURSE_CASE_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 인정 사례만 수정할 수 있습니다."),
     ADMISSION_REPORT_FORBIDDEN(HttpStatus.FORBIDDEN, "E403", "본인의 스펙만 수정할 수 있습니다"),

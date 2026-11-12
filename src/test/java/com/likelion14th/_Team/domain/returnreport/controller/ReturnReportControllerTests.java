@@ -43,6 +43,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import com.likelion14th._Team.domain.user.service.ConsentService;
 
 @WebMvcTest(controllers = ReturnReportController.class, properties = "app.cors.allowed-origins=http://localhost:3000")
 @Import(SecurityConfig.class)
@@ -73,6 +74,9 @@ class ReturnReportControllerTests {
     @MockitoBean
     private JwtProvider jwtProvider;
 
+    @MockitoBean
+    private ConsentService consentService;
+
     @BeforeEach
     void setUp() {
         when(jwtProvider.getUserId("valid-token")).thenReturn(1L);
@@ -102,7 +106,7 @@ class ReturnReportControllerTests {
                     .andExpect(jsonPath("$.errors").doesNotExist())
                     .andExpect(jsonPath("$.timestamp").isNotEmpty());
         }
-        verifyNoInteractions(returnReportService, returnReportExtractService);
+        verifyNoInteractions(returnReportService, returnReportExtractService, consentService);
     }
 
     // ===== 추출 =====
@@ -154,6 +158,38 @@ class ReturnReportControllerTests {
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.code").value("E500"))
                 .andExpect(jsonPath("$.message").value("항목 추출에 실패했습니다. 다시 시도하거나 직접 입력해 주세요."));
+    }
+
+    @Test
+    void extractWithoutExternalAiConsentReturns403() throws Exception {
+        doThrow(new CustomException(ErrorCode.EXTERNAL_AI_CONSENT_REQUIRED))
+                .when(consentService).requireExternalAiConsent(1L);
+
+        mockMvc.perform(authed(json(post(URL + "/extract"), "{\"text\":\"보고서\"}")))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("E403"))
+                .andExpect(jsonPath("$.message").value("외부 AI 처리 동의가 필요합니다"))
+                .andExpect(jsonPath("$.data").doesNotExist());
+        verifyNoInteractions(returnReportExtractService);
+    }
+
+    @Test
+    void extractChecksConsentOfLoggedInUser() throws Exception {
+        when(returnReportExtractService.extract(any())).thenReturn(new ReturnReportExtractResponse(
+                ReturnReportCost.EMPTY, null, ReturnReportVisa.EMPTY, null, List.of(), null));
+
+        mockMvc.perform(authed(json(post(URL + "/extract"), "{\"text\":\"보고서\"}")))
+                .andExpect(status().isOk());
+
+        verify(consentService).requireExternalAiConsent(1L);
+    }
+    @Test
+    void extractValidatesInputBeforeCheckingConsent() throws Exception {
+        mockMvc.perform(authed(json(post(URL + "/extract"), "{\"text\":\"   \"}")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("E400"));
+
+        verifyNoInteractions(consentService, returnReportExtractService);
     }
 
     // ===== 저장 =====

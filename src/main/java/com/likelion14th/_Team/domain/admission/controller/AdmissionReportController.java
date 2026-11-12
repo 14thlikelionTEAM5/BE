@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.util.List;
-import java.util.Set;
+import com.likelion14th._Team.global.enums.AdmissionResult;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,11 +31,13 @@ public class AdmissionReportController {
             @Parameter(schema=@Schema(allowableValues={"ALL","PASS","FAIL"}, defaultValue="ALL"))
             @RequestParam(required=false) String result) {
         var filter = AdmissionReportFilter.from(universityId, null, null);
-        String selectedResult = result == null ? "ALL" : result;
-        if (!Set.of("ALL", "PASS", "FAIL").contains(selectedResult)) {
-            throw new CustomException(ErrorCode.INVALID_INPUT, "입력값이 올바르지 않습니다",
-                    List.of(new FieldErrorDetail(
-                            "result", "ALL, PASS, FAIL 중 하나를 입력해 주세요.")));
+        AdmissionResult selectedResult = null;
+        if (result != null && !result.equals("ALL")) {
+            try { selectedResult = AdmissionResult.valueOf(result); }
+            catch (IllegalArgumentException exception) {
+                throw new CustomException(ErrorCode.INVALID_INPUT, "입력값이 올바르지 않습니다",
+                        List.of(new FieldErrorDetail("result", "ALL, PASS, FAIL 중 하나를 입력해 주세요.")));
+            }
         }
         try {
             return ApiResponse.ok("조회되었습니다.", service.list(userId, filter.universityId(), selectedResult));

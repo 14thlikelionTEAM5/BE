@@ -11,6 +11,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,4 +38,28 @@ public class AdmissionReport extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(name = "major_type", nullable = false, length = 20) private MajorType majorType;
+
+    @Builder
+    private AdmissionReport(University university, User user, String semester, AdmissionResult result,
+                            LanguageTestType languageTestType, BigDecimal languageScore,
+                            BigDecimal gpa, MajorType majorType) {
+        this.university = university;
+        this.user = user;
+        this.semester = semester;
+        this.result = result;
+        this.languageTestType = languageTestType;
+        this.languageScore = languageScore;
+        this.gpa = gpa;
+        this.majorType = majorType;
+    }
+
+    /** 학교·학기·결과·어학 성적만 덮어쓴다. gpa·majorType은 등록 시점 값을 유지한다 */
+    public void update(University university, String semester, AdmissionResult result,
+                       LanguageTestType languageTestType, BigDecimal languageScore) {
+        this.university = university;
+        this.semester = semester;
+        this.result = result;
+        this.languageTestType = languageTestType;
+        this.languageScore = languageScore;
+    }
 }

@@ -71,4 +71,20 @@ class UniversityQueryTests {
         assertThrows(CustomException.class, () -> UniversitySearch.from(null,null,null,null,"RECENT"));
         assertEquals("NAME", UniversitySearch.from(null,null,null,null,null).sort());
     }
+    @Test void missingLanguageHasSpecificMessageWithoutOverridingOtherChecks() {
+        var requirements = List.of(language(LanguageTestType.IELTS, null));
+        var missing = calculator.calculate(agreement(true, 2), new BigDecimal("4.0"), Map.of(), requirements);
+        assertEquals("NEEDS_CHECK", missing.status());
+        assertEquals(List.of("LANGUAGE_SCORE_NOT_PROVIDED"), missing.reasonCodes());
+        assertEquals("어학 성적이 없어 지원 자격을 확인해야 해요.", missing.message());
+        var gpaFailure = calculator.calculate(agreement(true, 2), new BigDecimal("2.0"), Map.of(), requirements);
+        assertEquals(List.of("GPA_BELOW_MIN"), gpaFailure.reasonCodes());
+        assertEquals("학점이 기준에 못 미쳐요.", gpaFailure.message());
+        var unknownSchoolCriteria = calculator.calculate(agreement(true, 2), new BigDecimal("4.0"), Map.of(), List.of());
+        assertEquals("지원 조건을 확인해 주세요.", unknownSchoolCriteria.message());
+        var differentTest = calculator.calculate(agreement(true, 2), new BigDecimal("4.0"),
+                Map.of(LanguageTestType.TOEFL_IBT, new BigDecimal("100")), requirements);
+        assertEquals("지원 조건을 확인해 주세요.", differentTest.message());
+    }
+
 }

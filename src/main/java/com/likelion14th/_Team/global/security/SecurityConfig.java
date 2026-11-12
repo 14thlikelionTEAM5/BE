@@ -81,6 +81,9 @@ public class SecurityConfig {
                         .requestMatchers(studyPlans).authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/universities/search", "/api/v1/home-courses").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/v1/consents").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bookmarks").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bookmarks").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/bookmarks/{universityId}").authenticated()
                         .requestMatchers("/api/v1/return-reports/**").authenticated()
                         .requestMatchers("/api/v1/admission-reports/**").authenticated()
                         // TODO: 로그인 API가 머지되면 permitAll()을 authenticated()로 바꾼다.

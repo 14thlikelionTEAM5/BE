@@ -6,12 +6,14 @@ import com.likelion14th._Team.global.exception.*;
 import com.likelion14th._Team.global.response.*;
 import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @Slf4j
 @RestController
 @RequiredArgsConstructor

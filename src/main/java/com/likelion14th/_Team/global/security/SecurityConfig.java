@@ -88,6 +88,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/return-reports/**").authenticated()
                         .requestMatchers("/api/v1/course-cases/**").authenticated()
                         .requestMatchers("/api/v1/admission-reports/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/experiences/check-duplicate").authenticated()
                         // TODO: 로그인 API가 머지되면 permitAll()을 authenticated()로 바꾼다.
                         // 지금 바꾸면 로그인할 방법이 없어서 다른 API를 Swagger에서 테스트할 수 없다.
                         .anyRequest().permitAll())

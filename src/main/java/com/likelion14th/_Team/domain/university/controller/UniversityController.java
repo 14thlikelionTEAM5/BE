@@ -5,16 +5,16 @@ import com.likelion14th._Team.domain.university.service.UniversityQueryService;
 import com.likelion14th._Team.domain.university.service.UniversityService;
 import com.likelion14th._Team.global.exception.*;
 import com.likelion14th._Team.global.response.ApiResponse;
-import io.swagger.v3.oas.annotations.Operation;
+import com.likelion14th._Team.global.response.FieldErrorDetail;
 import com.likelion14th._Team.global.validation.PositiveIdParser;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.RequiredArgsConstructor;
 import java.util.List;
-import com.likelion14th._Team.global.response.FieldErrorDetail;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

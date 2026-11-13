@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReturnReportRepository extends JpaRepository<ReturnReport, Long> {
 
+    List<ReturnReport> findByUniversityIdOrderBySemesterDescCreatedAtDescIdDesc(Long universityId);
+
     boolean existsByUserIdAndSemester(Long userId, String semester);
 
     /** 내 등록 내역 조회: 내 건을 학기 최신순으로 */

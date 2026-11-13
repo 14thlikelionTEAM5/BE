@@ -51,4 +51,16 @@ public class User extends BaseEntity {
         this.majorType = majorType;
         this.nickname = nickname;
     }
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changeMajorType(MajorType majorType) {
+        this.majorType = majorType;
+    }
+
+    /** 이미 BCrypt로 해시된 값을 받는다 */
+    public void changePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }

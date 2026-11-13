@@ -4,6 +4,7 @@ import com.likelion14th._Team.domain.university.dto.UniversitySearchResponse;
 import com.likelion14th._Team.domain.university.repository.UniversityRepository;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.util.SearchKeyword;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class UniversityService {
                     .map(UniversitySearchResponse::from)
                     .toList();
         } catch (RuntimeException e) {
-            log.error("학교 검색 실패", e);
+            log.error("학교 검색 실패", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "학교 검색 중 오류가 발생했습니다.");
         }
     }

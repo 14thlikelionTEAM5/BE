@@ -9,6 +9,7 @@ import com.likelion14th._Team.global.enums.DuplicateReason;
 import com.likelion14th._Team.global.enums.ExperienceType;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class ExperienceDuplicateService {
                         : DuplicateCheckResponse.unavailable(DuplicateReason.REPORT_REQUIRED);
             };
         } catch (RuntimeException e) {
-            log.error("등록 중복 확인 실패", e);
+            log.error("등록 중복 확인 실패", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "등록 확인 중 오류가 발생했습니다.");
         }
     }

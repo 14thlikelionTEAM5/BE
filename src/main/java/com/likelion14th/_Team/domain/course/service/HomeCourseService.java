@@ -5,6 +5,7 @@ import com.likelion14th._Team.domain.course.repository.HomeCourseRepository;
 import com.likelion14th._Team.global.enums.CourseCategory;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import com.likelion14th._Team.global.util.SearchKeyword;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class HomeCourseService {
                     .map(HomeCourseSearchResponse::from)
                     .toList();
         } catch (RuntimeException e) {
-            log.error("본교 과목 검색 실패", e);
+            log.error("본교 과목 검색 실패", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "본교 과목 검색 중 오류가 발생했습니다.");
         }
     }

@@ -28,7 +28,7 @@ class UniversityServiceTests {
     @Test
     void searchesWithTrimmedKeywordAndLimitTen() {
         University nus = University.builder().name("National University of Singapore").country("싱가포르").build();
-        when(repository.findByNameContainingOrderByNameAsc(eq("Singapore"), any(Pageable.class)))
+        when(repository.searchByName(eq("Singapore"), any(Pageable.class)))
                 .thenReturn(List.of(nus));
 
         List<UniversitySearchResponse> result = service.search("  Singapore ");
@@ -37,30 +37,30 @@ class UniversityServiceTests {
         assertEquals("National University of Singapore", result.getFirst().name());
         assertEquals("싱가포르", result.getFirst().country());
         ArgumentCaptor<Pageable> pageable = ArgumentCaptor.forClass(Pageable.class);
-        verify(repository).findByNameContainingOrderByNameAsc(eq("Singapore"), pageable.capture());
+        verify(repository).searchByName(eq("Singapore"), pageable.capture());
         assertEquals(0, pageable.getValue().getPageNumber());
         assertEquals(10, pageable.getValue().getPageSize());
     }
 
     @Test
     void returnsEmptyListWhenNoMatch() {
-        when(repository.findByNameContainingOrderByNameAsc(anyString(), any(Pageable.class))).thenReturn(List.of());
+        when(repository.searchByName(anyString(), any(Pageable.class))).thenReturn(List.of());
 
         assertEquals(List.of(), service.search("zzz"));
     }
 
     @Test
     void passesWildcardCharactersAsIs() {
-        when(repository.findByNameContainingOrderByNameAsc(anyString(), any(Pageable.class))).thenReturn(List.of());
+        when(repository.searchByName(anyString(), any(Pageable.class))).thenReturn(List.of());
 
         service.search("100%_");
 
-        verify(repository).findByNameContainingOrderByNameAsc(eq("100%_"), any(Pageable.class));
+        verify(repository).searchByName(eq("100%_"), any(Pageable.class));
     }
 
     @Test
     void rejectsBlankOrMissingKeyword() {
-        for (String keyword : new String[]{null, "", "   "}) {
+        for (String keyword : new String[]{null, "", "   ", "\u2003", " \t\n\u2003"}) {
             CustomException e = assertThrows(CustomException.class, () -> service.search(keyword));
             assertEquals(ErrorCode.INVALID_INPUT, e.getErrorCode());
             assertEquals("입력값이 올바르지 않습니다", e.getMessage());
@@ -71,7 +71,7 @@ class UniversityServiceTests {
 
     @Test
     void keywordLengthLimitIsFiftyAfterTrim() {
-        when(repository.findByNameContainingOrderByNameAsc(anyString(), any(Pageable.class))).thenReturn(List.of());
+        when(repository.searchByName(anyString(), any(Pageable.class))).thenReturn(List.of());
 
         service.search(" " + "a".repeat(50) + " ");
 
@@ -80,8 +80,18 @@ class UniversityServiceTests {
     }
 
     @Test
+    void stripsUnicodeEdgesAndCountsSupplementaryCharactersAsOne() {
+        when(repository.searchByName(anyString(), any(Pageable.class))).thenReturn(List.of());
+        service.search("\u2003 Alpha  University \u2003");
+        verify(repository).searchByName(eq("Alpha  University"), any(Pageable.class));
+        service.search("😀".repeat(50));
+        verify(repository).searchByName(eq("😀".repeat(50)), any(Pageable.class));
+        assertThrows(CustomException.class, () -> service.search("😀".repeat(51)));
+    }
+
+    @Test
     void wrapsRepositoryFailureAs500() {
-        when(repository.findByNameContainingOrderByNameAsc(anyString(), any(Pageable.class)))
+        when(repository.searchByName(anyString(), any(Pageable.class)))
                 .thenThrow(new IllegalStateException("db down"));
 
         CustomException e = assertThrows(CustomException.class, () -> service.search("nus"));

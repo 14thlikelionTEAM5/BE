@@ -14,10 +14,13 @@ public record UniversitySearch(String keyword, String country, LanguageTestType 
             }
             String order = sort == null ? "NAME" : sort;
             if (!order.equals("NAME") && !order.equals("COUNTRY")) throw new IllegalArgumentException();
-            if (keyword != null && keyword.length() > 200 || country != null && country.length() > 100) {
+            String normalizedKeyword = keyword == null ? null : keyword.strip();
+            if ((normalizedKeyword != null
+                    && normalizedKeyword.codePointCount(0, normalizedKeyword.length()) > 200)
+                    || (country != null && country.length() > 100)) {
                 throw new IllegalArgumentException();
             }
-            return new UniversitySearch(keyword == null ? null : keyword.strip(),
+            return new UniversitySearch(normalizedKeyword,
                     country == null ? null : country.strip(),
                     languageTest == null ? null : LanguageTestType.valueOf(languageTest),
                     "true".equals(eligibleOnly), order);

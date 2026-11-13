@@ -22,10 +22,10 @@ public class UniversityService {
 
     /** 학교명 자동완성. 이름순 최대 10건, 없으면 빈 목록 */
     public List<UniversitySearchResponse> search(String rawKeyword) {
-        String keyword = SearchKeyword.require(rawKeyword);
+        String keyword = SearchKeyword.require(rawKeyword == null ? null : rawKeyword.strip());
         try {
             return universityRepository
-                    .findByNameContainingOrderByNameAsc(keyword, PageRequest.of(0, SEARCH_LIMIT))
+                    .searchByName(keyword, PageRequest.of(0, SEARCH_LIMIT))
                     .stream()
                     .map(UniversitySearchResponse::from)
                     .toList();

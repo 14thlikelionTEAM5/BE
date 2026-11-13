@@ -28,4 +28,11 @@ public interface CourseCaseRepository extends JpaRepository<CourseCase, Long> {
             + "left join fetch c.homeCourse "
             + "where r.user.id = :userId order by c.semester desc, c.id desc")
     List<CourseCase> findAllByUserIdWithDetails(@Param("userId") Long userId);
+
+    /** 학교별 공개 인정 사례. 작성자 정보는 읽지 않고 교양의 본교 과목 누락도 허용한다. */
+    @Query("select c from CourseCase c join fetch c.returnReportCourse rc "
+            + "join rc.returnReport r left join fetch c.homeCourse "
+            + "where r.university.id = :universityId "
+            + "order by c.semester desc, c.createdAt desc, c.id desc")
+    List<CourseCase> findAllByUniversityIdWithCourses(@Param("universityId") Long universityId);
 }

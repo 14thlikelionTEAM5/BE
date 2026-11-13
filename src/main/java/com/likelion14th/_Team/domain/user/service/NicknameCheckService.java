@@ -5,7 +5,7 @@ import com.likelion14th._Team.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.text.Normalizer;
+import com.likelion14th._Team.global.validation.NicknameRules;
 import java.util.List;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
@@ -18,10 +18,10 @@ public class NicknameCheckService {
 
     @Transactional(readOnly = true)
     public NicknameCheckResponse check(String input, Long userId) {
-        String nickname = input == null ? "" : Normalizer.normalize(input, Normalizer.Form.NFC);
-        if (!nickname.matches("[가-힣a-zA-Z0-9]{2,12}")) {
+        String nickname = NicknameRules.normalize(input);
+        if (!NicknameRules.isValidNormalized(nickname)) {
             throw new CustomException(ErrorCode.INVALID_INPUT, ErrorCode.INVALID_INPUT.getMessage(),
-                    List.of(new FieldErrorDetail("nickname", "닉네임은 2~12자의 한글, 영문, 숫자만 사용할 수 있습니다")));
+                    List.of(new FieldErrorDetail("nickname", NicknameRules.CHECK_FORMAT_MESSAGE)));
         }
         var owner = users.findByNicknameIgnoreCase(nickname);
         boolean current = owner.isPresent() && owner.get().getId().equals(userId);

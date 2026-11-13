@@ -26,7 +26,7 @@ public class NicknameCheckController {
     private final NicknameCheckRateLimiter limiter;
 
     @GetMapping(value = "/check", produces = "application/json")
-    @Operation(summary = "닉네임 중복 확인", description = "인증 선택. 잘못된 토큰은 비로그인 처리. IP당 1분 30회까지 허용합니다.")
+    @Operation(summary = "닉네임 중복 확인", description = "인증 선택. 잘못된 토큰은 비로그인 처리. 닉네임은 NFC 정규화 후 검증·조회하며 응답 nickname은 입력 표기를 유지합니다. IP당 1분 30회까지 허용합니다.")
     @ApiResponses({
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "사용 가능·중복·본인 닉네임"),
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "입력값 오류"),

@@ -31,7 +31,7 @@ public class AuthController {
     private final AuthService authService;
     private final EmailAuthService emailAuthService;
 
-    @Operation(summary = "회원가입")
+    @Operation(summary = "회원가입", description = "닉네임을 NFC로 정규화한 후 검증·중복 확인·저장합니다. 응답 nickname은 저장된 NFC 표기입니다.")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignupResponse>> signup(@Valid @RequestBody SignupRequest request) {
         SignupResponse response = authService.signup(request);

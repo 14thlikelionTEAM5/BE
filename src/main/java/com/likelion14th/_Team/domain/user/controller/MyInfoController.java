@@ -39,7 +39,7 @@ public class MyInfoController {
     }
 
     @Operation(summary = "내 정보 수정",
-            description = "닉네임, 전공 구분, 누적 학점은 보낸 항목만 수정합니다. "
+            description = "닉네임은 NFC 정규화 후 검증·저장하며 응답도 저장된 표기입니다. 닉네임, 전공 구분, 누적 학점은 보낸 항목만 수정합니다. "
                     + "languageScores는 생략하면 유지, 보내면 목록 전체로 교체(빈 배열이면 전체 삭제)합니다.")
     @PatchMapping
     public ResponseEntity<ApiResponse<MyInfoUpdateResponse>> updateMyInfo(

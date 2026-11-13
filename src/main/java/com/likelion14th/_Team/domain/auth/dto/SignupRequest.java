@@ -1,6 +1,7 @@
 package com.likelion14th._Team.domain.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.likelion14th._Team.global.validation.NicknameRules;
 import com.likelion14th._Team.global.enums.LanguageTestType;
 import com.likelion14th._Team.global.enums.MajorType;
 import jakarta.validation.Valid;
@@ -29,8 +30,7 @@ public record SignupRequest(
         String password,
 
         @NotBlank(message = "닉네임을 입력해 주세요")
-        @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,12}$",
-                message = "2~12자의 한글, 영문, 숫자만 사용할 수 있습니다")
+        @Pattern(regexp = NicknameRules.REGEXP, message = NicknameRules.FORMAT_MESSAGE)
         String nickname,
 
         @NotNull(message = "전공 구분을 선택해 주세요")
@@ -52,6 +52,7 @@ public record SignupRequest(
 
     /** languageScores를 안 보내거나 null이면 빈 배열로 취급 */
     public SignupRequest {
+        nickname = NicknameRules.normalize(nickname);
         languageScores = (languageScores == null) ? List.of() : languageScores;
     }
 

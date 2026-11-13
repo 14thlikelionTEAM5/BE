@@ -1,6 +1,7 @@
 package com.likelion14th._Team.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.likelion14th._Team.global.validation.NicknameRules;
 import com.likelion14th._Team.domain.auth.dto.SignupRequest.LanguageScoreRequest;
 import com.likelion14th._Team.global.enums.LanguageTestType;
 import com.likelion14th._Team.global.enums.MajorType;
@@ -22,8 +23,7 @@ import java.util.Objects;
  */
 public record MyInfoUpdateRequest(
 
-        @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,12}$",
-                message = "2~12자의 한글, 영문, 숫자만 사용할 수 있습니다")
+        @Pattern(regexp = NicknameRules.REGEXP, message = NicknameRules.FORMAT_MESSAGE)
         String nickname,
 
         MajorType majorType,
@@ -36,6 +36,10 @@ public record MyInfoUpdateRequest(
         @Valid
         List<@NotNull(message = "어학 성적 항목이 비어 있습니다") @Valid LanguageScoreRequest> languageScores
 ) {
+
+    public MyInfoUpdateRequest {
+        nickname = NicknameRules.normalize(nickname);
+    }
 
     /** 같은 어학 시험(testType) 중복 불가 */
     @JsonIgnore

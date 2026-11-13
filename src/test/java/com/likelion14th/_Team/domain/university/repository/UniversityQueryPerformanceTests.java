@@ -28,6 +28,7 @@ class UniversityQueryPerformanceTests {
     @Autowired EntityManager em;
     @Autowired EntityManagerFactory emf;
     @Autowired UniversityQueryService service;
+    @Autowired com.likelion14th._Team.domain.bookmark.service.BookmarkService bookmarks;
     @Test void selectiveSearchMeasuresBoundedDatabaseReads() {
         String key=UUID.randomUUID().toString().replace("-", "");
         User viewer=User.builder().schoolEmail(key+"@example.hufs.ac.kr").nickname(key.substring(0,12))
@@ -64,6 +65,7 @@ class UniversityQueryPerformanceTests {
         for(int i=0;i<100;i++) {
             University school=University.builder().name("MixedSchool-"+key+"-"+i).country(country).build();
             em.persist(school);
+            em.persist(com.likelion14th._Team.domain.bookmark.entity.Bookmark.builder().user(viewer).university(school).build());
             if(i<10) {
                 var agreement=Agreement.builder()
                         .university(school).semester("9999-1").quota(2)
@@ -88,6 +90,12 @@ class UniversityQueryPerformanceTests {
         assertTrue(Arrays.stream(statistics.getQueries()).anyMatch(q -> q.contains("AgreementLanguageRequirement")));
         System.out.printf("UNIVERSITY_MIXED_MEASUREMENT queries=%d entities=%d%n",
                 statistics.getPrepareStatementCount(),statistics.getEntityLoadCount());
+        em.clear();
+        statistics.clear();
+        var saved = bookmarks.list(viewer.getId());
+        assertEquals(100, saved.totalCount());
+        assertEquals(10, saved.universities().stream().filter(s -> s.agreementId() != null).count());
+        assertTrue(statistics.getPrepareStatementCount() <= 5, "bookmark cards must also use bounded batch queries");
     }
 
 }

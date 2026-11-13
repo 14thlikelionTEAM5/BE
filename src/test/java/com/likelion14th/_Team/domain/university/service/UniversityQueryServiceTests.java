@@ -14,7 +14,8 @@ import static org.mockito.Mockito.*;
 
 class UniversityQueryServiceTests {
     private final UniversityQueryRepository repository = mock(UniversityQueryRepository.class);
-    private final UniversityQueryService service = new UniversityQueryService(repository, new UniversityEligibilityCalculator());
+    private final UniversityQueryService service = new UniversityQueryService(repository, new UniversityEligibilityCalculator(),
+            new UniversityCardAssembler(repository, new UniversityEligibilityCalculator()));
     @BeforeEach void setup() {
         when(repository.profile(1L)).thenReturn(Optional.empty());
         when(repository.semesters()).thenReturn(List.of("2027-1"));

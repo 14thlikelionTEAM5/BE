@@ -12,6 +12,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(errorResponse.getStatusCode())
                     .body(ApiResponse.error("E" + status, "요청을 처리할 수 없습니다", null));
         }
-        log.error("처리되지 않은 예외", e);
+        log.error("처리되지 않은 예외", ExceptionLogSanitizer.withoutMessages(e));
         ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
         return ResponseEntity.status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode.getCode(), errorCode.getMessage(), null));

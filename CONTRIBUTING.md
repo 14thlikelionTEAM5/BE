@@ -230,6 +230,20 @@ git push                                       # 이후 push
 
 ---
 
+### 7-6. 테스트 실행 (개발 DB와 격리)
+
+- JDK 21과 실행 중인 Docker 엔진이 필요합니다. 로컬과 CI 모두 `./gradlew build`로 실행합니다.
+- DB 통합 테스트(`@SpringBootTest`)는 Testcontainers로 **실행 JVM마다 별도 MySQL 8.4 컨테이너**를 생성합니다. 개발 DB 컨테이너나 `.env`, 시연 SQL은 필요하지 않습니다.
+- `src/test/resources/META-INF/spring.factories`에 등록된 커스터마이저가 접속 URL·계정·DDL 설정을 강제합니다. `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `DDL_AUTO`가 설정되어 있어도 개발·운영 DB에 접속하지 않습니다. Docker가 없으면 실패하며 다른 DB로 대체하지 않습니다.
+- 전체 컨텍스트 테스트에는 `@ActiveProfiles("test")`를 붙입니다. 프로필은 SQL 출력과 외부 메일·AI 설정을 분리하며, DB 격리는 프로필 누락 여부와 무관하게 적용됩니다. MockMvc 슬라이스/단위 테스트만 실행하면 DB 컨테이너를 시작하지 않습니다.
+- 일반 DB 통합 테스트는 `@Transactional` 롤백을 유지합니다. 현재 찜 동시성 테스트는 별도 스레드의 실제 커밋을 검증하므로 UUID로 데이터를 구분하고 자신이 생성한 ID만 `finally`에서 삭제합니다. 회원 탈퇴는 기존 Mockito 단위 테스트에 더해, 커밋한 사용자·찜 데이터로 실제 삭제 성공 및 중간 오류 시 전체 롤백을 검증합니다. 이 테스트도 자신이 생성한 ID만 정리합니다.
+- 재실행은 `./gradlew test --rerun-tasks`, 동시성 테스트만 실행하려면 `./gradlew test --tests '*BookmarkConcurrencyTests' --rerun-tasks`를 사용합니다.
+- 같은 JVM 안에서는 테스트를 순차 실행합니다. 여러 Gradle/IDE 실행은 컨테이너와 임의 호스트 포트가 각각 달라 서로의 데이터를 건드리지 않습니다.
+- 컨테이너 재사용과 영구 볼륨은 사용하지 않습니다. 테스트 JVM 종료 후 Ryuk이 컨테이너를 제거합니다. 테스트 프로세스 비정상 종료 시에도 Docker와 Ryuk이 동작 중이면 정리됩니다. Docker 자체가 중단된 경우 복구 후 테스트 컨테이너 잔존 여부를 확인하세요.
+- CI는 Docker를 사용할 수 있는 실행기에서 위 명령을 그대로 사용합니다. DB/메일/AI용 운영 Secrets를 테스트 작업에 전달하지 않습니다. 첫 실행은 MySQL 이미지 다운로드가 필요합니다.
+
+---
+
 ## 8. 막혔을 때
 
 - 명세가 이상하거나 모호하면 이슈에 남기고 팀장에게 알려주세요.

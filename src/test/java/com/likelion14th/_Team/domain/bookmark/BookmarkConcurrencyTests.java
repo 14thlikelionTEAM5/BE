@@ -20,9 +20,11 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+@ActiveProfiles("test")
 @SpringBootTest
 class BookmarkConcurrencyTests {
     @Autowired BookmarkService service;
@@ -93,13 +95,20 @@ class BookmarkConcurrencyTests {
         } finally {
             start.countDown();
             pool.shutdownNow();
-            assertTrue(pool.awaitTermination(20, TimeUnit.SECONDS));
-            tx.executeWithoutResult(status -> {
-                em.createNativeQuery("delete from bookmark where user_id=:id")
-                        .setParameter("id", ids[0]).executeUpdate();
-                users.deleteById(ids[0]);
-                schools.deleteById(ids[1]);
-            });
+            try {
+                assertTrue(pool.awaitTermination(20, TimeUnit.SECONDS));
+            } finally {
+                // 이 실행에서 만든 ID만 정리하며, 스레드 종료 검증 실패 시에도 수행한다.
+                tx.executeWithoutResult(status -> {
+                    em.createNativeQuery("delete from bookmark where user_id=:id")
+                            .setParameter("id", ids[0]).executeUpdate();
+                    users.deleteById(ids[0]);
+                    schools.deleteById(ids[1]);
+                });
+            }
+            assertFalse(users.existsById(ids[0]));
+            assertFalse(schools.existsById(ids[1]));
+            assertFalse(bookmarks.existsByUserIdAndUniversityId(ids[0], ids[1]));
         }
     }
 }

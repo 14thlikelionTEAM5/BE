@@ -18,6 +18,8 @@ import java.util.Optional;
 import java.util.UUID;
 import io.jsonwebtoken.JwtException;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,6 +36,10 @@ class NicknameCheckTests {
     org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request(String nickname) {
         return get("/api/v1/users/nickname/check").param("nickname",nickname)
                 .with(r -> {r.setRemoteAddr(ip);return r;});
+    }
+    @BeforeEach
+    void activeUser() {
+        when(users.existsById(any())).thenReturn(true);
     }
     @Test void availableAndNfc() throws Exception {
         mvc.perform(request("채원")).andExpect(status().isOk())

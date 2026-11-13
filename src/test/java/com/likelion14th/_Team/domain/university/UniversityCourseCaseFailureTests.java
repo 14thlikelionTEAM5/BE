@@ -6,6 +6,7 @@ import com.likelion14th._Team.domain.university.repository.UniversityRepository;
 import com.likelion14th._Team.domain.university.service.UniversityCourseCaseService;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = UniversityCourseCaseController.class,
         properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import({SecurityConfig.class, UniversityCourseCaseService.class})
+@Import({SecurityConfig.class, ActiveUserTestConfig.class, UniversityCourseCaseService.class})
 class UniversityCourseCaseFailureTests {
     @Autowired MockMvc mvc;
     @MockitoBean JwtProvider jwt;

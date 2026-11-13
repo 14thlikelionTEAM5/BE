@@ -27,6 +27,7 @@ import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,7 @@ import com.likelion14th._Team.domain.user.service.WithdrawService;
 
 @WebMvcTest(controllers = MyInfoController.class,
         properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 class MyInfoControllerTests {
 
     private static final String URL = "/api/v1/users/me";

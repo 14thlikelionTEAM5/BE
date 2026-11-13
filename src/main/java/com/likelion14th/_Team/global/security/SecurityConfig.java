@@ -18,6 +18,7 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import com.likelion14th._Team.domain.user.repository.UserRepository;
 
 import java.util.List;
 
@@ -40,7 +41,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProvider jwtProvider,
+                                                   UserRepository userRepository) throws Exception {
         var paths = PathPatternRequestMatcher.withDefaults();
         var admissionStats = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports/stats");
         var admissionReports = paths.matcher(HttpMethod.GET, "/api/v1/universities/{universityId}/admission-reports");
@@ -108,7 +110,8 @@ public class SecurityConfig {
                                 new ApiAuthenticationEntryPoint.Route(studyPlans, ErrorCode.AUTHENTICATION_REQUIRED))))
                         .accessDeniedHandler((request, response, e) ->
                                 SecurityErrorWriter.write(response, ErrorCode.FORBIDDEN)))
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, userRepository),
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

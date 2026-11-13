@@ -14,6 +14,7 @@ import com.likelion14th._Team.domain.admission.service.AdmissionReportStatsServi
 import com.likelion14th._Team.global.enums.AdmissionResult;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = AdmissionReportController.class,
         properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 class AdmissionReportControllerTests {
     private static final String URL = "/api/v1/universities/4/admission-reports";
 

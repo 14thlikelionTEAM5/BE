@@ -16,6 +16,7 @@ import com.likelion14th._Team.global.exception.ErrorCode;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = HomeCourseController.class, properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 class HomeCourseControllerTests {
 
     private static final String URL = "/api/v1/home-courses";

@@ -15,6 +15,7 @@ import com.likelion14th._Team.domain.user.service.ConsentService;
 import com.likelion14th._Team.global.enums.ConsentType;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = ConsentController.class, properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 class ConsentControllerTests {
 
     private static final String URL = "/api/v1/consents";

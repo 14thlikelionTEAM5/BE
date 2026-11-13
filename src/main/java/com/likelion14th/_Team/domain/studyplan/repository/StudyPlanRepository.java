@@ -44,4 +44,9 @@ public interface StudyPlanRepository extends JpaRepository<StudyPlan, Long> {
             order by plan.updatedAt desc, plan.id desc
             """)
     List<StudyPlan> findAllForUser(@Param("userId") Long userId);
+
+    /** 회원 탈퇴: 항목(study_plan_item)을 먼저 지운 뒤 호출 */
+    @Modifying(flushAutomatically = true)
+    @Query("delete from StudyPlan plan where plan.user.id = :userId")
+    int deleteAllByUserId(@Param("userId") Long userId);
 }

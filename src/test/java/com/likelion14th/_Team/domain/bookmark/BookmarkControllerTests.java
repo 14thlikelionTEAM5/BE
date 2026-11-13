@@ -12,6 +12,7 @@ import com.likelion14th._Team.domain.bookmark.controller.BookmarkController;
 import com.likelion14th._Team.domain.bookmark.service.BookmarkService;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = BookmarkController.class,
         properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 @ExtendWith(OutputCaptureExtension.class)
 class BookmarkControllerTests {
     @Autowired MockMvc mvc;

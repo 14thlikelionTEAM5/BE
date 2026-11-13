@@ -18,6 +18,7 @@ import com.likelion14th._Team.global.enums.LanguageTestType;
 import com.likelion14th._Team.global.enums.MajorType;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +31,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = MyExperienceController.class,
         properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 class MyExperienceControllerTests {
     private static final String URL = "/api/v1/users/me/experiences";
 

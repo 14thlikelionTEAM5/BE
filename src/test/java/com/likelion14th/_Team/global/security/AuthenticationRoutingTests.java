@@ -36,6 +36,8 @@ class AuthenticationRoutingTests {
     Filter security;
     @Value("${jwt.secret}")
     String signingKey;
+    @Autowired
+    JwtProvider jwtProvider;
     private MockMvc mvc;
     private String expired;
     private String forged;
@@ -117,6 +119,11 @@ class AuthenticationRoutingTests {
     @Test
     void forgedTokensReturnUnified401Message() throws Exception {
         assertUnauthorized(forged);
+    }
+    @Test
+    void tokensOfDeletedUsersReturnUnified401Message() throws Exception {
+        // 서명과 만료 시간은 유효하지만 DB에 없는 사용자(탈퇴)의 토큰
+        assertUnauthorized(jwtProvider.createAccessToken(Long.MAX_VALUE));
     }
 
     @Test

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers=UniversityReturnReportController.class,properties="app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 @ExtendWith(OutputCaptureExtension.class)
 class UniversityReturnReportControllerTests {
     @Autowired MockMvc mvc;

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.likelion14th._Team.domain.user.service.WithdrawService;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @Tag(name = "MyInfo", description = "내 정보 API")
 @RestController
@@ -27,6 +29,7 @@ public class MyInfoController {
 
     private final MyInfoService myInfoService;
     private final PasswordService passwordService;
+    private final WithdrawService withdrawService;
 
     @Operation(summary = "내 정보 조회",
             description = "로그인한 사용자의 프로필, 지원 조건(누적 학점·어학 성적), 외부 AI 처리 동의 여부를 조회합니다.")
@@ -52,5 +55,13 @@ public class MyInfoController {
             @Valid @RequestBody PasswordChangeRequest request) {
         passwordService.changePassword(userId, request);
         return ResponseEntity.ok(ApiResponse.ok("비밀번호가 변경되었습니다.", null));
+    }
+    @Operation(summary = "회원 탈퇴",
+            description = "계정과 지원 조건, 수강계획, 등록한 경험 정보(귀국보고서, 합격·탈락 스펙, 인정 사례)를 모두 삭제합니다. "
+                    + "삭제 후 복구할 수 없습니다.")
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> withdraw(@AuthenticationPrincipal Long userId) {
+        withdrawService.withdraw(userId);
+        return ResponseEntity.ok(ApiResponse.ok("회원 탈퇴가 완료되었습니다.", null));
     }
 }

@@ -55,6 +55,7 @@ class UniversityCourseCaseControllerTests {
         mvc.perform(get(url("4")).header("Authorization","Bearer valid"))
             .andExpect(status().isOk()).andExpect(jsonPath("$.message").value("인정 사례 목록 조회에 성공했습니다."))
             .andExpect(jsonPath("$.data.courseCases[0].courseCaseId").value(7))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("\"recognizedCredit\":3.0")))
             .andExpect(jsonPath("$.data.courseCases[0].recognitionType").value("GENERAL"))
             .andExpect(jsonPath("$.data.courseCases[0].majorType").value("MINOR"))
             .andExpect(jsonPath("$.data.courseCases[0].homeCourseName").value(org.hamcrest.Matchers.nullValue()))

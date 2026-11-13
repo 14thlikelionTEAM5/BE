@@ -8,12 +8,14 @@ import com.likelion14th._Team.global.response.ApiResponse;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ import java.util.List;
 public class UniversityCourseCaseController {
     private final UniversityCourseCaseService service;
 
-    @GetMapping(produces = "application/json")
+    @GetMapping
     @Operation(summary = "인정 사례 목록 조회", description = "전공 필터 없이 전체 인정 사례를 학기·등록일·ID 내림차순으로 반환합니다. 참고용이며 최종 인정 여부는 학과 확인이 필요합니다.")
     @ApiResponses({
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인정 사례 목록. 없으면 빈 배열"),

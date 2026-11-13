@@ -15,6 +15,7 @@ import com.likelion14th._Team.domain.user.repository.UserProfileRepository;
 import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class WithdrawService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("회원 탈퇴 처리 중 예외", e);
+            log.error("회원 탈퇴 처리 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "회원 탈퇴 중 오류가 발생했습니다");
         }
     }

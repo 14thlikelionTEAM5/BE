@@ -9,6 +9,7 @@ import com.likelion14th._Team.domain.user.repository.EmailVerificationRepository
 import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -55,7 +56,7 @@ public class EmailAuthService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("학교 메일 인증 코드 발송 중 예외", e);
+            log.error("학교 메일 인증 코드 발송 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "메일 발송 중 오류가 발생했습니다");
         }
     }
@@ -111,7 +112,7 @@ public class EmailAuthService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("학교 메일 인증 확인 중 예외", e);
+            log.error("학교 메일 인증 확인 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "인증 확인 중 오류가 발생했습니다");
         }
     }

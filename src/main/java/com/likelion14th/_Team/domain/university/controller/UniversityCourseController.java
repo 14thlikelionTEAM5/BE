@@ -3,6 +3,7 @@ package com.likelion14th._Team.domain.university.controller;
 import com.likelion14th._Team.domain.university.dto.UniversityCoursesResponse;
 import com.likelion14th._Team.domain.university.service.UniversityCourseService;
 import com.likelion14th._Team.global.exception.*;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -29,7 +30,7 @@ public class UniversityCourseController {
             return ApiResponse.ok("수강 과목 목록 조회에 성공했습니다.", service.courses(userId, id));
         } catch (CustomException exception) { throw exception; }
         catch (RuntimeException exception) {
-            log.error("수강 과목 목록 조회 실패", exception);
+            log.error("수강 과목 목록 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "수강 과목 목록 조회 중 오류가 발생했습니다");
         }
     }

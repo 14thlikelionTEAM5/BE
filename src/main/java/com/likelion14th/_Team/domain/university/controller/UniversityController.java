@@ -4,6 +4,7 @@ import com.likelion14th._Team.domain.university.dto.*;
 import com.likelion14th._Team.domain.university.service.UniversityQueryService;
 import com.likelion14th._Team.domain.university.service.UniversityService;
 import com.likelion14th._Team.global.exception.*;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,7 +57,7 @@ public class UniversityController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("협정교 상세 조회 실패", exception);
+            log.error("협정교 상세 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "협정교 상세 조회 중 오류가 발생했습니다");
         }
     }
@@ -69,7 +70,7 @@ public class UniversityController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("국가 목록 조회 실패", exception);
+            log.error("국가 목록 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "국가 목록 조회 중 오류가 발생했습니다");
         }
     }
@@ -91,7 +92,7 @@ public class UniversityController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("협정교 목록 조회 실패", exception);
+            log.error("협정교 목록 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "협정교 목록 조회 중 오류가 발생했습니다.");
         }
 

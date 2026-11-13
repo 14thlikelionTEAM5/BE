@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import com.likelion14th._Team.global.validation.PositiveIdParser;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
@@ -47,11 +50,12 @@ public class UniversityController {
         return ApiResponse.ok("국가 목록 조회에 성공했습니다.", service.countries(userId));
     }
 
-    @Operation(summary = "협정교 목록 조회", description = "최신 모집 학기의 협정교 목록을 조회합니다. 지원 가능 여부는 참고용입니다.")
+    @Operation(summary = "협정교 목록 조회", description = "최신 모집 학기의 협정교 목록을 조회합니다. 지원 가능 여부는 참고용입니다. NAME은 학교명(대소문자·악센트 무시) → ID 순, COUNTRY는 국가명 → 학교명 → ID 순입니다.")
     @ApiFailure(message = "협정교 목록 조회 중 오류가 발생했습니다.", logMessage = "협정교 목록 조회 실패")
     @GetMapping
     public ApiResponse<UniversityListResponse> list(@AuthenticationPrincipal Long userId,
-            @Parameter(description = "학교명 부분 검색, 대소문자 무시") @RequestParam(required = false) String keyword,
+            @Parameter(description = "학교명 부분 검색. 대소문자·악센트 무시(ecole, école, ÉCOLE 모두 일치). 앞뒤 공백 제거 후 최대 200자(유니코드 코드 포인트 기준). 미입력·빈 문자열·공백만 입력하면 검색 필터 없음. 내부 공백과 %, _, 역슬래시는 문자 그대로 검색합니다.")
+            @RequestParam(required = false) String keyword,
             @Parameter(description = "국가명 하나, 미입력 시 전체") @RequestParam(required = false) String country,
             @Parameter(schema = @Schema(allowableValues = {"TOEFL_IBT", "TOEFL_NEW", "TOEFL_ITP", "IELTS"}))
             @RequestParam(required = false) String languageTest,
@@ -63,10 +67,39 @@ public class UniversityController {
         return ApiResponse.ok("협정교 목록 조회에 성공했습니다.", service.list(userId, search));
 
     }
-    @Operation(summary = "학교 검색", description = "학교명 일부로 후보 학교를 이름순 최대 10건 조회합니다. 일치하는 학교가 없으면 빈 배열을 반환합니다.")
+    @Operation(summary = "학교 검색", description = """
+            로그인한 사용자가 학교명 일부로 후보 학교를 최대 10건 조회합니다.
+            협정 공고 존재 여부나 모집 학기에 관계없이 university에 등록된 전체 학교를 대상으로 합니다.
+            검색어는 앞뒤 공백을 제거한 뒤 1~50자(유니코드 코드 포인트 기준)여야 합니다.
+            누락·빈 문자열·공백만 입력하면 400입니다. 내부 공백은 유지합니다.
+            %, _, 역슬래시는 와일드카드가 아닌 입력한 문자 그대로 검색합니다.
+            협정교 목록 검색과 동일하게 대소문자와 악센트를 모두 무시합니다.
+            예를 들어 ecole, école, ÉCOLE은 같은 학교명에 일치합니다.
+            학교명은 대소문자·악센트를 무시한 이름순, 비교 결과가 같으면 학교 ID 오름차순으로 정렬합니다.
+            일치하는 학교가 없으면 HTTP 200과 빈 배열을 반환합니다.
+            """)
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회되었습니다.",
+                    content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
+                            {
+                              "code": "S200",
+                              "message": "조회되었습니다.",
+                              "data": [
+                                {"universityId": 31, "name": "Nanyang Technological University", "country": "싱가포르"},
+                                {"universityId": 12, "name": "National University of Singapore", "country": "싱가포르"}
+                              ],
+                              "errors": null,
+                              "timestamp": "2026-11-14T12:00:00"
+                            }
+                            """))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "입력값이 올바르지 않습니다. errors의 keyword 필드에 누락 또는 50자 초과 사유를 반환합니다."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "로그인이 필요합니다."),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "학교 검색 중 오류가 발생했습니다.")
+    })
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<UniversitySearchResponse>>> search(
-            @Parameter(description = "학교명 일부 (앞뒤 공백 제외 1~50자)", required = true)
+            @Parameter(description = "학교명 일부 (앞뒤 공백 제외 1~50자)", example = "Na", required = true,
+                    schema = @Schema(minLength = 1, maxLength = 50))
             @RequestParam(required = false) String keyword) {
         List<UniversitySearchResponse> response = universityService.search(keyword);
         return ResponseEntity.ok(ApiResponse.ok("조회되었습니다.", response));

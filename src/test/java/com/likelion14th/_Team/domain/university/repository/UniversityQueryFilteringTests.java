@@ -75,7 +75,7 @@ class UniversityQueryFilteringTests {
             var data=list(literal,null,null);assertEquals(1,data.totalCount(),literal);
             assertEquals(alpha.getId(),data.universities().getFirst().universityId());
         }
-        assertEquals(0,list("ecole",null,null).totalCount());
+        assertEquals(1,list("ecole",null,null).totalCount());
         assertEquals(1,list("éCOLE",null,null).totalCount());
     }
     @Test void languageFilterUsesCurrentAgreementButReturnsAllItsRequirements() {

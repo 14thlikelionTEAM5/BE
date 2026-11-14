@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 @ExtendWith(OutputCaptureExtension.class)
 class GlobalExceptionHandlerTests {
@@ -19,7 +20,7 @@ class GlobalExceptionHandlerTests {
         String marker = UUID.randomUUID().toString();
         Exception exception = new IllegalStateException(marker, new IllegalArgumentException(marker));
 
-        var response = handler.handleException(exception);
+        var response = handler.handleException(exception, new MockHttpServletRequest());
 
         assertTrue(response.getStatusCode().isSameCodeAs(HttpStatus.INTERNAL_SERVER_ERROR));
         assertFalse(output.getAll().contains(marker));

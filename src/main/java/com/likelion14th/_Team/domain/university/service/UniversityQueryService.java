@@ -91,9 +91,9 @@ public class UniversityQueryService {
                     a == null ? null : a.getAnnouncedAt(), changes(a, before.get(u.getId()), previous != null),
                     eligibility, row.bookmarked()));
         }
-        Comparator<School> order = Comparator.comparing(School::name, String.CASE_INSENSITIVE_ORDER).thenComparing(School::universityId);
-        if (search.sort().equals("COUNTRY")) order = Comparator.comparing(School::country).thenComparing(order);
-        result.sort(order);
+        // NAME 순서는 Repository의 공통 collation + ID 정렬을 유지한다.
+        // 안정 정렬로 같은 국가 안에서는 기존 학교명·ID 순서를 보존한다.
+        if (search.sort().equals("COUNTRY")) result.sort(Comparator.comparing(School::country));
         return new UniversityListResponse(semester, result.size(), List.copyOf(result));
     }
     private Map<Long, Agreement> bySchool(List<Agreement> agreements, String semester) {

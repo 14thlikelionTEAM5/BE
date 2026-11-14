@@ -20,8 +20,8 @@ class UniversityQueryServiceTests {
         when(repository.semesters()).thenReturn(List.of("2027-1"));
         when(repository.bookmarks(1L)).thenReturn(Set.of(1L));
         when(repository.schools(eq(1L),any(UniversitySearch.class),nullable(String.class))).thenReturn(List.of(
-                new SchoolRow(school(1L,"Zulu","Belgium"),true,false),
-                new SchoolRow(school(2L,"Alpha","USA"),false,true)));
+                new SchoolRow(school(2L,"Alpha","USA"),false,true),
+                new SchoolRow(school(1L,"Zulu","Belgium"),true,false)));
     }
     private University school(Long id, String name, String country) {
         var u = University.builder().name(name).country(country).creditSystem(CreditSystem.ECTS).build();

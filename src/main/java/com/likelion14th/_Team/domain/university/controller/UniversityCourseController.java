@@ -2,10 +2,10 @@ package com.likelion14th._Team.domain.university.controller;
 
 import com.likelion14th._Team.domain.university.dto.UniversityCoursesResponse;
 import com.likelion14th._Team.domain.university.service.UniversityCourseService;
-import com.likelion14th._Team.global.response.*;
-import io.swagger.v3.oas.annotations.Operation;
 import com.likelion14th._Team.global.exception.ApiFailure;
+import com.likelion14th._Team.global.response.*;
 import com.likelion14th._Team.global.validation.PositiveIdParser;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

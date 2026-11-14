@@ -2,27 +2,16 @@ package com.likelion14th._Team.domain.bookmark.service;
 
 import com.likelion14th._Team.domain.bookmark.dto.BookmarkCreateResponse;
 import com.likelion14th._Team.domain.bookmark.dto.BookmarkDeleteResponse;
+import com.likelion14th._Team.domain.bookmark.dto.BookmarkListResponse;
 import com.likelion14th._Team.domain.bookmark.entity.Bookmark;
 import com.likelion14th._Team.domain.bookmark.repository.BookmarkRepository;
 import com.likelion14th._Team.domain.university.repository.UniversityRepository;
+import com.likelion14th._Team.domain.university.service.UniversityCardAssembler;
 import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
 import java.sql.SQLException;
-import com.likelion14th._Team.domain.bookmark.dto.BookmarkListResponse;
-import com.likelion14th._Team.domain.university.dto.UniversityListResponse.LanguageRequirement;
-import com.likelion14th._Team.domain.university.entity.Agreement;
-import com.likelion14th._Team.domain.university.entity.AgreementLanguageRequirement;
-import com.likelion14th._Team.domain.university.repository.UniversityQueryRepository;
-import com.likelion14th._Team.domain.university.service.UniversityEligibilityCalculator;
-import com.likelion14th._Team.global.enums.LanguageTestType;
-import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -34,8 +23,7 @@ public class BookmarkService {
     private final BookmarkRepository bookmarks;
     private final UniversityRepository universities;
     private final UserRepository users;
-    private final UniversityQueryRepository universityQueries;
-    private final UniversityEligibilityCalculator calculator;
+    private final UniversityCardAssembler cardAssembler;
 
     @Transactional
     public BookmarkCreateResponse create(Long userId, Long universityId) {
@@ -77,38 +65,18 @@ public class BookmarkService {
     @Transactional(readOnly = true)
     public BookmarkListResponse list(Long userId) {
         if (userId == null) throw new CustomException(ErrorCode.UNAUTHORIZED);
-        var semesters = universityQueries.semesters();
-        String semester = semesters.isEmpty() ? null : semesters.getFirst();
+        var semesters = cardAssembler.semesters();
         var saved = bookmarks.findAllForUser(userId);
-        if (saved.isEmpty()) return new BookmarkListResponse(semester, 0, List.of());
+        if (saved.isEmpty()) return new BookmarkListResponse(semesters.current(), 0, List.of());
 
-        var ids = saved.stream().map(b -> b.getUniversity().getId()).toList();
-        var agreements = universityQueries.agreementsForSchools(
-                semester == null ? List.of() : List.of(semester), ids);
-        Map<Long, Agreement> bySchool = agreements.stream().collect(Collectors.toMap(
-                a -> a.getUniversity().getId(), Function.identity()));
-        Map<Long, List<AgreementLanguageRequirement>> requirements = universityQueries.requirementsForAgreements(
-                agreements.stream().map(Agreement::getId).toList()).stream()
-                .collect(Collectors.groupingBy(r -> r.getAgreement().getId()));
-        var applicant = universityQueries.applicant(userId);
-        BigDecimal gpa = applicant.isEmpty() ? null : applicant.getFirst().gpa();
-        Map<LanguageTestType, BigDecimal> scores = new EnumMap<>(LanguageTestType.class);
-        applicant.stream().filter(a -> a.testType() != null && a.score() != null)
-                .forEach(a -> scores.put(a.testType(), a.score()));
+        var cards = cardAssembler.cards(userId, semesters.currentOnly(),
+                saved.stream().map(bookmark -> bookmark.getUniversity()).toList());
         var schools = saved.stream().map(bookmark -> {
-            var university = bookmark.getUniversity();
-            Agreement agreement = bySchool.get(university.getId());
-            var language = agreement == null ? List.<AgreementLanguageRequirement>of()
-                    : requirements.getOrDefault(agreement.getId(), List.of());
-            var displayed = agreement == null ? null : language.stream()
-                    .sorted(Comparator.comparing(r -> r.getTestType().ordinal()))
-                    .map(r -> new LanguageRequirement(r.getTestType().name(), r.getMinScore())).toList();
-            return new BookmarkListResponse.School(university.getId(), university.getName(), university.getCountry(),
-                    agreement == null ? null : agreement.getId(), agreement == null ? null : agreement.getQuota(),
-                    agreement == null ? null : agreement.getMinGpa(), displayed,
-                    calculator.calculate(agreement, gpa, scores, language), true);
+            var card = cards.get(bookmark.getUniversity().getId());
+            return new BookmarkListResponse.School(card.universityId(), card.name(), card.country(),
+                    card.agreementId(), card.quota(), card.minGpa(), card.languageRequirements(),
+                    card.eligibility(), true);
         }).toList();
-        return new BookmarkListResponse(semester, schools.size(), schools);
+        return new BookmarkListResponse(semesters.current(), schools.size(), schools);
     }
-
 }

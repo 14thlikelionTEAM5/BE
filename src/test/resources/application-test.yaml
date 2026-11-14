@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  mail:
+    host: localhost
+    port: 1
+    username: ""
+    password: ""
+
+ai:
+  mode: mock

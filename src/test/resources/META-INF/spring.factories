@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory=\
+com.likelion14th._Team.support.IsolatedDatabaseContextCustomizerFactory

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UniversityCourseCaseController {
     private final UniversityCourseCaseService service;
 
-    @ApiFailure(message = "인정 사례 목록 조회 중 오류가 발생했습니다", logMessage = "인정 사례 목록 조회 실패", omitExceptionMessage = true)
+    @ApiFailure(message = "인정 사례 목록 조회 중 오류가 발생했습니다", logMessage = "인정 사례 목록 조회 실패")
     @GetMapping
     @Operation(summary = "인정 사례 목록 조회", description = "전공 필터 없이 전체 인정 사례를 학기·등록일·ID 내림차순으로 반환합니다. 참고용이며 최종 인정 여부는 학과 확인이 필요합니다.")
     @ApiResponses({

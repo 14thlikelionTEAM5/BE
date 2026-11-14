@@ -11,7 +11,4 @@ import java.lang.annotation.Target;
 public @interface ApiFailure {
     String message();
     String logMessage();
-
-    /** 기존 API의 로그 방식을 보존한다. 로그 정책 통일은 별도 이슈에서 진행한다. */
-    boolean omitExceptionMessage() default false;
 }

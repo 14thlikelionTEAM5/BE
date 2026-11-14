@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UniversityReturnReportController {
     private final UniversityReturnReportService service;
 
-    @ApiFailure(message = "귀국보고서 조회 중 오류가 발생했습니다", logMessage = "귀국보고서 조회 실패", omitExceptionMessage = true)
+    @ApiFailure(message = "귀국보고서 조회 중 오류가 발생했습니다", logMessage = "귀국보고서 조회 실패")
     @GetMapping
     @Operation(summary = "귀국보고서 조회", description = "학기·생성일시·ID 내림차순으로 전체 보고서를 반환합니다. 저장된 요약을 사용하며 작성자 정보는 제외합니다.")
     @ApiResponses({

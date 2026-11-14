@@ -14,6 +14,7 @@ import com.likelion14th._Team.global.exception.ErrorCode;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import io.jsonwebtoken.JwtException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = {UniversityController.class, UniversityCourseController.class,
         UniversityReturnReportController.class, UniversityCourseCaseController.class},
         properties = "app.cors.allowed-origins=http://localhost:3000")
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ActiveUserTestConfig.class})
 class UniversityErrorResponseTests {
     @Autowired MockMvc mvc;
     @MockitoBean UniversityQueryService queries;

@@ -1,8 +1,10 @@
 package com.likelion14th._Team.domain.university.service;
 
 import com.likelion14th._Team.domain.university.dto.UniversityCoursesResponse;
-import com.likelion14th._Team.domain.university.repository.*;
-import com.likelion14th._Team.global.exception.*;
+import com.likelion14th._Team.domain.university.repository.UniversityCourseRepository;
+import com.likelion14th._Team.domain.university.repository.UniversityRepository;
+import com.likelion14th._Team.global.exception.CustomException;
+import com.likelion14th._Team.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,10 @@ public class UniversityCourseService {
         if (!universities.existsById(universityId)) {
             throw new CustomException(ErrorCode.UNIVERSITY_NOT_FOUND, "존재하지 않는 학교입니다");
         }
-        return new UniversityCoursesResponse(universityId, repository.courses(universityId));
+        var courses = repository.courses(universityId).stream()
+                .map(row -> new UniversityCoursesResponse.Course(row.courseId(), row.courseCode(),
+                        row.courseName(), row.foreignCredit(), row.hasRecognition()))
+                .toList();
+        return new UniversityCoursesResponse(universityId, courses);
     }
 }

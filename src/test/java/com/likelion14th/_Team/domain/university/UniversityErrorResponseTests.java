@@ -13,6 +13,7 @@ import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import com.likelion14th._Team.global.security.JwtProvider;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import com.likelion14th._Team.global.security.SecurityConfig;
 import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import io.jsonwebtoken.JwtException;
@@ -142,6 +143,16 @@ class UniversityErrorResponseTests {
         request(BASE + "/4/course-cases").andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message").value("서비스 오류 메시지"))
                 .andExpect(jsonPath("$.errors[0].reason").value("원래 오류"));
+    }
+
+    @Test
+    void validationBeforeServiceStillUsesCustom400InsteadOfApiFailure() throws Exception {
+        request(BASE + "?sort=WRONG").andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("검색 조건이 올바르지 않습니다."));
+        request(BASE + "/4?semester=2027-3").andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("학기 형식이 올바르지 않습니다 (예: 2027-1)"))
+                .andExpect(jsonPath("$.errors[0].field").value("semester"));
+        verifyNoInteractions(queries);
     }
 
     @Test

@@ -24,8 +24,9 @@ class BookmarkServiceTests {
         UniversityRepository schools = mock(UniversityRepository.class);
         UserRepository users = mock(UserRepository.class);
         BookmarkService service = new BookmarkService(bookmarks, schools, users,
-                mock(com.likelion14th._Team.domain.university.repository.UniversityQueryRepository.class),
-                new com.likelion14th._Team.domain.university.service.UniversityEligibilityCalculator());
+                new com.likelion14th._Team.domain.university.service.UniversityCardAssembler(
+                        mock(com.likelion14th._Team.domain.university.repository.UniversityQueryRepository.class),
+                        new com.likelion14th._Team.domain.university.service.UniversityEligibilityCalculator()));
         when(schools.findById(4L)).thenReturn(Optional.of(mock(University.class)));
         when(users.getReferenceById(1L)).thenReturn(mock(User.class));
         when(bookmarks.saveAndFlush(any())).thenThrow(new DataIntegrityViolationException(
@@ -43,7 +44,8 @@ class BookmarkServiceTests {
         var bookmarks = mock(BookmarkRepository.class);
         var queries = mock(com.likelion14th._Team.domain.university.repository.UniversityQueryRepository.class);
         var service = new BookmarkService(bookmarks, mock(UniversityRepository.class), mock(UserRepository.class),
-                queries, new com.likelion14th._Team.domain.university.service.UniversityEligibilityCalculator());
+                new com.likelion14th._Team.domain.university.service.UniversityCardAssembler(queries,
+                        new com.likelion14th._Team.domain.university.service.UniversityEligibilityCalculator()));
         when(queries.semesters()).thenReturn(java.util.List.of());
         when(bookmarks.findAllForUser(1L)).thenReturn(java.util.List.of());
         var response = service.list(1L);

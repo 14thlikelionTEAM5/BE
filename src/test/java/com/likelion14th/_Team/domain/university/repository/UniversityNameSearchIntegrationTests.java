@@ -12,6 +12,8 @@ import com.likelion14th._Team.domain.university.service.UniversityService;
 import com.likelion14th._Team.domain.university.service.UniversityQueryService;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.UUID;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,6 +94,39 @@ class UniversityNameSearchIntegrationTests {
     }
 
     @Test
+    void currentTenDemoSchoolNamesKeepTheirPreviousNameAndCountryOrder() {
+        String[][] demo = {
+                {"University of Groningen", "네덜란드"},
+                {"University of Mannheim", "독일"},
+                {"Texas State University", "미국"},
+                {"Florida International University", "미국"},
+                {"Ghent University", "벨기에"},
+                {"Queensland University of Technology", "호주"},
+                {"NHH Norwegian School of Economics", "노르웨이"},
+                {"Goethe University Frankfurt am Main", "독일"},
+                {"Audencia Business School", "프랑스"},
+                {"EM Normandie Business School", "프랑스"}
+        };
+        List<University> fixtures = new ArrayList<>();
+        for (String[] entry : demo) fixtures.add(school(key + " " + entry[0], entry[1]));
+        Comparator<University> previousNameOrder = Comparator.comparing(
+                University::getName, String.CASE_INSENSITIVE_ORDER).thenComparing(University::getId);
+        List<Long> expectedName = fixtures.stream().sorted(previousNameOrder)
+                .map(University::getId).toList();
+        assertEquals(expectedName, autocomplete.search(key).stream()
+                .map(item -> item.universityId()).toList());
+        assertEquals(expectedName, listService.list(Long.MAX_VALUE,
+                UniversitySearch.from(key, null, null, null, "NAME")).universities().stream()
+                .map(item -> item.universityId()).toList());
+        List<Long> expectedCountry = fixtures.stream().sorted(
+                Comparator.comparing(University::getCountry).thenComparing(previousNameOrder))
+                .map(University::getId).toList();
+        assertEquals(expectedCountry, listService.list(Long.MAX_VALUE,
+                UniversitySearch.from(key, null, null, null, "COUNTRY")).universities().stream()
+                .map(item -> item.universityId()).toList());
+    }
+
+    @Test
     void generatedSwaggerDocumentsSearchFailureAndAlphabeticallyOrderedExample() throws Exception {
         MockMvcBuilders.webAppContextSetup(context).build().perform(get("/v3/api-docs"))
                 .andExpect(status().isOk())
@@ -104,7 +139,11 @@ class UniversityNameSearchIntegrationTests {
     }
 
     private University school(String name) {
-        University university = University.builder().name(name).country("테스트").build();
+        return school(name, "테스트");
+    }
+
+    private University school(String name, String country) {
+        University university = University.builder().name(name).country(country).build();
         em.persist(university);
         em.flush();
         return university;

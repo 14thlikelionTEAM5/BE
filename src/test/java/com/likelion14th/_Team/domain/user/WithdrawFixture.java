@@ -29,7 +29,7 @@ import java.util.UUID;
 
 /**
  * 회원 탈퇴 통합 테스트용 데이터 도우미.
- * 모든 데이터는 PREFIX로 시작하는 이름을 써서 실제 데이터와 구분되고, 정리할 때 접두어로 찾는다.
+ * 모든 데이터는 PREFIX와 임의 태그로 구분한다. 커밋한 데이터 정리에는 반환된 Scenario의 ID를 사용한다.
  */
 public class WithdrawFixture {
 

@@ -3,7 +3,6 @@ package com.likelion14th._Team.domain.user;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
@@ -19,21 +18,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 /**
- * 탈퇴 도중 실패하면 이미 지운 데이터까지 전부 되돌아오는지(전체 롤백) 검증한다.
- *
- * 롤백은 테스트가 트랜잭션을 감싸면 확인할 수 없어서 데이터를 실제로 커밋한다.
- * 그래서 개발 DB를 지키는 장치를 둔다.
- *  1) 접속 DB가 localhost일 때만 실행한다 (DB_URL 환경변수로 원격 DB를 가리키면 건너뜀)
- *  2) 모든 데이터는 "withdraw-it-" 접두어를 쓴다
- *  3) 시작 전·종료 후에 접두어 데이터를 청소하고, 남아 있으면 테스트를 실패시킨다
+ * 격리된 테스트 MySQL에서 데이터를 실제로 커밋하고, 탈퇴 실패 시 전체 롤백을 검증한다.
+ * 정리는 이번 테스트가 생성한 Scenario의 ID만 대상으로 한다.
  */
+@ActiveProfiles("test")
 @SpringBootTest
 class WithdrawRollbackIntegrationTests {
 
@@ -41,28 +36,25 @@ class WithdrawRollbackIntegrationTests {
     @Autowired WithdrawService withdrawService;
     @Autowired PlatformTransactionManager txManager;
     @MockitoSpyBean UserProfileRepository userProfileRepository;
-    @Value("${spring.datasource.url}") String datasourceUrl;
+    private Scenario scenario;
 
     private TransactionTemplate tx;
 
     @BeforeEach
     void setUp() {
-        assumeTrue(isLocalDb(), "접속 DB가 localhost가 아니라서 건너뜀: " + datasourceUrl);
         tx = new TransactionTemplate(txManager);
-        cleanup(); // 이전 실행이 중간에 죽어서 남긴 데이터가 있으면 먼저 치운다
     }
 
     @AfterEach
     void tearDown() {
-        if (!isLocalDb()) {
-            return;
-        }
-        cleanup();
+        reset(userProfileRepository);
+        if (scenario != null) cleanup();
     }
 
     @Test
     void failureMidWayRollsBackEverythingAndRetrySucceeds() {
-        Scenario s = tx.execute(st -> new WithdrawFixture(em).create());
+        scenario = tx.execute(st -> new WithdrawFixture(em).create());
+        Scenario s = scenario;
         List<String> before = tx.execute(st -> new WithdrawFixture(em).nonEmptyTables(s));
         assertTrue(before.size() >= 11, "탈퇴 전에는 모든 테이블에 내 데이터가 있어야 한다: " + before);
 
@@ -85,31 +77,23 @@ class WithdrawRollbackIntegrationTests {
         assertEquals(List.of(), remaining);
     }
 
-    private boolean isLocalDb() {
-        return datasourceUrl.contains("localhost") || datasourceUrl.contains("127.0.0.1");
-    }
-
-    /** 접두어가 붙은 테스트 데이터를 모두 지우고, 남아 있으면 실패시킨다 */
+    /** 이미 탈퇴한 회원은 건너뛰고, 이 실행에서 생성한 두 회원과 대학만 정리한다. */
     private void cleanup() {
-        reset(userProfileRepository); // 강제 실패 설정이 남아 있으면 청소가 막히므로 먼저 푼다
-        String like = WithdrawFixture.PREFIX + "%";
-
-        List<Long> userIds = tx.execute(st -> em.createQuery(
-                        "select u.id from User u where u.schoolEmail like :p", Long.class)
-                .setParameter("p", like).getResultList());
-        for (Long userId : userIds) {
-            withdrawService.withdraw(userId); // 운영 탈퇴 로직으로 회원과 연결 데이터를 지운다
+        for (Long userId : List.of(scenario.userId(), scenario.otherUserId())) {
+            boolean exists = Boolean.TRUE.equals(tx.execute(st -> em.createQuery(
+                            "select count(u) from User u where u.id = :id", Long.class)
+                    .setParameter("id", userId).getSingleResult() > 0));
+            if (exists) withdrawService.withdraw(userId);
         }
-        tx.executeWithoutResult(st -> em.createQuery("delete from University u where u.name like :p")
-                .setParameter("p", like).executeUpdate());
-
+        tx.executeWithoutResult(st -> em.createQuery("delete from University u where u.id = :id")
+                .setParameter("id", scenario.universityId()).executeUpdate());
         Long leftoverUsers = tx.execute(st -> em.createQuery(
-                        "select count(u) from User u where u.schoolEmail like :p", Long.class)
-                .setParameter("p", like).getSingleResult());
+                        "select count(u) from User u where u.id in :ids", Long.class)
+                .setParameter("ids", List.of(scenario.userId(), scenario.otherUserId())).getSingleResult());
         Long leftoverUniversities = tx.execute(st -> em.createQuery(
-                        "select count(u) from University u where u.name like :p", Long.class)
-                .setParameter("p", like).getSingleResult());
-        assertEquals(0L, leftoverUsers, "테스트 회원 데이터가 DB에 남았다");
-        assertEquals(0L, leftoverUniversities, "테스트 대학 데이터가 DB에 남았다");
+                        "select count(u) from University u where u.id = :id", Long.class)
+                .setParameter("id", scenario.universityId()).getSingleResult());
+        assertEquals(0L, leftoverUsers, "이 테스트의 회원 데이터가 DB에 남았다");
+        assertEquals(0L, leftoverUniversities, "이 테스트의 대학 데이터가 DB에 남았다");
     }
 }

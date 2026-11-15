@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.likelion14th._Team.domain.user.WithdrawFixture.Scenario;
+import com.likelion14th._Team.domain.university.entity.University;
 import com.likelion14th._Team.domain.user.entity.User;
 import com.likelion14th._Team.domain.user.service.WithdrawService;
 import com.likelion14th._Team.global.exception.ErrorCode;
@@ -24,15 +25,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * 실제 DB(MySQL)로 탈퇴 동작을 검증한다. 클래스 전체가 하나의 트랜잭션이라 끝나면 롤백된다.
+ * 실제 DB(MySQL)로 탈퇴 동작을 검증한다. 각 테스트 메서드는 트랜잭션으로 실행하고 종료 후 롤백한다.
  * (중간 실패 시 전체 롤백 검증은 커밋이 필요해서 WithdrawRollbackIntegrationTests에서 한다)
  */
+@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 class WithdrawIntegrationTests {
@@ -72,6 +75,7 @@ class WithdrawIntegrationTests {
 
         assertEquals(List.of(), fixture.nonEmptyTables(s));
         assertNotNull(em.find(User.class, s.otherUserId()), "다른 회원은 그대로여야 한다");
+        assertNotNull(em.find(University.class, s.universityId()), "공유 대학 정보는 삭제되면 안 된다");
     }
 
     @Test

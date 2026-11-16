@@ -11,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 import java.util.Arrays;
@@ -22,6 +23,7 @@ import com.likelion14th._Team.domain.university.entity.AgreementLanguageRequirem
 import com.likelion14th._Team.global.enums.LanguageTestType;
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 @SpringBootTest(properties="spring.jpa.properties.hibernate.generate_statistics=true")
 @Transactional
 class UniversityQueryPerformanceTests {

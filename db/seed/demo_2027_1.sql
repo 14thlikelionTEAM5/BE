@@ -3,7 +3,8 @@
 -- 아래 네 테이블은 PassHUFS.sql 설계에 맞춰 앱이 아직 생성하지 않는 경우에만 만든다.
 -- 대학 메타데이터는 첨부 78개교 조사표의 국가·인증·학점 체계 열을 사용한다.
 -- 성적, 보고서, 과목과 인정 사례는 모두 가상의 시연 데이터다.
--- 2026-1 Texas State 실보고서와 2027-1 시연 데이터는 구분한다.
+-- 시연 귀국보고서와 인정 사례는 수학을 마친 2026-1로 두고, 협정·지원·수강계획은 2027-1로 둔다.
+-- 같은 2026-1 실보고서와는 시연 계정과 [가상 시연] 표기로 구분한다.
 -- 대상 10개교가 모두 경영 과목을 수강할 수 있다는 의미는 아니다. 공식 수강 제한을 확인한다.
 -- 로컬 시연 계정 passhufs-demo01@example.hufs.ac.kr ~ passhufs-demo10@example.hufs.ac.kr
 -- 시연 계정 자격 증명은 팀 비공개 채널에서 관리한다.
@@ -246,13 +247,13 @@ WHERE NOT EXISTS (
 );
 
 INSERT INTO return_report (user_id,university_id,semester,housing_type,review_summary,created_at,updated_at)
-SELECT s.id,u.id,'2027-1','DORM',
+SELECT s.id,u.id,'2026-1','DORM',
        '[시연] 수강 신청 전에 강의계획서와 과목 개설 학기를 확인했습니다.',@demo_now,@demo_now
 FROM passhufs_demo_2027_1 d
 JOIN university u ON u.name=d.name COLLATE utf8mb4_unicode_ci
 JOIN `user` s ON s.school_email=CONCAT('passhufs-demo',d.no,'@example.hufs.ac.kr') COLLATE utf8mb4_unicode_ci
 WHERE NOT EXISTS (
-    SELECT 1 FROM return_report r WHERE r.user_id=s.id AND r.semester='2027-1'
+    SELECT 1 FROM return_report r WHERE r.user_id=s.id AND r.semester='2026-1'
 );
 
 
@@ -268,7 +269,7 @@ SET r.cost_flight='[가상 시연] 왕복 약 180만원',
     r.visa_type='[가상 시연] 학생 체류 자격, 실제 요건 확인 필요',
     r.insurance_provider='[가상 시연] 교환교 안내 보험',
     r.review_summary=CONCAT('[가상 시연] ',u.name,'의 수강 신청 안내를 확인하고 숙소를 준비했습니다. 실제 경험담이 아닙니다.')
-WHERE r.semester='2027-1';
+WHERE r.semester='2026-1';
 
 INSERT INTO return_report_course (return_report_id,course_code,course_name_en,foreign_credit,
                                   satisfaction,created_at,updated_at)
@@ -276,18 +277,18 @@ SELECT r.id,CONCAT('DEMO-2027-',d.no),d.course_name,d.foreign_credit,4,@demo_now
 FROM passhufs_demo_2027_1 d
 JOIN university u ON u.name=d.name COLLATE utf8mb4_unicode_ci
 JOIN `user` s ON s.school_email=CONCAT('passhufs-demo',d.no,'@example.hufs.ac.kr') COLLATE utf8mb4_unicode_ci
-JOIN return_report r ON r.user_id=s.id AND r.university_id=u.id AND r.semester='2027-1'
+JOIN return_report r ON r.user_id=s.id AND r.university_id=u.id AND r.semester='2026-1'
 WHERE NOT EXISTS (
     SELECT 1 FROM return_report_course c WHERE c.return_report_id=r.id AND c.course_code=CONCAT('DEMO-2027-',d.no) COLLATE utf8mb4_unicode_ci
 );
 
 INSERT INTO course_case (return_report_course_id,home_course_id,recognition_type,recognized_credit,
                          major_type,semester,created_at,updated_at)
-SELECT c.id,h.id,'MAJOR_ELECTIVE',3.0,'PRIMARY','2027-1',@demo_now,@demo_now
+SELECT c.id,h.id,'MAJOR_ELECTIVE',3.0,'PRIMARY','2026-1',@demo_now,@demo_now
 FROM passhufs_demo_2027_1 d
 JOIN university u ON u.name=d.name COLLATE utf8mb4_unicode_ci
 JOIN `user` s ON s.school_email=CONCAT('passhufs-demo',d.no,'@example.hufs.ac.kr') COLLATE utf8mb4_unicode_ci
-JOIN return_report r ON r.user_id=s.id AND r.university_id=u.id AND r.semester='2027-1'
+JOIN return_report r ON r.user_id=s.id AND r.university_id=u.id AND r.semester='2026-1'
 JOIN return_report_course c ON c.return_report_id=r.id AND c.course_code=CONCAT('DEMO-2027-',d.no) COLLATE utf8mb4_unicode_ci
 JOIN home_course h ON h.code='DEMO-BIZ-2027'
 WHERE NOT EXISTS (SELECT 1 FROM course_case k WHERE k.return_report_course_id=c.id);
@@ -339,7 +340,7 @@ SELECT p.id,'REGISTERED',c.course_name_en,c.foreign_credit,c.id,h.id,'MAJOR_ELEC
 FROM passhufs_demo_2027_1 d
 JOIN university u ON u.name=d.name COLLATE utf8mb4_unicode_ci
 JOIN `user` s ON s.school_email=CONCAT('passhufs-demo',d.no,'@example.hufs.ac.kr') COLLATE utf8mb4_unicode_ci
-JOIN return_report r ON r.user_id=s.id AND r.university_id=u.id AND r.semester='2027-1'
+JOIN return_report r ON r.user_id=s.id AND r.university_id=u.id AND r.semester='2026-1'
 JOIN return_report_course c ON c.return_report_id=r.id AND c.course_code=CONCAT('DEMO-2027-',d.no) COLLATE utf8mb4_unicode_ci
 JOIN study_plan p ON p.user_id=s.id AND p.university_id=u.id
 JOIN home_course h ON h.code='DEMO-BIZ-2027'

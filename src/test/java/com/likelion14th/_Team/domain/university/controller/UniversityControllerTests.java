@@ -74,11 +74,11 @@ class UniversityControllerTests {
 
     @Test
     void searchReturnsUniversities() throws Exception {
-        when(universityService.search("Nan")).thenReturn(List.of(
+        when(universityService.search("Na")).thenReturn(List.of(
                 new UniversitySearchResponse(31L, "Nanyang Technological University", "싱가포르"),
                 new UniversitySearchResponse(12L, "National University of Singapore", "싱가포르")));
 
-        mockMvc.perform(get(URL).param("keyword", "Nan").header(HttpHeaders.AUTHORIZATION, BEARER))
+        mockMvc.perform(get(URL).param("keyword", "Na").header(HttpHeaders.AUTHORIZATION, BEARER))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("S200"))
                 .andExpect(jsonPath("$.message").value("조회되었습니다."))

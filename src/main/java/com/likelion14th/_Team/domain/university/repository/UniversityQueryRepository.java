@@ -57,8 +57,8 @@ public class UniversityQueryRepository {
                 """);
         boolean keyword = search.keyword() != null && !search.keyword().isEmpty();
         boolean country = search.country() != null && !search.country().isBlank();
-        // LOCATE treats %, _ and backslash literally. Binary collation preserves the former Java accent/case distinction.
-        if (keyword) hql.append(" and locate(:keyword, collate(lower(u.name) as utf8mb4_bin)) > 0");
+        // 자동완성과 같은 악센트·대소문자 무시 collation을 사용하며 특수문자도 그대로 검색한다.
+        if (keyword) hql.append(" and collate(u.name as utf8mb4_0900_ai_ci) like :keyword escape '!'");
         if (country) hql.append(" and collate(u.country as utf8mb4_bin) = :country and length(u.country) = length(:country)");
         if (search.languageTest() != null) hql.append("""
                  and exists (select requirement.id from AgreementLanguageRequirement requirement
@@ -66,8 +66,9 @@ public class UniversityQueryRepository {
                                and requirement.agreement.semester = :semester
                                and requirement.testType = :testType)
                 """);
+        hql.append(" order by collate(u.name as utf8mb4_0900_ai_ci), u.id");
         var query = em.createQuery(hql.toString(), SchoolRow.class).setParameter("userId", userId);
-        if (keyword) query.setParameter("keyword", search.keyword().toLowerCase(Locale.ROOT));
+        if (keyword) query.setParameter("keyword", UniversityNamePattern.contains(search.keyword()));
         if (country) query.setParameter("country", search.country());
         if (search.languageTest() != null) query.setParameter("semester", semester).setParameter("testType", search.languageTest());
         return query.getResultList();

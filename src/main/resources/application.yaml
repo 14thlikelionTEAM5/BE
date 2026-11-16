@@ -42,8 +42,8 @@ ai:
   gemini:
     # 키는 코드·yaml에 쓰지 않고 환경변수로만 받는다
     api-key: ${GEMINI_API_KEY:}
-    # 대안 모델(예: gemini-3.6-flash)은 GEMINI_MODEL로 바꿔 쓴다
-    model: ${GEMINI_MODEL:gemini-3.8-flash}
+    # 다른 모델은 GEMINI_MODEL로 바꿔 쓴다
+    model: ${GEMINI_MODEL:gemini-3.6-flash}
     base-url: https://generativelanguage.googleapis.com/v1beta
     api-revision: ${GEMINI_API_REVISION:2026-05-20}
     connect-timeout-seconds: 5

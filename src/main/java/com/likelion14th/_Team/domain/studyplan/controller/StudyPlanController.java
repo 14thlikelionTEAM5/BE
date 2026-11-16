@@ -13,6 +13,7 @@ import com.likelion14th._Team.domain.studyplan.dto.StudyPlanSummary;
 import com.likelion14th._Team.domain.studyplan.service.StudyPlanService;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.response.ApiResponse;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -69,7 +70,7 @@ public class StudyPlanController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("수강계획 과목 삭제 실패", exception);
+            log.error("수강계획 과목 삭제 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "수강계획 과목 삭제 중 오류가 발생했습니다.");
         }
     }
@@ -98,7 +99,7 @@ public class StudyPlanController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("수강계획 과목 수정 실패", exception);
+            log.error("수강계획 과목 수정 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "수강계획 과목 수정 중 오류가 발생했습니다.");
         }
     }
@@ -123,7 +124,7 @@ public class StudyPlanController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("수강계획 과목 추가 실패", exception);
+            log.error("수강계획 과목 추가 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "수강계획 과목 추가 중 오류가 발생했습니다.");
         }
     }
@@ -147,7 +148,7 @@ public class StudyPlanController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("수강계획 상세 조회 실패", exception);
+            log.error("수강계획 상세 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "수강계획 상세 조회 중 오류가 발생했습니다.");
         }
     }
@@ -173,7 +174,7 @@ public class StudyPlanController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("수강계획 이름 수정 실패", exception);
+            log.error("수강계획 이름 수정 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "수강계획 이름 수정 중 오류가 발생했습니다.");
         }
     }
@@ -191,7 +192,7 @@ public class StudyPlanController {
         } catch (CustomException exception) {
             throw exception;
         } catch (RuntimeException exception) {
-            log.error("수강계획 삭제 실패", exception);
+            log.error("수강계획 삭제 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "수강계획 삭제 중 오류가 발생했습니다.");
         }
     }
@@ -260,7 +261,7 @@ public class StudyPlanController {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<Void>> handleFailure(RuntimeException exception) {
-        log.error("수강계획 요청 처리 실패", exception);
+        log.error("수강계획 요청 처리 실패", ExceptionLogSanitizer.withoutMessages(exception));
         return ResponseEntity.internalServerError()
                 .body(ApiResponse.error(ErrorCode.INTERNAL_ERROR.getCode(), "서버 내부 오류가 발생했습니다.", null));
     }

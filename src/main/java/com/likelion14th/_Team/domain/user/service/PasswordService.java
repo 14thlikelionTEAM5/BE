@@ -5,6 +5,7 @@ import com.likelion14th._Team.domain.user.entity.User;
 import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,7 +43,7 @@ public class PasswordService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("비밀번호 변경 중 예외", e);
+            log.error("비밀번호 변경 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "비밀번호 변경 중 오류가 발생했습니다");
         }
     }

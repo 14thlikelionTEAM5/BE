@@ -3,6 +3,7 @@ package com.likelion14th._Team.domain.admission.controller;
 import com.likelion14th._Team.domain.admission.dto.*;
 import com.likelion14th._Team.domain.admission.service.AdmissionReportStatsService;
 import com.likelion14th._Team.global.exception.*;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,7 +44,7 @@ public class AdmissionReportController {
             return ApiResponse.ok("조회되었습니다.", service.list(userId, filter.universityId(), selectedResult));
         } catch (CustomException exception) { throw exception; }
         catch (RuntimeException exception) {
-            log.error("합격·탈락 스펙 목록 조회 실패", exception);
+            log.error("합격·탈락 스펙 목록 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "합격·탈락 스펙 목록 조회 중 오류가 발생했습니다");
         }
     }
@@ -58,7 +59,7 @@ public class AdmissionReportController {
             return ApiResponse.ok("합격 스펙 분포 조회에 성공했습니다.",service.stats(userId,filter));
         } catch (CustomException exception) { throw exception; }
         catch (RuntimeException exception) {
-            log.error("합격 스펙 분포 조회 실패",exception);
+            log.error("합격 스펙 분포 조회 실패", ExceptionLogSanitizer.withoutMessages(exception));
             throw new CustomException(ErrorCode.INTERNAL_ERROR,"합격 스펙 분포 조회 중 오류가 발생했습니다");
         }
     }

@@ -10,6 +10,7 @@ import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.enums.ConsentType;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.response.FieldErrorDetail;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -62,7 +63,7 @@ public class ConsentService {
         } catch (CustomException e) {
             throw e;
         } catch (RuntimeException e) {
-            log.error("동의 기록 실패", e);
+            log.error("동의 기록 실패", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "동의 기록 중 오류가 발생했습니다.");
         }
     }

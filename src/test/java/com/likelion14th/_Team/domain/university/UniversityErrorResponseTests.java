@@ -15,6 +15,7 @@ import com.likelion14th._Team.global.response.FieldErrorDetail;
 import com.likelion14th._Team.global.security.JwtProvider;
 import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import com.likelion14th._Team.global.security.SecurityConfig;
+import com.likelion14th._Team.global.security.ActiveUserTestConfig;
 import io.jsonwebtoken.JwtException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

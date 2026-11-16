@@ -14,6 +14,7 @@ import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.enums.ConsentType;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import java.math.RoundingMode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class MyInfoService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("내 정보 조회 중 예외", e);
+            log.error("내 정보 조회 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "내 정보 조회 중 오류가 발생했습니다");
         }
     }
@@ -60,7 +61,7 @@ public class MyInfoService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("내 정보 수정 중 예외", e);
+            log.error("내 정보 수정 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "내 정보 수정 중 오류가 발생했습니다");
         }
     }

@@ -74,15 +74,14 @@ public class GlobalExceptionHandler {
         if (e instanceof RuntimeException && handler instanceof HandlerMethod method) {
             ApiFailure failure = method.getMethodAnnotation(ApiFailure.class);
             if (failure != null) {
-                Throwable logged = failure.omitExceptionMessage()
-                        ? ExceptionLogSanitizer.withoutMessages(e) : e;
-                LoggerFactory.getLogger(method.getBeanType()).error(failure.logMessage(), logged);
+                LoggerFactory.getLogger(method.getBeanType())
+                        .error(failure.logMessage(), ExceptionLogSanitizer.withoutMessages(e));
                 ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
                 return ResponseEntity.status(errorCode.getStatus())
                         .body(ApiResponse.error(errorCode.getCode(), failure.message(), null));
             }
         }
-        log.error("처리되지 않은 예외", e);
+        log.error("처리되지 않은 예외", ExceptionLogSanitizer.withoutMessages(e));
         ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
         return ResponseEntity.status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode.getCode(), errorCode.getMessage(), null));

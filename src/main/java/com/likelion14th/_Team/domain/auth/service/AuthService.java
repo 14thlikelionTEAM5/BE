@@ -17,6 +17,7 @@ import com.likelion14th._Team.domain.user.repository.UserRepository;
 import com.likelion14th._Team.global.enums.ConsentType;
 import com.likelion14th._Team.global.exception.CustomException;
 import com.likelion14th._Team.global.exception.ErrorCode;
+import com.likelion14th._Team.global.logging.ExceptionLogSanitizer;
 import com.likelion14th._Team.global.security.JwtProvider;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -71,7 +72,7 @@ public class AuthService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("회원가입 처리 중 예외", e);
+            log.error("회원가입 처리 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "회원가입 중 오류가 발생했습니다");
         }
     }
@@ -145,7 +146,7 @@ public class AuthService {
         } catch (CustomException e) {
             throw e;
         } catch (Exception e) {
-            log.error("로그인 처리 중 예외", e);
+            log.error("로그인 처리 중 예외", ExceptionLogSanitizer.withoutMessages(e));
             throw new CustomException(ErrorCode.INTERNAL_ERROR, "로그인 중 오류가 발생했습니다");
         }
     }

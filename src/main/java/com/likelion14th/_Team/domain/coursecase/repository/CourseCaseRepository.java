@@ -1,0 +1,38 @@
+package com.likelion14th._Team.domain.coursecase.repository;
+
+import com.likelion14th._Team.domain.coursecase.entity.CourseCase;
+import java.util.Collection;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.util.List;
+
+public interface CourseCaseRepository extends JpaRepository<CourseCase, Long> {
+
+    boolean existsByReturnReportCourseId(Long returnReportCourseId);
+
+    /** 수정 시 자기 자신을 뺀 중복 확인 */
+    boolean existsByReturnReportCourseIdAndIdNot(Long returnReportCourseId, Long id);
+
+    /** 귀국보고서 수정·삭제 때 과목 행을 지우기 전에 딸린 인정 사례를 먼저 지운다 */
+    @Modifying(flushAutomatically = true)
+    @Query("delete from CourseCase c where c.returnReportCourse.id in :courseIds")
+    int deleteByReturnReportCourseIds(@Param("courseIds") Collection<Long> courseIds);
+
+    /** 내 등록 내역 조회: 내 귀국보고서 과목에 연결된 인정 사례를 학기 최신순으로 (교양은 homeCourse 없음) */
+    @Query("select c from CourseCase c "
+            + "join fetch c.returnReportCourse rc "
+            + "join fetch rc.returnReport r "
+            + "join fetch r.university "
+            + "left join fetch c.homeCourse "
+            + "where r.user.id = :userId order by c.semester desc, c.id desc")
+    List<CourseCase> findAllByUserIdWithDetails(@Param("userId") Long userId);
+
+    /** 학교별 공개 인정 사례. 작성자 정보는 읽지 않고 교양의 본교 과목 누락도 허용한다. */
+    @Query("select c from CourseCase c join fetch c.returnReportCourse rc "
+            + "join rc.returnReport r left join fetch c.homeCourse "
+            + "where r.university.id = :universityId "
+            + "order by c.semester desc, c.createdAt desc, c.id desc")
+    List<CourseCase> findAllByUniversityIdWithCourses(@Param("universityId") Long universityId);
+}

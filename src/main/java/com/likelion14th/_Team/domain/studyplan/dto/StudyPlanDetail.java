@@ -24,6 +24,7 @@ public record StudyPlanDetail(
             BigDecimal foreignCredit,
             Long sourceCourseId,
             Long homeCourseId,
+            String homeCourseName,
             String recognitionType,
             BigDecimal expectedCredit,
             boolean creditLimitWarning

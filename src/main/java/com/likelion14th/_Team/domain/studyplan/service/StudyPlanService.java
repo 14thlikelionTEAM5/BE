@@ -154,13 +154,14 @@ public class StudyPlanService {
 
     private Item detailItem(StudyPlanItem item, Calculation calculation, CreditPolicy policy) {
         Long homeCourseId = item.getHomeCourse() == null ? null : item.getHomeCourse().getId();
+        String homeCourseName = item.getHomeCourse() == null ? null : item.getHomeCourse().getName();
         BigDecimal expected = creditCalculator.expectedCredit(item, homeCourseId, calculation, policy);
         String type = item.getResponseItemType();
         return new Item(item.getId(), type, item.getCourseName(), item.getForeignCredit(),
-                "DIRECT".equals(type) ? null : item.getSourceCourseId(), homeCourseId, item.getRecognitionType(),
+                "DIRECT".equals(type) ? null : item.getSourceCourseId(), homeCourseId, homeCourseName,
+                item.getRecognitionType(),
                 expected, expected != null && expected.compareTo(BigDecimal.valueOf(policy.getMaxCreditPerCourse())) > 0);
     }
-
     private CreditPolicy currentPolicy() {
         return creditPolicyRepository
                 .findFirstByDepartmentNameAndEffectiveFromLessThanEqualOrderByEffectiveFromDesc(

@@ -1,6 +1,8 @@
 package com.likelion14th._Team.domain.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.likelion14th._Team.domain.user.entity.LanguageSectionScores;
+import io.swagger.v3.oas.annotations.media.Schema;
 import com.likelion14th._Team.global.enums.LanguageTestType;
 import com.likelion14th._Team.global.enums.MajorType;
 import jakarta.validation.Valid;
@@ -83,8 +85,21 @@ public record SignupRequest(
             LanguageTestType testType,
 
             @NotNull(message = "어학 점수를 입력해 주세요")
-            BigDecimal score
+            BigDecimal score,
+
+            @Valid
+            @Schema(description = "영역별 점수. 생략 시 기존 총점만 저장. 입력 시 reading/listening/speaking/writing 모두 필수")
+            LanguageSectionScores sectionScores
     ) {
+        public LanguageScoreRequest(LanguageTestType testType, BigDecimal score) {
+            this(testType, score, null);
+        }
+
+        @JsonIgnore
+        @AssertTrue(message = "영역별 점수가 해당 시험의 범위·단위에 맞지 않거나 지원하지 않는 시험입니다")
+        public boolean isSectionScoresValid() {
+            return sectionScores == null || testType == null || sectionScores.validFor(testType);
+        }
 
         @JsonIgnore
         @AssertTrue(message = "점수가 해당 시험의 범위·단위에 맞지 않습니다")

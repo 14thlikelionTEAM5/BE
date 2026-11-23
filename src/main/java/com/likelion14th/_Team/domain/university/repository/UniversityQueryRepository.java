@@ -42,7 +42,8 @@ public class UniversityQueryRepository {
     }
 
     public record SchoolRow(University university, boolean bookmarked, boolean experienceData) {}
-    public record ApplicantRow(BigDecimal gpa, LanguageTestType testType, BigDecimal score) {}
+    public record ApplicantRow(BigDecimal gpa, LanguageTestType testType, BigDecimal score,
+                               LanguageSectionScores sectionScores) {}
 
     public List<SchoolRow> schools(Long userId, UniversitySearch search, String semester) {
         StringBuilder hql = new StringBuilder("""
@@ -90,7 +91,7 @@ public class UniversityQueryRepository {
     public List<ApplicantRow> applicant(Long userId) {
         return em.createQuery("""
                 select new com.likelion14th._Team.domain.university.repository.UniversityQueryRepository$ApplicantRow(
-                    p.gpa, score.testType, score.score)
+                    p.gpa, score.testType, score.score, score.sectionScores)
                 from User u
                 left join UserProfile p on p.user.id = u.id
                 left join UserLanguageScore score on score.user.id = u.id

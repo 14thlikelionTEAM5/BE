@@ -43,7 +43,7 @@ class UniversityQueryTests {
     }
     @Test void exactThresholdsPass() {
         assertEquals("ELIGIBLE", calculator.calculate(agreement(true, 2), new BigDecimal("3.00"),
-                Map.of(LanguageTestType.IELTS, new BigDecimal("6.5")),
+                Map.of(LanguageTestType.IELTS, new UniversityEligibilityCalculator.LanguageScore(new BigDecimal("6.5"), null)),
                 List.of(language(LanguageTestType.IELTS, null))).status());
     }
     @Test void missingProfileNeedsCheckButKnownFailureWins() {
@@ -52,17 +52,17 @@ class UniversityQueryTests {
     }
     @Test void sectionCriteriaCannotBeApprovedWithOnlyTotalScore() {
         assertEquals("NEEDS_CHECK", calculator.calculate(agreement(true, 2), new BigDecimal("4.0"),
-                Map.of(LanguageTestType.IELTS, new BigDecimal("7.0")),
+                Map.of(LanguageTestType.IELTS, new UniversityEligibilityCalculator.LanguageScore(new BigDecimal("7.0"), null)),
                 List.of(language(LanguageTestType.IELTS, "6.0"))).status());
     }
     @Test void alternativePassingTestWinsOverFailedTest() {
         assertEquals("ELIGIBLE", calculator.calculate(agreement(true, 2), new BigDecimal("4.0"),
-                Map.of(LanguageTestType.IELTS, new BigDecimal("5.0"), LanguageTestType.TOEFL_NEW, new BigDecimal("7.0")),
+                Map.of(LanguageTestType.IELTS, new UniversityEligibilityCalculator.LanguageScore(new BigDecimal("5.0"), null), LanguageTestType.TOEFL_NEW, new UniversityEligibilityCalculator.LanguageScore(new BigDecimal("7.0"), null)),
                 List.of(language(LanguageTestType.IELTS, null), language(LanguageTestType.TOEFL_NEW, null))).status());
     }
     @Test void knownLanguageFailureIsReported() {
         assertEquals(List.of("LANGUAGE_BELOW_MIN"), calculator.calculate(agreement(true, 2), new BigDecimal("4.0"),
-                Map.of(LanguageTestType.IELTS, new BigDecimal("6.0")),
+                Map.of(LanguageTestType.IELTS, new UniversityEligibilityCalculator.LanguageScore(new BigDecimal("6.0"), null)),
                 List.of(language(LanguageTestType.IELTS, null))).reasonCodes());
     }
     @Test void invalidFiltersAreRejected() {
@@ -83,7 +83,7 @@ class UniversityQueryTests {
         var unknownSchoolCriteria = calculator.calculate(agreement(true, 2), new BigDecimal("4.0"), Map.of(), List.of());
         assertEquals("지원 조건을 확인해 주세요.", unknownSchoolCriteria.message());
         var differentTest = calculator.calculate(agreement(true, 2), new BigDecimal("4.0"),
-                Map.of(LanguageTestType.TOEFL_IBT, new BigDecimal("100")), requirements);
+                Map.of(LanguageTestType.TOEFL_IBT, new UniversityEligibilityCalculator.LanguageScore(new BigDecimal("100"), null)), requirements);
         assertEquals("지원 조건을 확인해 주세요.", differentTest.message());
     }
 

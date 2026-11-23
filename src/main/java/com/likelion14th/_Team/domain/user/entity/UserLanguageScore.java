@@ -4,6 +4,7 @@ import com.likelion14th._Team.global.entity.BaseEntity;
 import com.likelion14th._Team.global.enums.LanguageTestType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -44,14 +45,19 @@ public class UserLanguageScore extends BaseEntity {
     @Column(name = "score", nullable = false, precision = 5, scale = 1)
     private BigDecimal score;
 
+    @Embedded
+    private LanguageSectionScores sectionScores;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Builder
-    private UserLanguageScore(LanguageTestType testType, BigDecimal score, User user) {
+    private UserLanguageScore(LanguageTestType testType, BigDecimal score, User user,
+                              LanguageSectionScores sectionScores) {
         this.testType = testType;
         this.score = score;
         this.user = user;
+        this.sectionScores = sectionScores;
     }
 }

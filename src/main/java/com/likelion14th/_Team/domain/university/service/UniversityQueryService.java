@@ -4,6 +4,7 @@ import com.likelion14th._Team.domain.university.dto.*;
 import com.likelion14th._Team.domain.university.dto.UniversityListResponse.*;
 import com.likelion14th._Team.domain.university.entity.*;
 import com.likelion14th._Team.domain.university.repository.UniversityQueryRepository;
+import com.likelion14th._Team.domain.university.service.UniversityEligibilityCalculator.LanguageScore;
 import com.likelion14th._Team.global.enums.LanguageTestType;
 import com.likelion14th._Team.global.exception.*;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class UniversityQueryService {
         String semester = requestedSemester != null ? requestedSemester : available.isEmpty() ? null : available.getFirst();
         Agreement a = agreements.stream().filter(item -> Objects.equals(item.getSemester(), semester)).findFirst().orElse(null);
         var language = a == null ? List.<AgreementLanguageRequirement>of() : repository.agreementRequirements(a.getId());
-        Map<LanguageTestType, BigDecimal> scores = new EnumMap<>(LanguageTestType.class);
-        repository.scores(userId).forEach(s -> scores.put(s.getTestType(), s.getScore()));
+        Map<LanguageTestType, LanguageScore> scores = new EnumMap<>(LanguageTestType.class);
+        repository.scores(userId).forEach(s -> scores.put(s.getTestType(), new LanguageScore(s.getScore(), s.getSectionScores())));
         BigDecimal gpa = repository.profile(userId).map(p -> p.getGpa()).orElse(null);
         Eligibility eligibility = calculator.calculate(a, gpa, scores, language);
         var details = a == null ? null : new UniversityDetailResponse.AgreementDetail(a.getId(), a.getQuota(),

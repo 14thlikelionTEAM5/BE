@@ -25,7 +25,7 @@ class UniversityServiceLoggingTests {
     @Test
     void searchFailureDoesNotLogExceptionMessage(CapturedOutput output) {
         String marker = UUID.randomUUID().toString();
-        when(universityRepository.findByNameContainingOrderByNameAsc(any(), any()))
+        when(universityRepository.searchByName(any(), any()))
                 .thenThrow(new IllegalStateException(marker, new IllegalArgumentException(marker)));
 
         CustomException thrown = assertThrows(CustomException.class, () -> service.search("메이지"));

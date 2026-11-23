@@ -118,6 +118,7 @@ public class MyInfoService {
                         .user(user)
                         .testType(item.testType())
                         .score(item.score().setScale(1, RoundingMode.HALF_UP))
+                        .sectionScores(item.sectionScores())
                         .build())
                 .toList();
         return userLanguageScoreRepository.saveAll(entities);

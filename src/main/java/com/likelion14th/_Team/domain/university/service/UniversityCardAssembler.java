@@ -6,6 +6,7 @@ import com.likelion14th._Team.domain.university.entity.Agreement;
 import com.likelion14th._Team.domain.university.entity.AgreementLanguageRequirement;
 import com.likelion14th._Team.domain.university.entity.University;
 import com.likelion14th._Team.domain.university.repository.UniversityQueryRepository;
+import com.likelion14th._Team.domain.university.service.UniversityEligibilityCalculator.LanguageScore;
 import com.likelion14th._Team.global.enums.LanguageTestType;
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -50,9 +51,9 @@ public class UniversityCardAssembler {
                 .collect(Collectors.groupingBy(r -> r.getAgreement().getId()));
         var applicant = repository.applicant(userId);
         BigDecimal gpa = applicant.isEmpty() ? null : applicant.getFirst().gpa();
-        Map<LanguageTestType, BigDecimal> scores = new EnumMap<>(LanguageTestType.class);
+        Map<LanguageTestType, LanguageScore> scores = new EnumMap<>(LanguageTestType.class);
         applicant.stream().filter(row -> row.testType() != null && row.score() != null)
-                .forEach(row -> scores.put(row.testType(), row.score()));
+                .forEach(row -> scores.put(row.testType(), new LanguageScore(row.score(), row.sectionScores())));
 
         Map<Long, Card> result = new LinkedHashMap<>();
         for (University school : schools) {
@@ -73,7 +74,8 @@ public class UniversityCardAssembler {
 
     static List<LanguageRequirement> languageRequirements(List<AgreementLanguageRequirement> requirements) {
         return requirements.stream().sorted(Comparator.comparing(r -> r.getTestType().ordinal()))
-                .map(r -> new LanguageRequirement(r.getTestType().name(), r.getMinScore())).toList();
+                .map(r -> new LanguageRequirement(r.getTestType().name(), r.getMinScore(),
+                        r.getMinSectionScore(), r.getConditionNote())).toList();
     }
 
     public record Semesters(String current, String previous) {

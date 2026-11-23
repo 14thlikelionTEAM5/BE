@@ -121,6 +121,7 @@ public class AuthService {
                             .user(user)
                             .testType(s.testType())
                             .score(s.score())
+                            .sectionScores(s.sectionScores())
                             .build())
                     .toList();
             userLanguageScoreRepository.saveAll(scores);

@@ -1,6 +1,7 @@
 package com.likelion14th._Team.domain.user.dto;
 
 import com.likelion14th._Team.domain.user.entity.User;
+import com.likelion14th._Team.domain.user.entity.LanguageSectionScores;
 import com.likelion14th._Team.domain.user.entity.UserLanguageScore;
 import com.likelion14th._Team.domain.user.entity.UserProfile;
 import com.likelion14th._Team.global.enums.LanguageTestType;
@@ -32,13 +33,16 @@ public record MyInfoResponse(
         );
     }
 
-    public record LanguageScoreItem(LanguageTestType testType, BigDecimal score) {
+    public record LanguageScoreItem(LanguageTestType testType, BigDecimal score, LanguageSectionScores sectionScores) {
+        public LanguageScoreItem(LanguageTestType testType, BigDecimal score) {
+            this(testType, score, null);
+        }
 
         /** 응답 순서는 LanguageTestType 선언 순서 */
         public static List<LanguageScoreItem> listOf(List<UserLanguageScore> scores) {
             return scores.stream()
                     .sorted(Comparator.comparing(UserLanguageScore::getTestType))
-                    .map(s -> new LanguageScoreItem(s.getTestType(), s.getScore()))
+                    .map(s -> new LanguageScoreItem(s.getTestType(), s.getScore(), s.getSectionScores()))
                     .toList();
         }
     }

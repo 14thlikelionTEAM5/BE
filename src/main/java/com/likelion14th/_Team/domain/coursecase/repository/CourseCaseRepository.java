@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
+import java.util.Optional;
 
 public interface CourseCaseRepository extends JpaRepository<CourseCase, Long> {
 
@@ -35,4 +36,10 @@ public interface CourseCaseRepository extends JpaRepository<CourseCase, Long> {
             + "where r.university.id = :universityId "
             + "order by c.semester desc, c.createdAt desc, c.id desc")
     List<CourseCase> findAllByUniversityIdWithCourses(@Param("universityId") Long universityId);
+
+    /** 수강계획 담기: 원본 과목에 등록된 인정 사례(과목당 최대 1건)를 본교 과목과 함께 조회 */
+    @Query("select c from CourseCase c left join fetch c.homeCourse "
+            + "where c.returnReportCourse.id = :returnReportCourseId")
+    Optional<CourseCase> findByReturnReportCourseIdWithHomeCourse(
+            @Param("returnReportCourseId") Long returnReportCourseId);
 }

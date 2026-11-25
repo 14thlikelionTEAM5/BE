@@ -8,6 +8,7 @@ import com.likelion14th._Team.domain.studyplan.repository.StudyPlanItemRepositor
 import com.likelion14th._Team.domain.studyplan.repository.StudyPlanRepository;
 import com.likelion14th._Team.domain.user.entity.User;
 import com.likelion14th._Team.global.exception.CustomException;
+import com.likelion14th._Team.domain.coursecase.repository.CourseCaseRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,7 @@ class StudyPlanItemReviewTests {
         when(plans.findForDeleteById(2L)).thenReturn(Optional.of(plan));
         when(items.findByIdAndStudyPlanId(3L, 2L)).thenReturn(Optional.of(item));
 
-        assertEquals(3L, new StudyPlanItemService(plans, items, homes).delete(1L, 2L, 3L).itemId());
+        assertEquals(3L, new StudyPlanItemService(plans, items, homes, mock(CourseCaseRepository.class)).delete(1L, 2L, 3L).itemId());
 
         verify(items).delete(item);
         verify(plans).touch(eq(2L), any(LocalDateTime.class));

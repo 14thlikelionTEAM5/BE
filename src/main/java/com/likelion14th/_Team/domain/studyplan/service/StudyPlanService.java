@@ -97,11 +97,11 @@ public class StudyPlanService {
         List<Item> items = plan.getItems().stream()
                 .map(item -> detailItem(item, calculation, policy))
                 .toList();
-        BigDecimal total = items.isEmpty() ? new BigDecimal("0.0") : items.stream()
+        // 계산 가능한 학교면 계산된 과목이 없어도 0.0, 계산 불가 학교만 null
+        BigDecimal total = calculation.rule() == null ? null : items.stream()
                 .map(Item::expectedCredit)
                 .filter(Objects::nonNull)
-                .reduce(BigDecimal::add)
-                .orElse(null);
+                .reduce(new BigDecimal("0.0"), BigDecimal::add);
         BigDecimal semesterLimit = policy == null ? null : BigDecimal.valueOf(policy.getMaxCreditPerSemester());
         return new StudyPlanDetail(plan.getId(), plan.getName(), university.getId(), university.getName(),
                 calculation, items, total, semesterLimit,

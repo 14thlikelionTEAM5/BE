@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.JsonNode;
+import com.likelion14th._Team.domain.coursecase.entity.CourseCase;
+import com.likelion14th._Team.domain.coursecase.repository.CourseCaseRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class StudyPlanItemService {
     private final StudyPlanRepository planRepository;
     private final StudyPlanItemRepository itemRepository;
     private final HomeCourseRepository homeCourseRepository;
+    private final CourseCaseRepository courseCaseRepository;
 
     @Transactional
     public StudyPlanItemDeleteResponse delete(Long userId, Long studyPlanId, Long itemId) {
@@ -66,10 +69,21 @@ public class StudyPlanItemService {
                 && itemRepository.existsByStudyPlanIdAndSourceCourseId(studyPlanId, request.sourceCourseId())) {
             throw new CustomException(ErrorCode.STUDY_PLAN_ITEM_DUPLICATED);
         }
+        String recognitionType = request.recognitionType();
+        // 담기: 구분·본교 과목을 보내지 않았으면 원본 과목의 인정 사례 값을 채운다 (사례가 없으면 빈 값 유지)
+        if (request.sourceCourseId() != null && recognitionType == null && home == null) {
+            CourseCase courseCase = courseCaseRepository
+                    .findByReturnReportCourseIdWithHomeCourse(request.sourceCourseId())
+                    .orElse(null);
+            if (courseCase != null) {
+                recognitionType = courseCase.getRecognitionType().name();
+                home = courseCase.getHomeCourse();
+            }
+        }
         StudyPlanItem item = itemRepository.save(StudyPlanItem.builder()
                 .studyPlan(plan).itemType(request.itemType()).courseName(request.courseName())
                 .foreignCredit(request.foreignCredit()).sourceCourseId(request.sourceCourseId())
-                .homeCourse(home).recognitionType(request.recognitionType()).build());
+                .homeCourse(home).recognitionType(recognitionType).build());
         planRepository.touch(studyPlanId, LocalDateTime.now(ZoneId.of("Asia/Seoul")));
         return new StudyPlanItemCreateResponse(item.getId());
     }
